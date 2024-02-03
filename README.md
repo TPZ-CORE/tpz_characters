@@ -3,9 +3,9 @@
 
 # Installation
 
-1. When opening the zip file, open `tpz_banking-main` directory folder and inside there will be another directory folder which is called as `tpz_banking`, this directory folder is the one that should be exported to your resources (The folder which contains `fxmanifest.lua`).
+1. When opening the zip file, open `tpz_characters-main` directory folder and inside there will be another directory folder which is called as `tpz_characters`, this directory folder is the one that should be exported to your resources (The folder which contains `fxmanifest.lua`).
 
-2. Add `ensure tpz_menu_base` after the `tpz-core` in the resources.cfg or server.cfg, depends where your scripts are located.
+2. Add `ensure tpz_characters` after the `tpz-core` in the resources.cfg or server.cfg, depends where your scripts are located.
    
 ## Screenshot Displays
 
