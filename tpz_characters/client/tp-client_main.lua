@@ -323,7 +323,12 @@ Citizen.CreateThread(function()
 
             local promptGroup, promptList = GetSelectorPromptData()
 
-            local characterUsername = CharacterData.Data[CharacterData.SelectedCharIndex].firstname .. ' ' .. CharacterData.Data[CharacterData.SelectedCharIndex].lastname
+            local characterUsername = ""
+
+            if CharacterData.SelectedCharIndex ~= 0 then
+                CharacterData.Data[CharacterData.SelectedCharIndex].firstname .. ' ' .. CharacterData.Data[CharacterData.SelectedCharIndex].lastname
+            end
+
             local label = CreateVarString(10, 'LITERAL_STRING', characterUsername)
             PromptSetActiveGroupThisFrame(promptGroup, label)
 
