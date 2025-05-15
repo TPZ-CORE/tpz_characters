@@ -326,7 +326,7 @@ Citizen.CreateThread(function()
             local characterUsername = ""
 
             if CharacterData.SelectedCharIndex ~= 0 then
-                CharacterData.Data[CharacterData.SelectedCharIndex].firstname .. ' ' .. CharacterData.Data[CharacterData.SelectedCharIndex].lastname
+                characterUsername = CharacterData.Data[CharacterData.SelectedCharIndex].firstname .. ' ' .. CharacterData.Data[CharacterData.SelectedCharIndex].lastname
             end
 
             local label = CreateVarString(10, 'LITERAL_STRING', characterUsername)
