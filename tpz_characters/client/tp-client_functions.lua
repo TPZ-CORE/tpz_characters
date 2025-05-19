@@ -197,7 +197,7 @@ function RequestImapCreator()
 end
 
 function StartCam(x, y, z, rotx, roty, rotz, fov)
-	Citizen.InvokeNative(0x17E0198B3882C2CB, PlayerPedId())
+	Citizen.InvokeNative(0x17E0198B3882C2CB, PlayerPedId()) -- start solo tutorial session
 	DestroyAllCams(true)
 
     local cameraHandler = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", x, y, z, rotx, roty, rotz, fov, false, 2)
