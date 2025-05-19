@@ -10,5 +10,4 @@
 
 ## Disclaimer and Credits
 
-- @Credits to VORP-CORE for many utility functions and mechanics to be used properly for character creation.
-- @Credits to REDEM:RP for many utility functions and mechanics to be used properly for character creation.
+Credits to VORP and REDM:RP for many utility functions and mechanics to be used properly for character creation.
