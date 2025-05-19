@@ -42,8 +42,10 @@ RegisterNUICallback('submit', function(data)
             
         SetNUIStatus(false)
 
+	Citizen.InvokeNative(0x17E0198B3882C2CB, PlayerPedId()) -- start tutorial session
+			
         CreateCharacterLobbyHandlers(tonumber(data.sex))
-
+			
         -- [[ We open the character customization menu & control actions ]] 
         OpenCharacterCustomization()
         StartMenuControlActions()
