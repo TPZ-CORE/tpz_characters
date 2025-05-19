@@ -142,6 +142,8 @@ function OpenCharacterCustomization()
             ClearSelectorPrompt()
 
             TriggerServerEvent('tpz_core:createNewCharacter', RegisterData.firstname, RegisterData.lastname, RegisterData.gender, RegisterData.dob, SkinData, "unemployed")
+
+            Citizen.InvokeNative(0xD0AFAFF5A51D72F7, PlayerPedId()) -- end tutorial session
             TriggerServerEvent('tpz_core:instanceplayers', 0) -- Removing all the instanced players after selecting a character.
       
         end
