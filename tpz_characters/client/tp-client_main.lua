@@ -58,8 +58,8 @@ end)
 -- on player join
 RegisterNetEvent('tpz_core:playerJoining')
 AddEventHandler("tpz_core:playerJoining", function(userData)
-    TriggerServerEvent('tpz_core:onPlayerJoined')
     CharacterData.MaxCharacters = userData.max_chars
+    TriggerServerEvent('tpz_core:onPlayerJoined')
 end)
 
 RegisterNetEvent('tpz_characters:loadPlayerSkinComps')
