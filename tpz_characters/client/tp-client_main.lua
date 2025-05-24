@@ -57,8 +57,9 @@ end)
 
 -- on player join
 RegisterNetEvent('tpz_core:playerJoining')
-AddEventHandler("tpz_core:playerJoining", function()
+AddEventHandler("tpz_core:playerJoining", function(userData)
     TriggerServerEvent('tpz_core:onPlayerJoined')
+    CharacterData.MaxCharacters = userData.max_chars
 end)
 
 RegisterNetEvent('tpz_characters:loadPlayerSkinComps')
@@ -336,7 +337,7 @@ Citizen.CreateThread(function()
             for i, prompt in pairs (promptList) do
                 PromptSetVisible(prompt.prompt, 0)
 
-                if CharacterData.Characters < Config.MaxCharacters and prompt.type == 'CREATE_CHARACTER' then
+                if CharacterData.Characters < CharacterData.MaxCharacters and prompt.type == 'CREATE_CHARACTER' then
                     PromptSetVisible(prompt.prompt, 1)
                 end
 
