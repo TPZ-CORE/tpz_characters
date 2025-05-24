@@ -3,7 +3,7 @@ local CharacterData = {
     PositionIndex       = 0,
 
     Characters          = 0,
-    MaxCharacters        = 3,
+    MaxCharacters       = 3,
 
     OnCharacterSelector = false,
 
