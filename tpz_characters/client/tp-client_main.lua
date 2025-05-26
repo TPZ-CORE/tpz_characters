@@ -534,7 +534,7 @@ end)
 -----------------------------------------------------------
 
 -- Reload Character Command (if set to true).
-if Config.ReloadCharacterCommand then
+if Config.ReloadCharacter.Command then
 
     TriggerEvent("chat:addSuggestion", "/" .. Config.ReloadCharacter.Command, Config.ReloadCharacter.Description)
 
