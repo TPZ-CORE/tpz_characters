@@ -1,3 +1,5 @@
+local TPZ = exports.tpz_core:getCoreAPI()
+
 -----------------------------------------------------------
 --[[ Events ]]--
 -----------------------------------------------------------
@@ -39,18 +41,14 @@ end)
 RegisterServerEvent("tpz_core:requestCharacterSkin")
 AddEventHandler("tpz_core:requestCharacterSkin", function()
     local _source = source
+				local xPlayer = TPZ.GetPlayer(_source)
 
-    if (_source == nil) then
-        return
-    end
+				if not xPlayer.loaded() then return end 
 
-    local steamId = GetSteamID(_source)
+				local identifier = xPlayer.getIdentifier()
+				local charIdentifier = xPlayer.getCharacterIdentifier()
     
-    if not steamId then
-        return
-    end
-    
-    exports["ghmattimysql"]:execute("SELECT * FROM `characters` WHERE `identifier` = @identifier AND `selected` = 1", { ['identifier'] = tostring(steamId)}, function(result)
+    exports["ghmattimysql"]:execute("SELECT * FROM characters WHERE charidentifier = @charidentifier", { ['charidentifier'] = charIdentifier}, function(result)
         if result and result[1] then
             local charData = result[1]
             TriggerClientEvent('tpz_characters:receiveSkinData', _source, {
@@ -59,7 +57,7 @@ AddEventHandler("tpz_core:requestCharacterSkin", function()
                 gender = charData.gender
             })
         else
-            print('[TPZ-CHARACTERS] Character not found for:', steamId)
+            print(string.format("[TPZ-CHARACTERS] Character {%s} not found for %s', charIdentifier, identifier"))
         end
     end)
 
