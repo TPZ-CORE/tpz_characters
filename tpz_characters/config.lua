@@ -15,8 +15,6 @@ Config.BlacklistedNames = {
     'penis', 'pennis', 'fucker', 
 }
 
-Config.MaxCharacters = 3
-
 Config.ReloadCharacterCommand                = true
 Config.ReloadCharacterCommandExecute         = "rc"
 Config.ReloadCharacterCommandExecuteCooldown = 120 -- 120 as default (equals to 2 minutes), time in seconds.
