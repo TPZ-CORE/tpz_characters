@@ -16,6 +16,8 @@ local CharacterData = {
     Data                = {},
 }
 
+local reloadSkinCooldown = 0
+
 CameraHandler = {coords = nil, zoom = 0, z = 0 }
 
 -----------------------------------------------------------
