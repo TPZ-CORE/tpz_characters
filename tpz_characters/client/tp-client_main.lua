@@ -60,7 +60,7 @@ RegisterNetEvent('tpz_core:playerJoining')
 AddEventHandler("tpz_core:playerJoining", function(userData)
 
     if userData == nil or userData.max_chars == nil then
-        CharacterData.MaxCharacters = Config.MaxCharacters
+        CharacterData.MaxCharacters = 3
     else
         CharacterData.MaxCharacters = userData.max_chars
     end
