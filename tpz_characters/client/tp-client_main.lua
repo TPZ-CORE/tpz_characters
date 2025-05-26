@@ -557,6 +557,8 @@ if Config.ReloadCharacterCommand then
                     Wait(1000)
                     SetEntityHealth(PlayerPedId(), currentHealth)
                     CleanPlayerPed()
+
+                    TPZ.NotifyObjective(Locales["CHARACTER_RELOADED"], 3000)
                 else
                     print("skin data not found")
                 end
@@ -564,7 +566,7 @@ if Config.ReloadCharacterCommand then
             end, {charId = CharacterData.SelectedCharIndex } )
 
         else
-            TriggerEvent('tpz_core:sendNotification', string.format(Locales['RELOAD_CHARACTER_COMMAND_COOLDOWN'], reloadSkinCooldown), "right")
+            TPZ.NotifyObjective(string.format(Locales['RELOAD_CHARACTER_COMMAND_COOLDOWN'], reloadSkinCooldown), 3000)
         end
 
     end)
