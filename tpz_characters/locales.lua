@@ -9,7 +9,8 @@ Locales = {
     ['CHAR_FINISHED_SELECTION_TITLE'] = "Accept & Play",
     ['CHAR_FINISHED_SELECTION_DESC']  = "Click to accept your character changes and selections to start playing.",
     
-
+    ["CHARACTER_NOT_SELECTED"]        = "~e~Character not selected",
+    ["CHARACTER_RELOADED"]             = "Character reloaded!",
     ['TOTAL_TYPES']                   = "Total",
     ['TOTAL_COLORS']                  = "Total Colors: ",
 
