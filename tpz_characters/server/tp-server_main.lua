@@ -57,7 +57,7 @@ AddEventHandler("tpz_core:requestCharacterSkin", function()
                 gender = charData.gender
             })
         else
-            print(string.format("[TPZ-CHARACTERS] Character {%s} not found for %s", charIdentifier, identifier"))
+            print(string.format("[TPZ-CHARACTERS] Character {%s} not found for %s", charIdentifier, identifier))
         end
     end)
 
