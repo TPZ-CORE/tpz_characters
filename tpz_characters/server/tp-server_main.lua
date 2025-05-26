@@ -39,8 +39,13 @@ end)
 
 -- @added by dobiban
 RegisterServerEvent("tpz_core:requestCharacterSkin")
-AddEventHandler("tpz_core:requestCharacterSkin", function()
+AddEventHandler("tpz_core:requestCharacterSkin", function(targetSource)
 	local _source = source
+
+	if targetSource then
+		_source = tonumber(targetSource)
+	end
+
 	local xPlayer = TPZ.GetPlayer(_source)
 
 	if not xPlayer.loaded() then return end 
