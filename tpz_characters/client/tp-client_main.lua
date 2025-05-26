@@ -517,16 +517,35 @@ if Config.ReloadCharacterCommand then
 
     RegisterCommand(Config.ReloadCharacterCommandExecute, function()
 
+        if CharacterData.SelectedCharIndex == 0 or CharacterData.OnCharacterSelector then
+            TPZ.NotifyObjective(Locales["CHARACTER_NOT_SELECTED"], 3000)
+            return
+        end
+
         if reloadSkinCooldown <= 0 then
+
+            local playerPed = PlayerPedId()
+            local currentHealth = GetEntityHealth(playerPed)
 
             reloadSkinCooldown = Config.ReloadCharacterCommandExecuteCooldown
 
             TriggerEvent("tpz_core:ExecuteServerCallBack", "tpz_characters:getPlayerSkinInformation", function(data)
 
-                SetPlayerModel(data.skin)
-                LoadEntitySkinComps(PlayerPedId(), data.skinComp, data.gender)
+                if data and data.skin then
+                    LoadHashModel(joaat(data.skin))
+                    Wait(500)
+                    SetPlayerModel(data.skin)
+                    SetModelAsNoLongerNeeded(data.skin)
+                    Wait(500)
+                    LoadEntitySkinComps(PlayerPedId(), data.skinComp, data.gender)
+                    Wait(1000)
+                    SetEntityHealth(PlayerPedId(), currentHealth)
+                    CleanPlayerPed()
+                else
+                    print("skin data not found")
+                end
 
-            end, {charId = SelectedCharIdentifier} )
+            end, {charId = CharacterData.SelectedCharIndex } )
 
         else
             TriggerEvent('tpz_core:sendNotification', string.format(Locales['RELOAD_CHARACTER_COMMAND_COOLDOWN'], reloadSkinCooldown), "right")
