@@ -35,7 +35,6 @@ $(function() {
 		}
 
 		var formattedDate = reformatDate(date);
-		console.log(formattedDate); // Output: "23/05/1997"
 
 		$.post('http://tpz_characters/submit', JSON.stringify({
 			firstname: firstname,
