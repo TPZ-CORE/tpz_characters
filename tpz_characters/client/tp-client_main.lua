@@ -93,9 +93,50 @@ AddEventHandler("tpz_core:playerJoining", function(userData)
     TriggerServerEvent('tpz_core:onPlayerJoined')
 end)
 
-RegisterNetEvent('tpz_characters:loadPlayerSkinComps')
-AddEventHandler("tpz_characters:loadPlayerSkinComps", function()
-    -- to-do
+-- Added by @Dobiban
+RegisterNetEvent('tpz_characters:receiveSkinData')
+AddEventHandler('tpz_characters:receiveSkinData', function(data)
+    
+    if data and data.skin then
+
+        local playerPed = PlayerPedId()
+        local currentHealth = GetEntityHealth(playerPed)
+
+        if Config.Debug then
+            print('[TPZ-CHARACTERS] Current health saved:', currentHealth)
+            print('[TPZ-CHARACTERS] Loading model:', data.skin)
+        end
+
+        LoadHashModel(joaat(data.skin))
+        Wait(500)
+        
+        if Config.Debug then
+            print('[TPZ-CHARACTERS] Applying model')
+        end
+
+        SetPlayerModel(data.skin)
+        SetModelAsNoLongerNeeded(data.skin)
+        Wait(500)
+        
+        if Config.Debug then
+            print('[TPZ-CHARACTERS] Loading components')
+        end
+
+        LoadEntitySkinComps(PlayerPedId(), data.skinComp, data.gender)
+        
+        -- Restaurar vida e limpar ped
+        Wait(1000)
+        SetEntityHealth(PlayerPedId(), currentHealth)
+        CleanPlayerPed()
+        
+        if Config.Debug then
+            print('[TPZ-CHARACTERS] Skin reloaded successfully')
+        end
+
+        TPZ.NotifyObjective(Locales["CHARACTER_RELOADED"], 3000)
+    else
+        print('[TPZ-CHARACTERS] Skin data not found')
+    end
 end)
 
 -- Load character selection
