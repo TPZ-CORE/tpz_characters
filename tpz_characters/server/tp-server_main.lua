@@ -35,6 +35,36 @@ AddEventHandler("tpz_characters:deleteSelectedCharacter", function(charId)
 
 end)
 
+-- @added by dobiban
+RegisterServerEvent("tpz_core:requestCharacterSkin")
+AddEventHandler("tpz_core:requestCharacterSkin", function()
+    local _source = source
+
+    if (_source == nil) then
+        return
+    end
+
+    local steamId = GetSteamID(_source)
+    
+    if not steamId then
+        return
+    end
+    
+    exports["ghmattimysql"]:execute("SELECT * FROM `characters` WHERE `identifier` = @identifier AND `selected` = 1", { ['identifier'] = tostring(steamId)}, function(result)
+        if result and result[1] then
+            local charData = result[1]
+            TriggerClientEvent('tpz_characters:receiveSkinData', _source, {
+                skin = charData.skin,
+                skinComp = charData.skinComp,
+                gender = charData.gender
+            })
+        else
+            print('[TPZ-CHARACTERS] Character not found for:', steamId)
+        end
+    end)
+
+end)
+
 -----------------------------------------------------------
 --[[ Callbacks ]]--
 -----------------------------------------------------------
