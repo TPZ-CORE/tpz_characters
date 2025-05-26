@@ -15,9 +15,12 @@ Config.BlacklistedNames = {
     'penis', 'pennis', 'fucker', 
 }
 
-Config.ReloadCharacterCommand                = true
-Config.ReloadCharacterCommandExecute         = "rc"
-Config.ReloadCharacterCommandExecuteCooldown = 120 -- 120 as default (equals to 2 minutes), time in seconds.
+Config.ReloadCharacter = { 
+    Enabled = true, 
+    Command = "loadskin", 
+    Description = "Re-load your current character skin",
+    Cooldown = 120,
+} -- 120 as default (equals to 2 minutes), time in seconds
 
 ---------------------------------------------------------------
 --[[ Characters Creation ]]--
