@@ -44,14 +44,14 @@ exports.tpz_core:getCoreAPI().addNewCallBack("tpz_characters:getPlayerSkinInform
     exports["ghmattimysql"]:execute("SELECT * FROM characters WHERE charidentifier = @charidentifier", { ['charidentifier'] = tonumber(data.charId)}, function(result)
         if result and result[1] then
 
-            cb({ 
+            return cb({ 
                 skin = result[1].skin, 
                 skinComp = result[1].skinComp, 
                 gender = result[1].gender 
             })
         else
             print('[TPZ-CHARACTERS] Character not found for charId:', data.charId)
-            cb(nil)
+            return cb(nil)
         end
     end)
 end)
