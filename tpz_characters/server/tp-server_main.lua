@@ -48,7 +48,7 @@ AddEventHandler("tpz_core:requestCharacterSkin", function(targetSource)
 
 	local xPlayer = TPZ.GetPlayer(_source)
 
-	if not xPlayer.loaded() then return end 
+	if not xPlayer.loaded() then print("Character not selected or loaded.") return end 
 
 	local identifier = xPlayer.getIdentifier()
 	local charIdentifier = xPlayer.getCharacterIdentifier()
