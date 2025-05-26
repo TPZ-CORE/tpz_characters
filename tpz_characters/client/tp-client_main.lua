@@ -109,7 +109,7 @@ AddEventHandler('tpz_characters:loadCharacterSelection', function(chars, data)
 	Citizen.InvokeNative(0xFDB74C9CC54C3F37, randomPosition.Modifications.Timecycle.Strength)
 
     local spawnCoords = randomPosition.Modifications.SpawnPlayerPosition
-    exports.tpz_core.getCoreAPI().teleportToCoords(spawnCoords.x, spawnCoords.y, spawnCoords.z, 0)
+    TPZ.teleportToCoords(spawnCoords.x, spawnCoords.y, spawnCoords.z, 0)
 
     -- Request Music
     PrepareMusicEvent(randomPosition.Modifications.Music)
