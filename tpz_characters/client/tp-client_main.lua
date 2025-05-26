@@ -16,8 +16,6 @@ local CharacterData = {
     Data                = {},
 }
 
-local reloadSkinCooldown = 0
-
 CameraHandler = {coords = nil, zoom = 0, z = 0 }
 
 -----------------------------------------------------------
@@ -576,6 +574,8 @@ end)
 
 -- Reload Character Command (if set to true).
 if Config.ReloadCharacter.Command then
+
+    local reloadSkinCooldown = 0
 
     TriggerEvent("chat:addSuggestion", "/" .. Config.ReloadCharacter.Command, Config.ReloadCharacter.Description)
 
