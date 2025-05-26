@@ -12,6 +12,7 @@ local CharacterData = {
     IsBusy              = true, -- for radar.
 
     SelectedCharIndex   = 0,
+    SelectedCharIdentifier = nil, -- selected char on select prompt
     Data                = {},
 }
 
@@ -455,6 +456,8 @@ Citizen.CreateThread(function()
                         local charData = CharacterData.Data[CharacterData.SelectedCharIndex]
                         local charId   = tonumber(charData.charidentifier)
 
+                        CharacterData.SelectedCharIdentifier = charId
+
                         ClearPedTasksImmediately(PlayerPedId(), true)
                 
                         LoadHashModel(joaat(charData.skin))
@@ -533,7 +536,7 @@ if Config.ReloadCharacterCommand then
 
     RegisterCommand(Config.ReloadCharacterCommandExecute, function()
 
-        if CharacterData.SelectedCharIndex == 0 or CharacterData.OnCharacterSelector then
+        if CharacterData.OnCharacterSelector or CharacterData.SelectedCharIdentifier == nil then
             TPZ.NotifyObjective(Locales["CHARACTER_NOT_SELECTED"], 3000)
             return
         end
@@ -543,11 +546,12 @@ if Config.ReloadCharacterCommand then
             local playerPed = PlayerPedId()
             local currentHealth = GetEntityHealth(playerPed)
 
-            reloadSkinCooldown = Config.ReloadCharacterCommandExecuteCooldown
-
             TriggerEvent("tpz_core:ExecuteServerCallBack", "tpz_characters:getPlayerSkinInformation", function(data)
 
                 if data and data.skin then
+
+                    reloadSkinCooldown = Config.ReloadCharacterCommandExecuteCooldown
+
                     LoadHashModel(joaat(data.skin))
                     Wait(500)
                     SetPlayerModel(data.skin)
@@ -563,7 +567,7 @@ if Config.ReloadCharacterCommand then
                     print("skin data not found")
                 end
 
-            end, {charId = CharacterData.SelectedCharIndex } )
+            end, { charId = CharacterData.SelectedCharIdentifier })
 
         else
             TPZ.NotifyObjective(string.format(Locales['RELOAD_CHARACTER_COMMAND_COOLDOWN'], reloadSkinCooldown), 3000)
@@ -572,3 +576,17 @@ if Config.ReloadCharacterCommand then
     end)
 
 end
+
+Citizen.CreateThread(function()
+    while true do
+        Wait(1000)
+
+        if not CharacterData.OnCharacterSelector then
+            if reloadSkinCooldown > 0 then
+                reloadSkinCooldown = reloadSkinCooldown - 1
+            end
+        else
+            Wait(5000)
+        end
+    end
+end)
