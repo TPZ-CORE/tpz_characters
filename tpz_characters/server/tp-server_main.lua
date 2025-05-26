@@ -41,12 +41,12 @@ end)
 RegisterServerEvent("tpz_core:requestCharacterSkin")
 AddEventHandler("tpz_core:requestCharacterSkin", function()
     local _source = source
-				local xPlayer = TPZ.GetPlayer(_source)
+	local xPlayer = TPZ.GetPlayer(_source)
 
-				if not xPlayer.loaded() then return end 
+	if not xPlayer.loaded() then return end 
 
-				local identifier = xPlayer.getIdentifier()
-				local charIdentifier = xPlayer.getCharacterIdentifier()
+	local identifier = xPlayer.getIdentifier()
+	local charIdentifier = xPlayer.getCharacterIdentifier()
     
     exports["ghmattimysql"]:execute("SELECT * FROM characters WHERE charidentifier = @charidentifier", { ['charidentifier'] = charIdentifier}, function(result)
         if result and result[1] then
