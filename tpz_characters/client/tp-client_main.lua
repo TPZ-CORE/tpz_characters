@@ -67,6 +67,10 @@ AddEventHandler("tpz_core:playerJoining", function(userData)
         CharacterData.MaxCharacters = userData.max_chars
     end
 
+    if Config.Debug then
+        print(string.format("Maximum Characters Limit: %s", CharacterData.MaxCharacters))
+    end
+
     TriggerServerEvent('tpz_core:onPlayerJoined')
 end)
 
