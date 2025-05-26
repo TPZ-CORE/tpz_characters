@@ -40,14 +40,19 @@ end)
 -----------------------------------------------------------
 
 exports.tpz_core:getCoreAPI().addNewCallBack("tpz_characters:getPlayerSkinInformation", function(source, cb, data)
+    
+    exports["ghmattimysql"]:execute("SELECT * FROM characters WHERE charidentifier = @charidentifier", { ['charidentifier'] = tonumber(data.charId)}, function(result)
+        if result and result[1] then
 
-    exports["ghmattimysql"]:execute("SELECT * FROM characters WHERE charidentifier = @charidentifier", { ['charidentifier'] = tonumber(data.charId) }, function(result)
-
-		while result == nil or result[1] == nil do
-			Wait(100)
-		end
-
-        return { skin = result[1].skin, skinComp = result[1].skinComp, gender = result[1].gender }
+            cb({ 
+                skin = result[1].skin, 
+                skinComp = result[1].skinComp, 
+                gender = result[1].gender 
+            })
+        else
+            print('[TPZ-CHARACTERS] Character not found for charId:', data.charId)
+            cb(nil)
+        end
     end)
-
 end)
+
