@@ -17,11 +17,14 @@ $(function() {
 		playAudio("button_click.wav");
 
 		// Verify date
-		var date      = $("#character_create_dob").val();
-		var dateCheck = new Date($("#character_create_dob").val());
+		var date = $("#character_create_dob").val();
 
-		if (date == null || date == "" || date == " " || dateCheck == "Invalid Date") {
-			date == "invalid";
+		if (date == null || date == false || date == "" || !date || date == undefined) {
+			return;
+		}
+
+		if (isInvalidDate(date)){
+			return;
 		}
 
 		var firstname = $("#character_create_firstname").val();
@@ -31,10 +34,13 @@ $(function() {
 			return;
 		}
 
+		var formattedDate = reformatDate(date);
+		console.log(formattedDate); // Output: "23/05/1997"
+
 		$.post('http://tpz_characters/submit', JSON.stringify({
 			firstname: firstname,
 			lastname: lastname,
-			dateofbirth: date,
+			dateofbirth: formattedDate,
 			sex: $("input[type='radio'][name='sex']:checked").val(),
 		}));
 
@@ -101,4 +107,15 @@ function playAudio(sound) {
 	var audio = new Audio('./audio/' + sound);
 	audio.volume = Config.DefaultClickSoundVolume;
 	audio.play();
+}
+
+function isInvalidDate(dateString) {
+    const date = new Date(dateString);
+    return isNaN(date.getTime());
+}
+
+function reformatDate(dateString) {
+    const parts = dateString.split("-");
+    if (parts.length !== 3) return "Invalid date format";
+    return `${parts[2]}/${parts[1]}/${parts[0]}`;
 }
