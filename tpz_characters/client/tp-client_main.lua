@@ -620,18 +620,18 @@ if Config.ReloadCharacter.Command then
 
     end)
 
-end
+    Citizen.CreateThread(function()
+        while true do
+            Wait(1000)
 
-Citizen.CreateThread(function()
-    while true do
-        Wait(1000)
-
-        if not CharacterData.OnCharacterSelector then
-            if reloadSkinCooldown > 0 then
-                reloadSkinCooldown = reloadSkinCooldown - 1
+            if not CharacterData.OnCharacterSelector then
+                if reloadSkinCooldown > 0 then
+                    reloadSkinCooldown = reloadSkinCooldown - 1
+                end
+            else
+                Wait(10000)
             end
-        else
-            Wait(10000)
         end
-    end
-end)
+    end)
+
+end
