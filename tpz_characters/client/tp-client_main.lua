@@ -536,7 +536,9 @@ end)
 -- Reload Character Command (if set to true).
 if Config.ReloadCharacterCommand then
 
-    RegisterCommand(Config.ReloadCharacterCommandExecute, function()
+    TriggerEvent("chat:addSuggestion", "/" .. Config.ReloadCharacter.Command, Config.ReloadCharacter.Description)
+
+    RegisterCommand(Config.ReloadCharacter.Command, function()
 
         if CharacterData.OnCharacterSelector or CharacterData.SelectedCharIdentifier == nil then
             TPZ.NotifyObjective(Locales["CHARACTER_NOT_SELECTED"], 3000)
@@ -552,7 +554,7 @@ if Config.ReloadCharacterCommand then
 
                 if data and data.skin then
 
-                    reloadSkinCooldown = Config.ReloadCharacterCommandExecuteCooldown
+                    reloadSkinCooldown = Config.ReloadCharacter.Cooldown
 
                     LoadHashModel(joaat(data.skin))
                     Wait(500)
@@ -588,7 +590,7 @@ Citizen.CreateThread(function()
                 reloadSkinCooldown = reloadSkinCooldown - 1
             end
         else
-            Wait(5000)
+            Wait(10000)
         end
     end
 end)
