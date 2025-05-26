@@ -37,6 +37,22 @@ function DeleteCharacterEntities()
 
 end
 
+-- Function to clean the character properly
+function CleanPlayerPed()
+    local playerPed = PlayerPedId()
+    if DoesEntityExist(playerPed) then
+        -- Clean blood and dirt
+        ClearPedBloodDamage(playerPed)
+        ClearPedEnvDirt(playerPed)
+        ClearPedWetness(playerPed)
+        ClearPedDamageDecalByZone(playerPed, 10, "ALL")
+        
+        -- Nearby
+        local coords = GetEntityCoords(playerPed)
+        RemoveDecalsInRange(coords.x, coords.y, coords.z, 2.0)
+    end
+end
+
 function GetCharacterData()
     return CharacterData
 end
