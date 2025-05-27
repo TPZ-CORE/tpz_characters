@@ -68,7 +68,7 @@ function CreateCharacterLobbyHandlers(sex)
     TaskStandStill(PlayerPedId(), -1)
 
     local createCharCoords = CreatorData.Modifications.SpawnPlayerPosition
-    exports.tpz_core.getCoreAPI().teleportToCoords(createCharCoords.x, createCharCoords.y, createCharCoords.z, createCharCoords.h)
+    exports.tpz_core.getCoreAPI().TeleportToCoords(createCharCoords.x, createCharCoords.y, createCharCoords.z, createCharCoords.h)
 
     -- [[ Creating camera handlers on character create (random selected coords) ]]
     local cameraCoords = CreatorData.Modifications.MainCamera
