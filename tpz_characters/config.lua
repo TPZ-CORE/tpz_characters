@@ -31,7 +31,6 @@ Config.OnCharacterCreate = {
     Modifications = {
 
         -- The player position for the character creation.
-        --SpawnPlayerPosition = { x = 1323.470, y = -1321.22, z = 73.965, h = 172.31329345703 },
         SpawnPlayerPosition = { x = -559.341, y = -3775.27, z = 237.59, h = 188.532104 },
         Weather      = { Type = "sunny", Transition = 20, Snow = false },  
         Timecycle    = { ModifierName = "Online_Character_Editor", Strenght = 1.0 },
@@ -40,9 +39,6 @@ Config.OnCharacterCreate = {
 
         MainCamera = {  x = -559.43, y = -3777.66, z = 239.11, rotx = 0.0, roty = 0.0, rotz = 1.89, fov = 32.0  },
         OutCamera  = {  x = -561.15, y = -3774.22, z = 238.0, rotx = 0.0, roty = 0.0, rotz = 1.89, fov = 32.0  },
-
-        --MainCamera = {  x = 1323.102, y = -1322.57, z = 75.442, rotx = 0.0, roty = 0.0, rotz = 344.0, fov = 60.0  },
-        --OutCamera  = {  x = 1322.627, y = -1324.86, z = 74.941, rotx = 0.0, roty = 0.0, rotz = 344.0, fov = 60.0 },
     },
 
     CameraAdjustmentPromptDescription = "Camera Adjustments",
