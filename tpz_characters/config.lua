@@ -17,7 +17,7 @@ Config.BlacklistedNames = {
 
 Config.ReloadCharacter = { 
     Enabled = true, 
-    Command = "loadskin", 
+    Command = "reloadskin", 
     Description = "Re-load your current character skin",
     Cooldown = 120,
 } -- 120 as default (equals to 2 minutes), time in seconds
