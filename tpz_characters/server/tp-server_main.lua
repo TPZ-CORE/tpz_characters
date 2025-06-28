@@ -38,8 +38,8 @@ AddEventHandler("tpz_characters:deleteSelectedCharacter", function(charId)
 end)
 
 -- @added by dobiban
-RegisterServerEvent("tpz_core:requestCharacterSkin")
-AddEventHandler("tpz_core:requestCharacterSkin", function(targetSource)
+RegisterServerEvent("tpz_characters:requestCharacterSkin")
+AddEventHandler("tpz_characters:requestCharacterSkin", function(targetSource)
 	local _source = source
 
 	if targetSource then
