@@ -573,7 +573,7 @@ end)
 -----------------------------------------------------------
 
 -- Reload Character Command (if set to true).
-if Config.ReloadCharacter.Command then
+if Config.ReloadCharacter.Enabled then
 
     local reloadSkinCooldown = 0
 
