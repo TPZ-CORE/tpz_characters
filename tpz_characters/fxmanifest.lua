@@ -3,7 +3,7 @@ games {"rdr3"}
 rdr3_warning 'I acknowledge that this is a prerelease build of RedM, and I am aware my resources *will* become incompatible once RedM ships.'
 
 author 'Nosmakos'
-description 'Titans Productions Zombies Core - Characters'
+description 'TPZ-CORE - Characters'
 version '1.0.1'
 
 ui_page 'html/index.html'
