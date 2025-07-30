@@ -27,6 +27,19 @@ AddEventHandler("tpz_characters:deleteSelectedCharacter", function(charId)
 		-- it is a devtools / injection cheat.
 		if res.identifier ~= tostring(steamId) then
 			print(string.format('[WARNING] - [DevTools / Injection FOUND] The player with the online id: %s and Steam Identifier: %s attempted to delete a character of another player.', _source, tostring(steamId)))
+			
+			local steamName = GetPlayerName(_source)
+
+			if Config.Webhooks['DEVTOOLS_INJECTION_CHEAT'].Enabled then
+      local _w, _c      = Config.Webhooks['DEVTOOLS_INJECTION_CHEAT'].Url, Config.Webhooks['DEVTOOLS_INJECTION_CHEAT'].Color
+      local description = 'The specified user attempted to use devtools / injection in attempt to delete a character of another player.'
+      TPZ.SendToDiscordWithPlayerParameters(_w, Locales['DEVTOOLS_INJECTION_DETECTED_TITLE_LOG'], _source, steamName, "n/a", tostring(steamId), "n/a", description, _c)
+   end
+
+			if TPZ.GetPlayer(_source).loaded() then
+	   TPZ.GetPlayer(_source).ban(Locales['DEVTOOLS_INJECTION_DETECTED'], -1)
+			end
+
 			return
 		end
 
