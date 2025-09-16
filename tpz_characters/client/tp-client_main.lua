@@ -608,6 +608,14 @@ if Config.ReloadCharacter.Enabled then
                     CleanPlayerPed()
 
                     TPZ.NotifyObjective(Locales["CHARACTER_RELOADED"], 3000)
+
+                    Citizen.CreateThread(function()
+                        while reloadSkinCooldown > 0 do
+                            Wait(1000)
+                            reloadSkinCooldown = reloadSkinCooldown - 1
+                        end
+                    end)
+
                 else
                     print("skin data not found")
                 end
@@ -618,20 +626,6 @@ if Config.ReloadCharacter.Enabled then
             TPZ.NotifyObjective(string.format(Locales['RELOAD_CHARACTER_COMMAND_COOLDOWN'], reloadSkinCooldown), 3000)
         end
 
-    end)
-
-    Citizen.CreateThread(function()
-        while true do
-            Wait(1000)
-
-            if not CharacterData.OnCharacterSelector then
-                if reloadSkinCooldown > 0 then
-                    reloadSkinCooldown = reloadSkinCooldown - 1
-                end
-            else
-                Wait(10000)
-            end
-        end
     end)
 
 end
