@@ -1,3 +1,16 @@
+-----------------------------------------------------------
+--[[ Variables ]]--
+-----------------------------------------------------------
+
+local delays = {}
+local isRefreshing = false
+
+-----------------------------------------------------------
+--[[ Data ]]--
+-----------------------------------------------------------
+
+cache.component = { color = {} }
+
 Components.data = {}
 
 Components.data.pedCategories = {
@@ -285,3 +298,212 @@ Components.data.expressions = {
   thighs = 64834,
 }
 Components.expressions = Components.data.expressions --deprecated name
+
+
+-----------------------------------------------------------
+--[[ Functions ]]--
+-----------------------------------------------------------
+
+local invokeNative = Citizen.InvokeNative
+local function SetTextureOutfitTints(ped, category, palette, tint0, tint1, tint2)
+  if not palette then return end
+  if palette == 0 then return end
+  return invokeNative(0x4EFC1F8FF1AD94DE, ped, Components.getCategoryHash(category), GetHashFromString(palette), tint0, tint1,
+    tint2)
+end
+local function SetActiveMetaPedComponentsUpdated(ped) return invokeNative(0xAAB86462966168CE, ped, true) end
+local function N_0x704C908E9C405136(ped) return invokeNative(0x704C908E9C405136, ped) end
+local function GetShopItemBaseLayers(hash, metapedType, isMp)
+  return invokeNative(0x63342C50EC115CE8,
+    GetHashFromString(hash), 0, 0, metapedType, isMp, Citizen.PointerValueInt(), Citizen.PointerValueInt(),
+    Citizen.PointerValueInt(), Citizen.PointerValueInt(), Citizen.PointerValueInt(), Citizen.PointerValueInt(),
+    Citizen.PointerValueInt(), Citizen.PointerValueInt())
+end
+local function UpdatePedVariation(ped) return invokeNative(0xCC8CA3E88256E58F, ped, false, true, true, true, false) end
+local function IsPedReadyToRender(...) return invokeNative(0xA0BC8FAED8CFEB3C, ...) end
+local function IsThisModelAHorse(...) return invokeNative(0x772A1969F649E902, ...) == 1 end
+local function ApplyShopItemToPed(ped, hash, immediatly, isMp, p4)
+  return invokeNative(0xD3A7B003ED343FD9, ped,
+    GetHashFromString(hash), immediatly, isMp, p4)
+end
+local function GetMetaPedAssetTint(ped, index)
+  return invokeNative(0xE7998FEC53A33BBE, ped, index,
+    Citizen.PointerValueInt(), Citizen.PointerValueInt(), Citizen.PointerValueInt(), Citizen.PointerValueInt())
+end
+local function GetNumComponentsInPed(ped) return invokeNative(0x90403E8107B60E81, ped) or 0 end
+local function GetShopItemComponentCategory(...) return invokeNative(0x5FF9A878C3D115B8, ...) end
+local function UpdateShopItemWearableState(ped, hash, state)
+  return invokeNative(0x66B957AAC2EAAEAB, ped, GetHashFromString(hash), GetHashFromString(state), 0, true, 1)
+end
+local function SetMetaPedTag(ped, drawable, albedo, normal, material, palette, tint0, tint1, tint2)
+  return invokeNative(
+    0xBC6DF00D7A4A6819, ped, GetHashFromString(drawable), GetHashFromString(albedo), GetHashFromString(normal),
+    GetHashFromString(material), GetHashFromString(palette), tint0, tint1, tint2)
+end
+
+local function refreshPed(ped)
+  SetActiveMetaPedComponentsUpdated(ped)
+  UpdatePedVariation(ped)
+  N_0x704C908E9C405136(ped)
+end
+
+local function GetCategoryOfComponentAtIndex(ped, componentIndex)
+  local pedType = IsThisModelAHorse(GetEntityModel(ped)) and 6 or 0
+  local category = invokeNative(0x9b90842304c938a7, ped, componentIndex, pedType, Citizen.ResultAsInteger())
+  --patch neckerchiefs
+  if category == `neckerchiefs` then
+    category = `neckwear`
+  end
+  return category
+end
+
+--- @return integer (Hash)
+--- @return integer (WearableState)
+local function GetShopItemComponentAtIndex(ped, index)
+  local componentHash, a, wearableState = GetShopPedComponentAtIndex(ped, index, true, Citizen.ResultAsInteger(), Citizen.ResultAsInteger())
+  if not componentHash or componentHash == 0 then
+    componentHash, a, wearableState = GetShopPedComponentAtIndex(ped, index, false, Citizen.ResultAsInteger(), Citizen.ResultAsInteger())
+  end
+  return componentHash, wearableState
+end
+
+
+local function isValidValue(value)
+  return value and value ~= 0 and value ~= -1 and value ~= 1
+end
+
+---@return any data formatted table for component data
+local function formatComponentData(_data)
+  local data = table.copy(_data)
+  if type(data) ~= "table" then
+    data = { hash = data }
+  end
+  if type(data.hash) == "table" then data = data.hash end --for VORP
+  if data.hash == 0 or data.hash == false then
+    data.remove = true
+  end
+  data.hash = isValidValue(data.hash) and data.hash or nil
+  data.drawable = isValidValue(data.drawable) and data.drawable or nil
+  data.palette = isValidValue(data.palette) and data.palette or nil
+
+  if not data.hash and not data.drawable and not data.palette and not data.remove then
+    return false
+  end
+  return data
+end
+
+local function getComponentIndexOfCategory(ped, category)
+  category = Components.getCategoryHash(category)
+  local numComponent = GetNumComponentsInPed(ped)
+  for index = 0, numComponent - 1, 1 do
+    if GetCategoryOfComponentAtIndex(ped, index) == category then
+      return index
+    end
+  end
+  return -1
+end
+
+function Component.new(index, category, hash, wearableState, drawable, albedo, normal, material, palette, tint0, tint1, tint2)
+  return {
+    category = Components.getCategoryNameFromHash(category),
+    categoryHash = Components.getCategoryHash(category),
+    palette = palette,
+    tint0 = tint0,
+    tint1 = tint1,
+    tint2 = tint2,
+    hash = hash,
+    wearableState = Components.getWearableStateNameFromHash(wearableState),
+    wearableStateHash = GetHashFromString(wearableState) or false,
+    index = index,
+    drawable = drawable,
+    albedo = albedo,
+    normal = normal,
+    material = material,
+  }
+end
+
+local function getComponentAtIndex(ped, index)
+  local palette, tint0, tint1, tint2 = GetMetaPedAssetTint(ped, index)
+  local _, drawable, albedo, normal, material = GetMetaPedAssetGuids(ped, index)
+  local category = GetCategoryOfComponentAtIndex(ped, index)
+
+  local hash, wearableState = GetShopItemComponentAtIndex(ped, index)
+  return Component.new(index, category, hash, wearableState, drawable, albedo, normal, material, palette, tint0, tint1, tint2)
+end
+
+--- A function to get the base layer of a component
+---@param ped integer (The entity ID or the metaped type)
+---@param hash string|integer (The component hash)
+---@param inTable? boolean (`true` to get the result as a table, `false` to get the result as separate values<br> Default: `false`)
+---@return table|integer,integer,integer,integer,integer,integer,integer,integer (When inTable is true: returns a table with {drawable, albedo, normal, material, palette, tint0, tint1, tint2} <br> When inTable is false: 1st: drawable <br> 2nd: albedo <br> 3rd: normal <br> 4th: material <br> 5th: palette <br> 6th: tint0 <br> 7th: tint1 <br> 8th: tint2)
+function Components.getBaseLayer(ped, hash, inTable)
+  inTable = GetValue(inTable, false)
+  local metapedType = DoesEntityExist(ped) and GetMetaPedType(ped) or ped
+  local drawable, albedo, normal, material, palette, tint0, tint1, tint2 = GetShopItemBaseLayers(hash, metapedType, Components.isMpComponent(ped, hash))
+  if drawable == 0 or drawable == 1 then drawable = nil end
+  if albedo == 0 then albedo = nil end
+  if normal == 0 then normal = nil end
+  if material == 0 then material = nil end
+  if palette == 0 then palette = nil end
+  if inTable then
+    return {
+      drawable = drawable,
+      albedo = albedo,
+      normal = normal,
+      material = material,
+      palette = Components.getPaletteNameFromHash(palette),
+      tint0 = tint0,
+      tint1 = tint1,
+      tint2 = tint2
+    }
+  end
+  return drawable, albedo, normal, material, Components.getPaletteNameFromHash(palette), tint0, tint1, tint2
+end
+
+local function convertToMetaTag(ped, data)
+  data = table.copy(data)
+  --restrict to hats & masks
+  if not data.hash then return data end
+  if data.albedo then return data end
+
+  local drawable, albedo, normal, material, palette, tint0, tint1, tint2 = Components.getBaseLayer(ped, data.hash)
+  data.drawable = data.drawable or drawable or data.hash or 0
+  data.albedo = data.albedo or albedo or 0
+  data.normal = data.normal or normal or 0
+  data.material = data.material or material or 0
+  data.palette = data.palette or palette or 0
+  data.tint0 = data.tint0 or tint0
+  data.tint1 = data.tint1 or tint1
+  data.tint2 = data.tint2 or tint2
+  data.hash = nil
+  return data
+end
+
+local function applyDefaultBodyParts(ped)
+  if IsPedMale(ped) then
+    EquipMetaPedOutfitPreset(ped, 4, false)
+    Components.apply(ped, "bodies_upper", `CLOTHING_ITEM_M_BODIES_UPPER_001_V_001`)
+    Components.apply(ped, "bodies_lower", `CLOTHING_ITEM_M_BODIES_LOWER_001_V_001`)
+    Components.apply(ped, "heads", `CLOTHING_ITEM_M_HEAD_002_V_001`)
+    Components.apply(ped, "eyes", `CLOTHING_ITEM_M_EYES_001_TINT_001`)
+    Components.apply(ped, "teeth", `CLOTHING_ITEM_M_TEETH_000`)
+  else
+    EquipMetaPedOutfitPreset(ped, 7, false)
+    Components.apply(ped, "bodies_upper", `CLOTHING_ITEM_F_BODIES_UPPER_001_V_001`)
+    Components.apply(ped, "bodies_lower", `CLOTHING_ITEM_F_BODIES_LOWER_001_V_001`)
+    Components.apply(ped, "heads", `CLOTHING_ITEM_F_HEAD_002_V_001`)
+    Components.apply(ped, "eyes", `CLOTHING_ITEM_F_EYES_001_TINT_001`)
+    Components.apply(ped, "teeth", `CLOTHING_ITEM_F_TEETH_000`)
+  end
+end
+
+---@param ped integer
+---@param category string|integer
+---@param hash table|integer|string
+---@param state string|integer
+local function updateComponentWearableState(ped, category, hash, state)
+  category = Components.getCategoryNameFromHash(category)
+  state = GetHashFromString(state)
+  Entity(ped).state:set("wearableState:" .. category, state)
+  UpdateShopItemWearableState(ped, type(hash) == "table" and hash.hash or hash, state)
+end
