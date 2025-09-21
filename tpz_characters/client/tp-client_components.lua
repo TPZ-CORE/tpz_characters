@@ -3,9 +3,9 @@
 
 Components = {}
 
----------------------------------------
--- Functions
-----------------------------------------
+-----------------------------------------------------------
+--[[ Functions  ]]--
+-----------------------------------------------------------
 
 --- A function to format component data
 ---@param _data string|number|table (The component data)
@@ -133,9 +133,9 @@ function Components.getTeethFromIndex(ped, index)
   return ("CLOTHING_ITEM_%s_TEETH_%03d"):format(sex, index or 1)
 end
 
----------------------------------------
--- EXPORTS
----------------------------------------
+-----------------------------------------------------------
+--[[ Exports  ]]--
+-----------------------------------------------------------
 
 exports("getComponents", function()
   return Components
