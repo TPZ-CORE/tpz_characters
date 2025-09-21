@@ -1,7 +1,7 @@
 
 -- @Credits to KadDarem, taken from jo_libs. 
 
-local Components = {}
+Components = {}
 
 ---------------------------------------
 -- Functions
@@ -131,10 +131,6 @@ function Components.getTeethFromIndex(ped, index)
     sex = IsPedMale(ped) and "M" or "F"
   end
   return ("CLOTHING_ITEM_%s_TEETH_%03d"):format(sex, index or 1)
-end
-
-function GetComponents()
-    return Components
 end
 
 ---------------------------------------
