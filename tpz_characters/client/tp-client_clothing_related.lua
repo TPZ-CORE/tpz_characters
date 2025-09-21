@@ -507,3 +507,106 @@ local function updateComponentWearableState(ped, category, hash, state)
   Entity(ped).state:set("wearableState:" .. category, state)
   UpdateShopItemWearableState(ped, type(hash) == "table" and hash.hash or hash, state)
 end
+
+-----------------------------------------------------------
+--[[ Color Management ]]--
+-----------------------------------------------------------
+
+---@param ped integer (The entity ID)
+---@param category integer|string the category hash
+local function resetCachedColor(ped, category)
+  if not cache.component.color[ped] then return end
+  cache.component.color[ped][category] = nil
+  if category == `neckwear` then
+    cache.component.color[ped][`neckerchiefs`] = nil
+  end
+end
+
+---@param ped integer (The entity ID)
+---@param category integer (the category hash)
+---@param hash integer (the component hash)
+---@param wearableState integer (the wearable state)
+---@param palette integer (the palette hash)
+---@param tint0 integer
+---@param tint1 integer
+---@param tint2 integer
+local function addCachedComponent(ped, index, category, hash, wearableState, drawable, albedo, normal, material, palette, tint0, tint1, tint2)
+  category = Components.getCategoryHash(category)
+  table.addMultiLevels(cache.component.color, ped, category)
+  cache.component.color[ped][category] = Component.new(index, category, hash, wearableState, drawable, albedo, normal, material, palette, tint0, tint1, tint2)
+  if category == `neckwear` then
+    cache.component.color[ped][`neckerchiefs`] = table.copy(cache.component.color[ped][category])
+    cache.component.color[ped][`neckerchiefs`].category = "neckerchiefs"
+  elseif category == `neckerchiefs` then
+    cache.component.color[ped][`neckwear`] = table.copy(cache.component.color[ped][category])
+    jcache.component.color[ped][`neckwear`].category = "neckwear"
+  end
+end
+
+---@param ped integer the entity ID
+---@return table
+local function initCachePedComponents(ped)
+  while isRefreshing do Wait(0) end
+  if not cache.component.color[ped] then
+    local numComponent = GetNumComponentsInPed(ped)
+    if not numComponent then return {} end -- No component detected on the ped
+    for index = 0, numComponent - 1 do
+      --Get current component
+      local palette, tint0, tint1, tint2 = GetMetaPedAssetTint(ped, index)
+      local _, drawable, albedo, normal, material = GetMetaPedAssetGuids(ped, index)
+      local category = GetCategoryOfComponentAtIndex(ped, index)
+
+      local hash, wearableState = GetShopItemComponentAtIndex(ped, index)
+      addCachedComponent(ped, index, category, hash, wearableState, drawable, albedo, normal, material, palette, tint0, tint1, tint2)
+    end
+  end
+  return table.copy(cache.component.color[ped])
+end
+
+-----------------------------------------------------------
+--[[ Cache Management ]]--
+-----------------------------------------------------------
+
+local function reapplyComponentStats(ped)
+  for category, list in pairs(Components.data.wearableStates) do
+    if Components.isCategoryAClothes(category) then
+      local isEquiped, index = Components.isCategoryEquiped(ped, category)
+      if isEquiped then
+        local state = Entity(ped).state["wearableState:" .. category] or "base"
+        local stateName = Components.getWearableStateNameFromHash(state)
+        if stateName ~= "base" and table.includes(list, stateName) then
+          local hash = GetShopItemComponentAtIndex(ped, index)
+          if Config.Debug then
+            print("Reapply state of %s: %s (%d)", category, Components.getWearableStateNameFromHash(state), state)
+          end
+          UpdateShopItemWearableState(ped, hash, state)
+        end
+      end
+    end
+  end
+end
+
+local function reapplyComponentsColor(ped)
+  for i = 1, #Components.data.order do
+    local category = Components.getCategoryHash(Components.data.order[i])
+    if cache.component.color[ped][category] then
+      local data = cache.component.color[ped][category]
+      SetTextureOutfitTints(ped, category, data.palette, data.tint0, data.tint1, data.tint2)
+    end
+  end
+end
+
+local function reapplyCached(ped)
+  if not cache.component.color[ped] then return end
+  delays["refresh" .. ped] = timeout.delay("jo_libs:component:reapplyCachedColor" .. ped,
+    function() component.waitPedLoaded(ped) end, function()
+      refreshPed(ped)
+      -- jo.component.waitPedLoaded(ped)
+      reapplyComponentStats(ped)
+      reapplyComponentsColor(ped)
+      cache.component.color[ped] = nil
+      refreshPed(ped)
+    end)
+end
+
+
