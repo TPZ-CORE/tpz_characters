@@ -253,7 +253,8 @@ function OpenCharacterCustomizationTypes(actionType)
                         local hash = clothingData.hash
 
                         ClothingList[tag].current = data.current.value
-                        SkinData[tag] = clothingData.hashDecSigned
+                        SkinData[tag] = clothingData.hashDecSigned -- SkinData[tag] = { id, palette, tint1, tint2, tint3 } 
+
 
                         if tag == "waist" or tag == "bodies_full" then
                             
