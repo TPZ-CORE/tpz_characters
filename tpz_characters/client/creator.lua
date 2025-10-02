@@ -225,8 +225,8 @@ function DefaultPedSetup(ped, male)
 		-- work around to fix skin on char creator
 		modules.IsPedReadyToRender()
 		modules.UpdateShopItemWearableState(-457866027, -425834297) -- fixes skin
-		modules.ApplyShopItemToPed(-218859683)                 -- might be boots cant remember
-		modules.ApplyShopItemToPed(PlayerSkin.gunbelt)
+		modules.ApplyShopItemToPed(-218859683)
+		modules.ApplyShopItemToPed(joaat(("CLOTHING_ITEM_%s_GUNBELT_000_TINT_001"):format(gender)))
 		modules.UpdateShopItemWearableState(-218859683, -2081918609) -- fixes skin
 		modules.UpdatePedVariation()
 	end
