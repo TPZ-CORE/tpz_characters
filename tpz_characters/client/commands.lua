@@ -21,7 +21,7 @@ if Config.ReloadCharacter.Enabled then
             local hogtied   = Citizen.InvokeNative(0x3AA24CCC0D451379, playerPed)
             local cuffed    = Citizen.InvokeNative(0x74E559B3BC910685, playerPed)
 
-            if hogtied or cuffed or IsPedOnMount(playerPed) and or IsPedInAnyVehicle(playerPed, false) then
+            if hogtied or cuffed or IsPedOnMount(playerPed) or IsPedInAnyVehicle(playerPed, false) then
                 exports.tpz_core:getCoreAPI().NotifyObjective(Locales["CHARACTER_RELOAD_NOT_PERMITTED"], 3000)
                 return
             end
