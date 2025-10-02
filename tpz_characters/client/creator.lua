@@ -118,7 +118,6 @@ function SelectCharacterModelOnCreation(isMale)
     Clothing = LoadClothingData()
 	Groom    = LoadGroomData() -- hairs
 
-    RemoveTagFromMetaPed(PlayerPedId(), Config.ComponentCategories.Teeth, 0)
 	modules.UpdatePedVariation()
 
 	SetEntityVisible(PlayerPedId(), true)
@@ -1019,56 +1018,56 @@ function SetCharacterDressingState()
 
 	local UndressCategories = {
 		-- Core clothing
-		Hat          = `HATS`,
-		Shirt        = `SHIRTS_FULL`,
-		ShirtOver    = `SHIRTS_FULL_OVERPANTS`,
-		Vest         = `VESTS`,
-		Vests        = `VESTS`,
-		Coat         = `COATS`,
-		CoatHeavy    = `COATS_HEAVY`,
-		CoatClosed   = `COATS_CLOSED`,
-		Cloak        = `CLOAKS`,
-		Poncho       = `PONCHOS`,
-		Dress        = `DRESSES`,
-		Skirt        = `SKIRTS`,
-		Pant         = `PANTS`,
-		Stockings    = `STOCKINGS`,
-		Chap         = `CHAPS`,
-		Suspender    = `SUSPENDERS`,
+		hat          = `HATS`,
+		shirt        = `SHIRTS_FULL`,
+		shirtover    = `SHIRTS_FULL_OVERPANTS`,
+		cest         = `VESTS`,
+		cests        = `VESTS`,
+		coat         = `COATS`,
+		coatHeavy    = `COATS_HEAVY`,
+		coatClosed   = `COATS_CLOSED`,
+		cloak        = `CLOAKS`,
+		poncho       = `PONCHOS`,
+		dress        = `DRESSES`,
+		skirt        = `SKIRTS`,
+		pant         = `PANTS`,
+		stockings    = `STOCKINGS`,
+		chap         = `CHAPS`,
+		suspender    = `SUSPENDERS`,
 	
 		-- Footwear
-		Boots        = `BOOTS`,
-		Spurs        = `BOOT_ACCESSORIES`,
-		Spats        = `SPATS`,
+		boots        = `BOOTS`,
+		spurs        = `BOOT_ACCESSORIES`,
+		spats        = `SPATS`,
 	
 		-- Belts / Holsters / Ammo
-		Belt         = `BELTS`,
-		Buckle       = `BELT_BUCKLES`,
-		Gunbelt      = `GUNBELTS`,
-		GunbeltAccs  = `GUNBELT_ACCS`,
-		Holster      = `HOLSTERS_LEFT`,
-		Loadouts     = `LOADOUTS`,
-		AmmoPistol   = `AMMO_PISTOLS`,
-		AmmoRifle    = `AMMO_RIFLES`,
+		belt         = `BELTS`,
+		buckle       = `BELT_BUCKLES`,
+		gunbelt      = `GUNBELTS`,
+		gunbeltaccs  = `GUNBELT_ACCS`,
+		holster      = `HOLSTERS_LEFT`,
+		loadouts     = `LOADOUTS`,
+		ammopistol   = `AMMO_PISTOLS`,
+		ammorifle    = `AMMO_RIFLES`,
 	
 		-- Accessories
-		Satchels     = `SATCHELS`,
-		Gloves       = `GLOVES`,
-		Gauntlets    = `GAUNTLETS`,
-		Eyewear      = `EYEWEAR`,
-		Necktie      = `NECKTIES`,
-		Neckwear     = `NECKWEAR`,
-		Bracelet     = `JEWELRY_BRACELETS`,
-		Badge        = `BADGES`,
-		Armor        = `ARMOR`,
-		Apron        = `APRONS`,
-		Accessories  = `ACCESSORIES`,
+		satchels     = `SATCHELS`,
+		gloves       = `GLOVES`,
+		gauntlets    = `GAUNTLETS`,
+		eyewear      = `EYEWEAR`,
+		necktie      = `NECKTIES`,
+		neckwear     = `NECKWEAR`,
+		bracelet     = `JEWELRY_BRACELETS`,
+		badge        = `BADGES`,
+		armor        = `ARMOR`,
+		apron        = `APRONS`,
+		accessories  = `ACCESSORIES`,
 	
 		-- Masks / Talismans
-		Mask         = `MASKS`,
-		MaskLarge    = `MASKS_LARGE`,
-		TalismanHol  = `TALISMAN_HOLSTER`,
-		TalismanBelt = `TALISMAN_BELT`,
+		mask         = `MASKS`,
+		masklarge    = `MASKS_LARGE`,
+		talismanhol  = `TALISMAN_HOLSTER`,
+		talismanbelt = `TALISMAN_BELT`,
 	}
 	
 	if not IsDressed then 
