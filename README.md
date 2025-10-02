@@ -10,4 +10,5 @@
 
 ## Disclaimer and Credits
 
-Credits to VORP and REDM:RP for many utility functions and mechanics to be used properly for character creation.
+- Credits to VORP and REDM:RP for many utility functions and methods to be used properly for the character creation.
+- Credits to KadDarem (Jump On Studios) for all the shared modules, utilities and components which are taken from jo libs
