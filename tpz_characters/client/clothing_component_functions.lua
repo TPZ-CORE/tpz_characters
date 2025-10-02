@@ -888,6 +888,7 @@ function LoadEntityComponents(ped, model, skinComp, reload, clean)
                 FixClothingProperlyOnCategorySelect(cloth.category, skinComp, ped)
 
             else
+                modules.IsPedReadyToRender(ped)
                 RemoveTagFromMetaPed(ped, Config.ComponentCategories[cloth.category])
                 modules.UpdatePedVariation(ped)
 
@@ -912,5 +913,4 @@ function LoadEntityComponents(ped, model, skinComp, reload, clean)
 
     SetEntityVisible(ped, true)
     SetEntityFadeIn(ped)
-
 end
