@@ -1,0 +1,409 @@
+<html>
+	<head>
+          <script src="https://kit.fontawesome.com/1aa8cd39de.js" crossorigin="anonymous"></script>
+
+          <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+          <link rel="stylesheet" href="css/style.css" type="text/css">
+          <link rel="stylesheet" href="css/info-keys.css" type="text/css">
+          <link rel="stylesheet" href="css/sex-dialog.css" type="text/css">
+          <link rel="stylesheet" href="css/identity-dialog.css" type="text/css">
+          <link rel="stylesheet" href="css/appearance.css" type="text/css">
+          <link rel="stylesheet" href="css/body_types.css" type="text/css">
+          <link rel="stylesheet" href="css/heritage.css" type="text/css">
+          <link rel="stylesheet" href="css/ageing.css" type="text/css">
+          <link rel="stylesheet" href="css/makeup.css" type="text/css">
+          <link rel="stylesheet" href="css/lifestyle.css" type="text/css">
+          <link rel="stylesheet" href="css/bodyfeatures.css" type="text/css">
+          <link rel="stylesheet" href="css/groom.css" type="text/css">
+          <link rel="stylesheet" href="css/clothing.css" type="text/css">
+          <script src="nui://game/ui/jquery.js" type="text/javascript"></script>
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+          <link href="https://fonts.cdnfonts.com/css/chinese-rocks" rel="stylesheet">
+     </head>
+      
+     <body>
+          <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        
+          <script src="js/script.js" type="text/javascript"></script>
+          <script src="js/script_utils.js" type="text/javascript"></script>
+          <script src="js/script_appearances.js" type="text/javascript"></script>
+          <script src="js/script_appearances_body_types.js" type="text/javascript"></script>
+          <script src="js/script_appearances_heritage.js" type="text/javascript"></script>
+          <script src="js/script_appearances_ageing.js" type="text/javascript"></script>
+          <script src="js/script_appearances_lifestyle.js" type="text/javascript"></script>
+          <script src="js/script_appearances_bodyfeatures.js" type="text/javascript"></script>
+          <script src="js/script_appearances_groom.js" type="text/javascript"></script>
+          <script src="js/script_appearances_makeup.js" type="text/javascript"></script>
+          <script src="js/script_clothing.js" type="text/javascript"></script>
+          
+		<div id = "tpz_characters">
+
+               <div class = "info"> <!-- Credits to spooni for the key displays -->
+
+                    <div id="controls">
+                         <div id="basic-controls" class="control-set">
+               
+                              <div class="control-and-help">
+                                   <div class="control">u</div>
+                                   <div class="control-help">Zoom Out</div>
+                              </div>
+                              
+                              <div class="control-and-help">
+                                   <div class="control">v</div>
+                                   <div class="control-help">Zoom In</div>
+                              </div>
+
+                              <div class="control-and-help">
+                                   <div class="control">r</div>
+                                   <div class="control-help">Camera Down</div>
+                              </div>
+               
+                              <div class="control-and-help">
+                                   <div class="control">q</div>
+                                   <div class="control-help">Camera Up</div>
+                              </div>
+
+                              <div class="control-and-help">
+                                   <div class="control">s</div>
+                                   <div class="control-help">Character Rotation</div>
+                              </div>
+               
+                              <div class="control-and-help">
+                                   <div class="control">t</div>
+                                   <div class="control-help">Character Rotation</div>
+                              </div>
+
+                              <div class="control-and-help">
+                                   <div class="control">e</div>
+                                   <div class="control-help">Undress - Dress Full</div>
+                              </div>
+
+                              <div class="control-and-help">
+                                   <div class="control">X</div>
+                                   <div class="control-help">Hands Up - Down</div>
+                              </div>
+
+                         </div>
+                    </div>      
+               </div>
+
+               <div id="main-background"></div>
+               <div id="title"></div>
+
+               <div class='main-section'>
+                    <div id="info-welcome-text"></div>
+                    <div id="main-identity-section-button"></div>
+                    <div id="main-appearance-section-button"></div>
+                    <div id="main-clothing-section-button"></div>
+                    <div id="main-accept-button"></div>
+               </div>
+
+               <div class='appearance-section'>
+                    <div id="appearance-info-text"></div>
+               
+                    <div id="appearance-categories-list"></div>
+                    <div id="appearance-back-button"></div>
+               
+               </div>
+
+               <div class='body-section'>
+                    <div id="body-info-text"></div>
+
+                    <div id="body-type-title"></div>
+                    
+                    <div class="body-type-selector">
+                         <div class="body-type-nav-container">
+                    
+                              <button id="body-type-prev">⟨</button>
+                              <div id="body-type-currentNumber">1</div>
+                              <button id="body-type-next">⟩</button>
+                    
+                         </div>
+                    
+                    </div>
+
+                    <div id="body-waist-title"></div>
+
+                    <div class="body-waist-selector">
+                         <div class="body-waist-nav-container">
+                    
+                              <button id="body-waist-prev">⟨</button>
+                              <div id="body-waist-currentNumber">1</div>
+                              <button id="body-waist-next">⟩</button>
+                    
+                         </div>
+                    
+                    </div>
+
+                    <div id="body-torso-title"></div>
+                    
+                    <div class="body-torso-selector">
+                         <div class="body-torso-nav-container">
+                    
+                              <button id="body-torso-prev">⟨</button>
+                              <div id="body-torso-currentNumber">1</div>
+                              <button id="body-torso-next">⟩</button>
+                    
+                         </div>
+                    
+                    </div>
+
+                    <div id="body-legs-title"></div>
+                    
+                    <div class="body-legs-selector">
+                         <div class="body-legs-nav-container">
+                    
+                              <button id="body-legs-prev">⟨</button>
+                              <div id="body-legs-currentNumber">1</div>
+                              <button id="body-legs-next">⟩</button>
+                    
+                         </div>
+                    
+                    </div>
+
+                    <div id="body-back-button"></div>
+               </div>
+
+               <div class='heritage-section'>
+                    <div id="heritage-info-text"></div>
+               
+                    <div id="heritage-type-title"></div>
+               
+                    <div class="heritage-type-selector">
+                         <div class="heritage-type-nav-container">
+               
+                              <button id="heritage-type-prev">⟨</button>
+                              <div id="heritage-type-currentNumber">1</div>
+                              <button id="heritage-type-next">⟩</button>
+               
+                         </div>
+               
+                    </div>
+               
+                    <div id="heritage-color-title"></div>
+               
+                    <div class="heritage-color-selector">
+                         <div class="heritage-color-nav-container">
+               
+                              <button id="heritage-color-prev">⟨</button>
+                              <div id="heritage-color-currentNumber">1</div>
+                              <button id="heritage-color-next">⟩</button>
+               
+                         </div>
+               
+                    </div>
+               
+                    <div id="heritage-back-button"></div>
+               </div>
+
+               <div class='groom-section'>
+                    <div id="groom-info-text"></div>
+
+                    <div id="groom-categories-list"></div>
+                    <div id="groom-back-button"></div>
+                    
+               </div>
+
+               <div class='groom-selected-section'>
+                    <div id="groom-selected-title"></div>
+                    <div id="groom-selected-info-text"></div>
+                    <div id="groom-selected-comps-list"></div>
+                    <div id="groom-selected-back-button"></div>
+               
+               </div>
+
+               <div class='makeup-section'>
+                    <div id="makeup-info-text"></div>
+               
+                    <div id="makeup-categories-list"></div>
+                    <div id="makeup-back-button"></div>
+               
+               </div>
+               
+               <div class='makeup-selected-section'>
+                    <div id="makeup-selected-title"></div>
+                    <div id="makeup-selected-info-text"></div>
+                    <div id="makeup-selected-comps-list"></div>
+                    <div id="makeup-selected-back-button"></div>
+               
+               </div>
+
+               <div class='ageing-section'>
+                    <div id="ageing-info-text"></div>
+               
+                    <div id="ageing-texture-id-title"></div>
+               
+                    <div class="ageing-texture-id-selector">
+                         <div class="ageing-texture-id-nav-container">
+               
+                              <button id="ageing-texture-id-prev">⟨</button>
+                              <div id="ageing-texture-id-currentNumber">10</div>
+                              <button id="ageing-texture-id-next">⟩</button>
+               
+                         </div>
+               
+                    </div>
+               
+                    <div id="ageing-opacity-title"></div>
+               
+                    <div class="ageing-opacity-selector">
+                         <div class="ageing-opacity-nav-container">
+               
+                              <button id="ageing-opacity-prev">⟨</button>
+                              <div id="ageing-opacity-currentNumber">10</div>
+                              <button id="ageing-opacity-next">⟩</button>
+               
+                         </div>
+               
+                    </div>
+               
+                    <div id="ageing-back-button"></div>
+               
+               </div>
+
+               <div class='lifestyle-section'>
+                    <div id="lifestyle-info-text"></div>
+                    <div id="lifestyle-categories-list"></div>
+                    <div id="lifestyle-back-button"></div>
+               
+               </div>
+
+               <div class='lifestyle-selected-section'>
+                    <div id="lifestyle-selected-title"></div>
+                    <div id="lifestyle-selected-info-text"></div>
+
+                    <div id="lifestyle-texture-id-title"></div>
+                    
+                    <div class="lifestyle-texture-id-selector">
+                         <div class="lifestyle-texture-id-nav-container">
+                    
+                              <button id="lifestyle-texture-id-prev">⟨</button>
+                              <div id="lifestyle-texture-id-currentNumber">0</div>
+                              <button id="lifestyle-texture-id-next">⟩</button>
+                    
+                         </div>
+                    
+                    </div>
+                    
+                    <div id="lifestyle-opacity-title"></div>
+                    
+                    <div class="lifestyle-opacity-selector">
+                         <div class="lifestyle-opacity-nav-container">
+                    
+                              <button id="lifestyle-opacity-prev">⟨</button>
+                              <div id="lifestyle-opacity-currentNumber">10</div>
+                              <button id="lifestyle-opacity-next">⟩</button>
+                    
+                         </div>
+                    
+                    </div>
+
+                    <div id="lifestyle-selected-back-button"></div>
+               
+               </div>
+
+               <div class='bodyfeatures-section'>
+                    <div id="bodyfeatures-info-text"></div>
+                    <div id="bodyfeatures-categories-list"></div>
+                    <div id="bodyfeatures-back-button"></div>
+               
+               </div>
+
+               <div class='bodyfeatures-selected-section'>
+                    <div id="bodyfeatures-selected-title"></div>
+                    <div id="bodyfeatures-selected-info-text"></div>
+                    <div id="bodyfeatures-selected-comps-list"></div>
+                    <div id="bodyfeatures-selected-back-button"></div>
+                    
+               </div>
+
+               <div class='clothing-categories-section'>
+                    <div id="clothing-info-text"></div>
+                    <div id="categories-list"></div>
+                    <div id="clothing-back-button"></div>
+
+               </div>
+
+               <div class='clothing-selected-section'>
+                    <div id="clothing-selected-title"></div>
+                    <div id="clothing-selected-info-text"></div>
+
+                    <div id="clothing-selected-back-button"></div>
+                    <div id="clothing-selected-select-tint-button"></div>
+                    <div id="clothing-selected-component-title"></div>
+                    <div id="clothing-selected-palette-title"></div>
+               
+                    <div class="selector">
+                         <div class="nav-container">
+                              <button id="prev">⟨</button>
+                              <div id="currentNumber">0</div>
+                              <button id="next">⟩</button>
+                         </div>
+               
+                    </div>
+               
+                    <div class="palette-selector">
+                         <div class="palette-nav-container">
+                              <button id="palette-prev">⟨</button>
+                              <div id="palette-currentNumber">1</div>
+                              <button id="palette-next">⟩</button>
+                         </div>
+               
+                    </div>
+               
+               
+                    <div class="controls">
+                         <div class="row">
+                              <label style="color: white;">1</label>
+                              <input type="number" class="r-num" min="0" max="255" value="0">
+                              <input type="range" class="r-range" min="0" max="255" value="0">
+                         </div>
+                         <div class="row">
+                              <label style="color: white;">2</label>
+                              <input type="number" class="g-num" min="0" max="255" value="0">
+                              <input type="range" class="g-range" min="0" max="255" value="0">
+                         </div>
+                         <div class="row">
+                              <label style="color: white;">3</label>
+                              <input type="number" class="b-num" min="0" max="255" value="0">
+                              <input type="range" class="b-range" min="0" max="255" value="0">
+                         </div>
+                    </div>
+               
+               </div>
+
+               <div class='sex-dialog'>
+               
+                    <div id="sex-dialog-fade-background"></div>
+                    <div id="sex-dialog-background"></div>
+                    <div id="sex-dialog-title"></div>
+                    <div id="sex-dialog-info-text"></div>
+
+                    <div id="sex-dialog-gender-text"></div>
+                    <input id="sex-dialog-gender-input" type="text" class="sex-dialog-input" style="text-transform: uppercase;" placeholder="⟩ ⟨"></input>
+
+                    <div id="sex-dialog-select-button"></div>
+               </div>
+
+               <div class="dialog">
+
+                    <div id = "dialog-fade-background"></div>
+                    <div id = "dialog-background"></div>
+
+                    <div id = "dialog-title"></div>
+
+                    <input id="dialog-firstname-input" type="text" class = "dialog-input" placeholder="First name"></input>
+                    <input id="dialog-lastname-input"  type="text" class = "dialog-input" placeholder="Last name"></input>
+                    <input type = "date" id="dialog-dob-date-input" class = "dialog-input"></input>
+              
+                    <div id = "dialog-save-button"></div>
+               </div>
+
+               <div id="notification_message" class="notification"> </div>
+
+          </div>
+
+	</body>
+
+</html>

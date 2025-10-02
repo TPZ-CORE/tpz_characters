@@ -1,0 +1,115 @@
+
+@font-face {
+	font-family: crock;
+	src: url(../fonts/crock.ttf) format('truetype');
+}
+
+.dialog {
+	font-family: 'Chinese Rocks Rg', sans-serif;
+	position: absolute;
+	font-size: 22px;
+
+	width: 100%;
+	height: 100%;
+	background-color: rgba(8, 8, 8, 0);
+}
+
+#dialog-fade-background {
+	position: absolute;
+
+	width: 100%;
+	height: 100%;
+
+	background-color: rgba(24, 24, 24, 0.437);
+}
+
+#dialog-background {
+	position: absolute;
+
+	color: #ffffffb9;
+
+	font-family: 'Chinese Rocks Rg', sans-serif;
+	font-size: 1.1vw;
+
+	margin-left: 36.5%;
+	margin-top: 9%;
+
+	height: 43%;
+	width: 27%;
+
+	background-color: rgba(0, 0, 0, 0.737);
+
+	border-radius: 2%;
+}
+
+#dialog-title {
+	position: absolute;
+
+	top: 0.7vw;
+	color: #ffffffe0;
+
+	font-family: "crock", crock, serif;
+	font-weight: 500;
+	font-size: 1.3vw;
+
+	height: fit-content;
+	width: 23%;
+
+	text-align: center;
+
+	margin-top: 9.5%;
+	margin-left: 38.4%;
+
+	white-space: wrap;
+}
+
+.dialog-input {
+	position: absolute;
+
+	text-align: center;
+	width: 25%;
+
+	left: 37.5%;
+	top: 2%;
+}
+
+#dialog-firstname-input {
+	margin-top: 15%;
+}
+
+#dialog-lastname-input {
+	margin-top: 18%;
+}
+
+#dialog-dob-date-input {
+	margin-top: 21%;
+}
+
+#dialog-save-button {
+	position: absolute;
+
+	color: #ffffffb9;
+
+	font-family: "crock", crock, serif;
+	font-weight: 500;
+
+	font-size: 1.1vw;
+
+	margin-left: 37.5%;
+	margin-top: 29%;
+
+	padding-top: 0.1vw;
+
+	width: 25%;
+
+	height: 1.7vw;
+
+	text-align: center;
+
+	background-color: rgba(61, 61, 61, 0.76);
+}
+
+
+#dialog-save-button:hover {
+	opacity: 0.7;
+}

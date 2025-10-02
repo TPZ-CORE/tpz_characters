@@ -1,0 +1,301 @@
+@import url('https://fonts.cdnfonts.com/css/chinese-rocks');
+
+@font-face {
+	font-family: "212 Keyboard";
+	src: url(../fonts/keyboard.ttf);
+}
+
+@font-face {
+	font-family: texat;
+	src: url(../fonts/texat.otf) format('opentype');
+}
+
+@font-face {
+	font-family: crock;
+	src: url(../fonts/crock.ttf) format('truetype');
+}
+
+*:focus {
+	outline: none; 
+}
+
+body {
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	margin: 0;
+
+	overflow: hidden;
+	display: none;
+
+	text-align: center;
+	justify-content: center;
+	align-items: center;
+
+	-webkit-touch-callout: none;
+	/* iOS Safari */
+	-webkit-user-select: none;
+	/* Safari */
+	-khtml-user-select: none;
+	/* Konqueror HTML */
+	-moz-user-select: none;
+	/* Old versions of Firefox */
+	-ms-user-select: none;
+	/* Internet Explorer/Edge */
+	user-select: none;
+	/* Non-prefixed version, currently */
+
+	overflow: hidden;
+	justify-content: center;
+
+}
+
+#main-background {
+	position: absolute;
+	transform: translate(-50%, 0);
+
+	top: 10%;
+	left: 88%;
+
+	width: 20%;
+	height: 61%;
+
+	background-image: url(../img/default.png);
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+
+	overflow: hidden;
+}
+
+#main-identity-section-button,
+#main-appearance-section-button,
+#main-accept-button,
+#main-clothing-section-button {
+	position: absolute;
+	transform: translate(-50%, 0);
+	color: #e2e2e2;
+	font-family: "crock", crock, serif;
+	font-weight: 500;
+
+	font-size: 1.15vw;
+
+	margin-top: 35.5%;
+	margin-left: 88%;
+
+	width: 13%;
+	height: 3.2%;
+
+	padding-top: 0.1;
+
+	background-color: rgba(0, 0, 0, 0.553);
+	box-shadow: inset 0 0 2px 2px #74737391;
+	border-radius: 2%;
+	text-align: center;
+}
+
+#main-accept-button {
+	box-shadow: inset 0 0 2px 2px #ebcd2273;
+}
+#main-accept-button:hover {
+	color: white;
+	box-shadow: inset 0 0 2px 2px #ebcd22;
+}
+
+#main-identity-section-button {
+	margin-top: 26.5%;
+}
+
+#main-appearance-section-button {
+	margin-top: 29%;
+}
+
+#main-clothing-section-button {
+	margin-top: 31.5%;
+}
+
+
+#main-identity-section-button:hover,
+#main-appearance-section-button:hover,
+#main-clothing-section-button:hover {
+	color: white;
+	box-shadow: inset 0 0 2px 2px #cacacabe;
+}
+
+#title,
+#info-welcome-text {
+	position: absolute;
+	transform: translate(-50%, 0);
+
+	font-size: 1.2vw;
+	color: #ffffff;
+
+	font-family: "crock", crock, serif;
+	font-weight: bold;
+	text-align: center;
+
+	width: 16.2%;
+	height: fit-content;
+
+	margin-top: 7.5%;
+	margin-left: 88%;
+
+	letter-spacing: 2px;
+
+	white-space: pre-wrap;
+}
+
+#info-welcome-text {
+	margin-top: 11%;
+	color: #a7a6a6e5;
+	font-weight: 100;
+	font-size: 0.85vw;
+}
+
+#info-text {
+	margin-top: 16.5%;
+	color: #a7a6a6e5;
+	font-weight: 100;
+	font-size: 0.85vw;
+}
+
+label {
+	width: 16px;
+	font-weight: 500;
+}
+
+input[type="number"] {
+	width: 60px;
+	padding: 2px 4px;
+}
+
+input[type="range"] {
+	flex: 1;
+	height: 6px;
+	border-radius: 4px;
+	-webkit-appearance: none;
+	background: #ddd;
+	cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	width: 14px;
+	height: 14px;
+	border-radius: 50%;
+	background: #fff;
+	border: 1px solid #555;
+}
+
+/* KEY BUTTON DISPLAYS */
+
+#info {
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	transform: translate(-50%, 0);
+	color: white;
+}
+
+#controls {
+	display: flex;
+	justify-content: center;
+	font-size: 1.25vh;
+	padding: 0.25vh 0.25vw;
+	margin-top: 1vh;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.control-set,
+.control-and-help {
+	display: flex;
+	align-items: center;
+}
+
+.control-and-help {
+	padding: 0 0.25vw;
+}
+
+.control-help {
+	padding-left: 0.25vw;
+}
+
+.control {
+	font-family: "212 Keyboard";
+	font-size: 4vh;
+}
+
+::-webkit-scrollbar {
+	width: 0.5vw;
+	border-radius: 0.1vw;
+	height: 0.55vw;
+
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: #ffffff8a;
+	border-radius: 0.5vw;
+	height: 0.55vw;
+
+}
+
+.scroll-container {
+	padding-right: 1vw;
+	box-sizing: border-box;
+	/* keeps scrollbar visible */
+}
+
+
+#notification_message {
+	position: absolute;
+	transform: translateX(-50%);
+
+	font-family: "crock", crock, serif;
+	font-weight: 500;
+
+	display: flex;
+	justify-content: center;
+	/* horizontal center */
+	align-items: center;
+	/* vertical center */
+	text-align: center;
+
+	white-space: pre-line;
+	/* 👈 makes \n show as line breaks */
+
+	font-size: 0.9vw;
+	width: 40vw;
+	min-height: 2vw;
+	/* base height */
+	padding: 0.5vw 1vw;
+
+	top: 2%;
+	left: 50%;
+
+	background-image: url(../img/default.png);
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+/* Other */
+
+input[type=text] {
+
+	font-family:Arial, Helvetica, sans-serif;
+	font-size: 0.9vw;
+	color: white;
+	height: 1.2vw;
+	text-align: center;
+	background-color: rgba(27, 27, 27, 0.644);
+	border-color: rgba(58, 58, 58, 0.415);
+}
+
+.radio {
+	font-family: 'Chinese Rocks Rg', sans-serif;
+	font-size: 0.7vw;
+	color: #ddc076dc;
+}
+
+textarea {
+	resize: none;
+}
