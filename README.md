@@ -12,3 +12,4 @@
 
 - Credits to VORP and REDM:RP for many utility functions and methods to be used properly for the character creation.
 - Credits to KadDarem (Jump On Studios) for all the shared modules, utilities and components which are taken from jo libs
+- Credits to SPOONI for the idea and the way of creating key displays than having prompts.
