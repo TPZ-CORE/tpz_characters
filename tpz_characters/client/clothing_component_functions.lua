@@ -600,57 +600,6 @@ function FixClothingProperlyOnCategorySelect(category, skinData, ped)
 
 end
 
-/*
-
-body
-waist
-torso:
-legs
-action
-
-function UpdateCharacterBodyModifications(data)
-	local sex = IdentityData.isMale and 'M' or 'F'
-
-	if data.action == 'BODY_TYPE' then 
-
-		modules.IsPedReadyToRender()
-		EquipMetaPedOutfit(PlayerPedId(), Config.BodyType.Body[data.body])
-		modules.UpdatePedVariation()
-
-		PlayerSkin.body = Config.BodyType.Body[data.body]
-
-	elseif data.action == 'WAIST' then 
-
-		modules.IsPedReadyToRender()
-		EquipMetaPedOutfit(PlayerPedId(), Config.BodyType.Waist[data.waist])
-
-		modules.UpdatePedVariation()
-
-		PlayerSkin.waist = Config.BodyType.Waist[data.waist]
-
-	elseif data.action == 'TORSO' or data.action == 'LEGS' then 
-
-		local index    = data.action == 'TORSO' and data.torso or data.legs
-		local tag      = data.action == 'TORSO' and 'Body' or 'Legs'
-
-		local Comp     = Config.DefaultChar[SkinColorTracker]
-		local compType = joaat(Comp[tag][index]:format(sex))
-
-		if tag == "Body" then
-			PlayerSkin.torso = compType
-
-		elseif tag == 'Legs' then
-			PlayerSkin.legs = compType
-		end
-
-		modules.IsPedReadyToRender()
-		modules.ApplyShopItemToPed(compType)
-		modules.UpdatePedVariation()
-	end
-
-end
-*/
-
 function LoadAll(gender, ped, skinComp, set)
     local modules = exports.tpz_core:getCoreAPI().modules()
 
@@ -963,4 +912,5 @@ function LoadEntityComponents(ped, model, skinComp, reload, clean)
 
     SetEntityVisible(ped, true)
     SetEntityFadeIn(ped)
+
 end
