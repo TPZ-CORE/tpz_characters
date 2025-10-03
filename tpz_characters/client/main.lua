@@ -96,47 +96,43 @@ end)
 RegisterNetEvent('tpz_characters:receiveSkinData')
 AddEventHandler('tpz_characters:receiveSkinData', function(data)
     
-    if data and data.skin then
+    local playerPed = PlayerPedId()
+    local currentHealth = GetEntityHealth(playerPed)
+    local gender = data.gender == 0 and "mp_male" or "mp_female"
 
-        local playerPed = PlayerPedId()
-        local currentHealth = GetEntityHealth(playerPed)
-
-        if Config.Debug then
-            print('[TPZ-CHARACTERS] Current health saved:', currentHealth)
-            print('[TPZ-CHARACTERS] Loading model:', data.skin)
-        end
-
-        local gender = data.gender == 0 and "mp_male" or "mp_female"
-
-        LoadHashModel(joaat(gender))
-        Wait(500)
-        
-        if Config.Debug then
-            print('[TPZ-CHARACTERS] Applying model')
-        end
-
-        SetPlayerModel(gender)
-        SetModelAsNoLongerNeeded(joaat(gender))
-        Wait(500)
-        
-        if Config.Debug then
-            print('[TPZ-CHARACTERS] Loading components')
-        end
-
-        LoadEntityComponents(PlayerPedId(), gender, data.skinComp, true, true)
-
-        -- Restaurar vida e limpar ped
-        Wait(1000)
-        SetEntityHealth(PlayerPedId(), currentHealth)
-
-        if Config.Debug then
-            print('[TPZ-CHARACTERS] Skin reloaded successfully')
-        end
-
-        exports.tpz_core:getCoreAPI().NotifyObjective(Locales["CHARACTER_RELOADED"], 3000)
-    else
-        print('[TPZ-CHARACTERS] Skin data not found')
+    if Config.Debug then
+        print('[TPZ-CHARACTERS] Current health saved:', currentHealth)
+        print('[TPZ-CHARACTERS] Loading model:', gender)
     end
+
+
+    LoadHashModel(joaat(gender))
+    Wait(500)
+    
+    if Config.Debug then
+        print('[TPZ-CHARACTERS] Applying model')
+    end
+
+    SetPlayerModel(gender)
+    SetModelAsNoLongerNeeded(joaat(gender))
+    Wait(500)
+    
+    if Config.Debug then
+        print('[TPZ-CHARACTERS] Loading components')
+    end
+
+    LoadEntityComponents(PlayerPedId(), gender, data.skinComp, true, true)
+
+    -- Restaurar vida e limpar ped
+    Wait(1000)
+    SetEntityHealth(PlayerPedId(), currentHealth)
+
+    if Config.Debug then
+        print('[TPZ-CHARACTERS] Skin reloaded successfully')
+    end
+
+    exports.tpz_core:getCoreAPI().NotifyObjective(Locales["CHARACTER_RELOADED"], 3000)
+
 end)
 
 -- Load character selection
