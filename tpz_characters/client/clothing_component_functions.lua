@@ -190,7 +190,7 @@ local function ApplyAllComponents(category, value, ped, set)
 
         local status = not set and "false" or GetResourceKvpString((tostring(outfitHash)):format(CHARID or 0))
         if status == "true" then
-            return RemoveTagFromMetaPed(Config.ComponentCategories[category])
+            return RemoveTagFromMetaPed(ped, Config.ComponentCategories[category])
         end
     
        modules.ApplyShopItemToPed(outfitHash, ped)
@@ -227,7 +227,7 @@ local function ApplyAllComponents(category, value, ped, set)
 			modules.ApplyShopItemToPed(hash, ped)
 		else
 			local capitalizedCategoryName = exports.tpz_core:getCoreAPI().Capitalize(category)
-			RemoveTagFromMetaPed(PlayerPedId(), Config.ComponentCategories[capitalizedCategoryName])
+			RemoveTagFromMetaPed(ped, Config.ComponentCategories[capitalizedCategoryName])
 		end
 
     end
@@ -903,7 +903,7 @@ function LoadEntityComponents(ped, model, skinComp, reload, clean)
     Wait(200)
 	--TriggerServerEvent("vorpcharacter:reloadedskinlistener")
 	
-    RemoveTagFromMetaPed(Config.ComponentCategories.ammopistol)
+    RemoveTagFromMetaPed(ped, Config.ComponentCategories.ammopistol)
 	SetPedScale(ped, skinComp.scale)
     Wait(1000)
 
