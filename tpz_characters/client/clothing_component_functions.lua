@@ -273,7 +273,7 @@ end
 --[[ Functions  ]]--
 -----------------------------------------------------------
 
-function LoadGroomData()
+function LoadGroomData(gender)
 
     local Groom = {}
 
@@ -283,7 +283,7 @@ function LoadGroomData()
         Wait(100)
     end
 
-    local gender = GetGender()
+    local gender = gender or GetGender()
 
     for category, value in pairs(hairComponents[gender]) do
 
@@ -307,7 +307,7 @@ function LoadGroomData()
 
 end
 
-function LoadClothingData()
+function LoadClothingData(gender)
 
     local Clothing = {}
 
@@ -317,7 +317,7 @@ function LoadClothingData()
         Wait(100)
     end
     
-    local gender = GetGender()
+    local gender = gender or GetGender()
 
     for category, value in pairs(playerComponents[gender]) do
 
@@ -791,7 +791,7 @@ function LoadEntityComponents(ped, model, skinComp, reload, clean)
     end
 
     -- Load Groom
-    local groom = LoadGroomData()
+    local groom = LoadGroomData(gender)
 
     local groom_elements = {
         'hair',
@@ -814,7 +814,7 @@ function LoadEntityComponents(ped, model, skinComp, reload, clean)
                 modules.IsPedReadyToRender(ped)
 
                 if data.id > 0 then 
-        
+
                     local hash = groom[element][data.id][data.color].hex
         
                     modules.ApplyShopItemToPed(hash, ped)
@@ -862,7 +862,7 @@ function LoadEntityComponents(ped, model, skinComp, reload, clean)
         
     end
 
-    local clothing = LoadClothingData()
+    local clothing = LoadClothingData(gender)
 
     for _, cloth in pairs (Config.ClothingCategories) do
 
