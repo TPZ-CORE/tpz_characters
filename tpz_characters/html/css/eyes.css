@@ -1,0 +1,124 @@
+@import url('https://fonts.cdnfonts.com/css/chinese-rocks');
+
+@font-face {
+	font-family: crock;
+	src: url(../fonts/crock.ttf) format('truetype');
+}
+#eyes-info-text,
+#eyes-texture-id-title {
+	position: absolute;
+	transform: translate(-50%, 0);
+
+	font-size: 0.85vw;
+	color: #a7a6a6e5;
+
+	font-family: "crock", crock, serif;
+	font-weight: 100;
+	text-align: center;
+
+	width: 16.2%;
+	height: fit-content;
+
+	margin-top: 11%;
+	margin-left: 88%;
+
+	letter-spacing: 2px;
+
+	white-space: pre-wrap;
+}
+
+#eyes-texture-id-title {
+	font-size: 0.6vw;
+	margin-top: 19.5%;
+	margin-left: 87.85%;
+}
+
+#eyes-back-button {
+	position: absolute;
+	transform: translate(-50%, 0);
+	color: #e2e2e2;
+	font-family: "crock", crock, serif;
+	font-weight: 500;
+
+	font-size: 1.15vw;
+
+	margin-top: 35.5%;
+	margin-left: 88%;
+
+	width: 13%;
+	height: 3.2%;
+
+	padding-top: 0.1;
+
+	background-color: rgba(0, 0, 0, 0.553);
+	box-shadow: inset 0 0 2px 2px #74737391;
+	border-radius: 2%;
+	text-align: center;
+}
+
+#eyes-back-button:hover {
+	color: white;
+	box-shadow: inset 0 0 2px 2px #cacacabe;
+}
+
+.eyes-texture-id-selector {
+	position: absolute;
+	top: 38.7%;
+	left: 87.75%;
+	transform: translateX(-50%);
+	width: 12.3vw;
+	background: rgba(34, 34, 34, 0.452);
+	border-radius: 12px;
+	box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+	text-align: center;
+}
+
+.eyes-texture-id-nav-container {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 15px;
+}
+
+.eyes-texture-id-nav-container button {
+	font-size: 1vw;
+	cursor: pointer;
+	border-radius: 8px;
+	border: 1px solid #888;
+	background: #f9f9f9d5;
+	transition: background 0.2s, transform 0.1s;
+}
+
+.eyes-texture-id-nav-container button:hover {
+	background: #e0e0e0;
+	transform: scale(1.05);
+}
+
+#eyes-texture-id-currentNumber {
+	font-size: 0.9vw;
+
+	color: #ffffffd8;
+	width: 25vw;
+	text-align: center;
+	user-select: none;
+
+	font-family: "crock", crock, serif;
+	font-weight: bold;
+
+	margin-top: 0.5vw;
+	margin-left: 1vw;
+}
+
+#eyes-texture-id-prev,
+#eyes-texture-id-next {
+	font-size: 0.85vw;
+	font-weight: bold;
+	height: 1.2vw;
+	width: 1.5vw;
+	margin-left: 1vw;
+	margin-top: 0.5vw;
+}
+
+#eyes-texture-id-next {
+	margin-right: 1vw;
+}
