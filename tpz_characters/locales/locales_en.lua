@@ -42,6 +42,7 @@ local locales = { -- <- DO NOT TOUCH, MOVE TO LAST SECTION FOR LOCALE CHECK.
     ['NUI_APPEARANCE_GROOM']                           = "Groom",
     ['NUI_APPEARANCE_AGEING']                          = "Ageing",
     ['NUI_APPEARANCE_HEIGHT']                          = "Height Adjustment",
+    ['NUI_APPEARANCE_EYES']                            = "Eyes Coloring",
     ['NUI_APPEARANCE_BODY_FEATURES']                   = "Body Features",
     ['NUI_APPEARANCE_LIFESTYLE']                       = "Lifestyle",
     ['NUI_APPEARANCE_MAKEUP']                          = "Makeup",
@@ -215,6 +216,11 @@ local locales = { -- <- DO NOT TOUCH, MOVE TO LAST SECTION FOR LOCALE CHECK.
     ['NUI_MAKEUP_BLUSH_SECONDARY_COLOR']               = 'Secondary Color',
     ['NUI_MAKEUP_BLUSH_VARIANT']                       = 'Variants',
     ['NUI_MAKEUP_BLUSH_OPACITY']                       = 'Opacity',
+
+    -- APPEARANCE EYES
+    ['NUI_EYES_TITLE']                                 = "Eyes Coloring",
+    ['NUI_EYES_INFO']                                  = "Customize your character’s eyes — choose the perfect color, shape, and shine to match their story.",
+    ['NUI_EYES_TEXTURE_ID_TITLE']                      = "Select An Eyes Texture",
 
     -- CLOTHING SECTION
     ['NUI_CLOTHING_INFO']                              = "Customize your character’s clothing outfit based on your preferences.",
