@@ -901,8 +901,7 @@ function LoadEntityComponents(ped, model, skinComp, reload, clean)
 
 
     Wait(200)
-	--TriggerServerEvent("vorpcharacter:reloadedskinlistener")
-	
+
     RemoveTagFromMetaPed(ped, Config.ComponentCategories.ammopistol)
 	SetPedScale(ped, skinComp.scale)
     Wait(1000)
