@@ -49,6 +49,9 @@ let MAXIMUM_MAKEUP_VARIANT_ITEMS           = 0;
 
 let CURRENT_MAKEUP_OPACITY_ITEM            = 9;
 
+let CURRENT_OVERLAY_INFO_EYES_TEXTURE_ID   = 14;
+let MAX_OVERLAYS_INFO_EYES_TEXTURE_ID      = 14;
+
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -86,6 +89,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   displayPage("lifestyle-selected-section", "visible");
   $(".lifestyle-selected-section").fadeOut();
+
+  displayPage("eyes-section", "visible");
+  $(".eyes-section").fadeOut();
 
   displayPage("bodyfeatures-section", "visible");
   $(".bodyfeatures-section").fadeOut();
