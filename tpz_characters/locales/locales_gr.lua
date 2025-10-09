@@ -41,6 +41,7 @@ local locales = { -- <- DO NOT TOUCH, MOVE TO LAST SECTION FOR LOCALE CHECK.
     ['NUI_APPEARANCE_GROOM']                           = "Κούρεμα / Περιποίηση",
     ['NUI_APPEARANCE_AGEING']                          = "Γήρανση",
     ['NUI_APPEARANCE_HEIGHT']                          = "Ρύθμιση Ύψους",
+    ['NUI_APPEARANCE_EYES']                            = "Χρωματισμός Ματιών",
     ['NUI_APPEARANCE_BODY_FEATURES']                   = "Χαρακτηριστικά Σώματος",
     ['NUI_APPEARANCE_LIFESTYLE']                       = "Στυλ Ζωής",
     ['NUI_APPEARANCE_MAKEUP']                          = "Μακιγιάζ",
@@ -214,6 +215,11 @@ local locales = { -- <- DO NOT TOUCH, MOVE TO LAST SECTION FOR LOCALE CHECK.
     ['NUI_MAKEUP_BLUSH_SECONDARY_COLOR']               = 'Δευτερεύον Χρώμα',
     ['NUI_MAKEUP_BLUSH_VARIANT']                       = 'Παραλλαγές',
     ['NUI_MAKEUP_BLUSH_OPACITY']                       = 'Αδιαφάνεια',
+
+    -- APPEARANCE EYES
+    ['NUI_EYES_TITLE']                                 = "Χρωματισμός Ματιών",
+    ['NUI_EYES_INFO']                                  = "Προσαρμόστε τα μάτια του χαρακτήρα σας — επιλέξτε το ιδανικό χρώμα, σχήμα και λάμψη που ταιριάζουν στην ιστορία του.",
+    ['NUI_EYES_TEXTURE_ID_TITLE']                      = "Επιλέξτε Χρωματισμό Ματιών",
     
     -- CLOTHING SECTION
     ['NUI_CLOTHING_INFO']                              = "Προσαρμόστε την ενδυμασία του χαρακτήρα σας σύμφωνα με τις προτιμήσεις σας.",
