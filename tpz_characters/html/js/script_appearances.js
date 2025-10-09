@@ -24,6 +24,10 @@ $(function () {
 			return;
 		}
 
+		if ($section == '.eyes-section') {
+			$.post('http://tpz_characters/request_eye_textures', JSON.stringify({}));
+		}
+
 		$(".appearance-section").fadeOut();
 		$($section).fadeIn();
 	});
