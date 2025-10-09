@@ -111,6 +111,7 @@ $(function () {
 			$("#makeup-selected-back-button").text(item.locales['NUI_BACK']);
 			$("#body-back-button").text(item.locales['NUI_BACK']);
 			$("#heritage-back-button").text(item.locales['NUI_BACK']);
+			$("#eyes-back-button").text(item.locales['NUI_BACK']);
 			$("#clothing-selected-reset-button").text(item.locales['NUI_RESET_OUTFIT_TYPE']);
 
 			$("#clothing-info-text").text(item.locales['NUI_CLOTHING_INFO']);
@@ -157,6 +158,10 @@ $(function () {
 			$("#bodyfeatures-info-text").text(item.locales['NUI_BODYFEATURES_INFO']);
 			$("#groom-info-text").text(item.locales['NUI_GROOM_INFO']);
 			$("#makeup-info-text").text(item.locales['NUI_MAKEUP_INFO']);
+
+			$("#eyes-info-text").text(item.locales['NUI_EYES_INFO']);
+			$("#eyes-texture-id-title").text(item.locales['NUI_EYES_TEXTURE_ID_TITLE']);
+
 		} else if (item.action == 'set_welcome_text'){
 
 			$("#info-welcome-text").text(item.text);
@@ -362,6 +367,12 @@ $(function () {
 			let opacity = res.current_opacity != 10 ? convertToInt(res.current_opacity) : 10;
 			CURRENT_GROOM_OPACITY_ITEM = opacity;
 
+		} else if (item.action == 'selectedEyesCategory') {
+
+			$("#eyes-texture-id-currentNumber").text(item.current + " / " + item.max);
+
+			MAX_OVERLAYS_INFO_EYES_TEXTURE_ID = item.max;
+			
 		} else if (item.action == 'updateGroomSpecificData') {
 
 			MAXIMUM_GROOM_COLOR_ITEMS = item.max_colors;
