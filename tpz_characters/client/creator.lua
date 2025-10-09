@@ -150,9 +150,11 @@ function SelectCharacterModelOnCreation(isMale)
 		{ label = Locales['NUI_APPEARANCE_GROOM'],         category = '.groom-section'},
 		{ label = Locales['NUI_APPEARANCE_AGEING'],        category = '.ageing-section'},
 		{ label = Locales['NUI_APPEARANCE_HEIGHT'],        category = '.height-section'},
+		{ label = Locales['NUI_APPEARANCE_EYES'],          category = '.eyes-section'},
 		{ label = Locales['NUI_APPEARANCE_BODY_FEATURES'], category = '.bodyfeatures-section'},
 		{ label = Locales['NUI_APPEARANCE_LIFESTYLE'],     category = '.lifestyle-section'},
 		{ label = Locales['NUI_APPEARANCE_MAKEUP'],        category = '.makeup-section'},
+
 	}
 	for _, element in pairs (AppearanceCategories) do 
 
@@ -415,6 +417,35 @@ function UpdateCharacterHeight()
 
 end
 
+-----------------------------------------------------------
+--[[ Eyes ]]--
+-----------------------------------------------------------
+
+RequestEyeTextures = function()
+
+    SELECTED_CATEGORY_TYPE = 'EYES'
+
+    SendNUIMessage( { action = 'selectedEyesCategory', 
+        max     = #Config.Eyes,
+		current = EyeColorIndexTracker,
+    })
+
+end
+
+UpdateCharacterEyeTextures = function(data)
+	local texture_id = data.texture_id
+
+	modules.IsPedReadyToRender()
+
+	local gender = IsPedMale(PlayerPedId()) and "M" or "F"
+	PlayerSkin.eyes = joaat(Config.Eyes[texture_id]:format(gender))
+
+	modules.ApplyShopItemToPed(PlayerSkin.eyes)
+	modules.UpdatePedVariation()
+
+	EyeColorIndexTracker = texture_id
+
+end
 -----------------------------------------------------------
 --[[ Lifestyle ]]--
 -----------------------------------------------------------
