@@ -292,6 +292,15 @@ RegisterNUICallback('set_makeup_textures', function(data)
     UpdateCharacterMakeupTextures(data)
 end)
 
+
+RegisterNUICallback('request_eye_textures', function()
+    RequestEyeTextures()
+end)
+
+RegisterNUICallback('set_eye_textures', function(data)
+    UpdateCharacterEyeTextures(data)
+end)
+
 RegisterNUICallback('key_action', function(data)
     
     local playerPed = PlayerPedId()
