@@ -871,23 +871,6 @@ Config.overlays_info = {
     },
 }
 
-Config.EyesColor = {
-    "color1",
-    "color2",
-    "color3",
-    "color4",
-    "color5",
-    "color6",
-    "color7",
-    "color8",
-    "color9",
-    "color10",
-    "color11",
-    "color12",
-    "color13",
-    "color14",
-}
-
 Config.Eyes = {
 
     "CLOTHING_ITEM_%s_EYES_001_TINT_001",
@@ -1162,4 +1145,5 @@ Config.ComponentCategoriesExclude = {
 
 Config.clothesPalettes = {
     1090645383, 1064202495, -783849117, 864404955, 1669565057, -1952348042
+
 }
