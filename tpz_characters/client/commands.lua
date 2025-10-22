@@ -26,8 +26,6 @@ if Config.ReloadCharacter.Enabled then
                 return
             end
 
-            local currentHealth = GetEntityHealth(playerPed)
-
             local data = exports.tpz_core:getCoreAPI().GetPlayerClientData()
 
             reloadSkinCooldown = Config.ReloadCharacter.Cooldown
@@ -36,7 +34,6 @@ if Config.ReloadCharacter.Enabled then
             LoadEntityComponents(PlayerPedId(), gender, data.skinComp, true, true)
             
             Wait(1000)
-            SetEntityHealth(PlayerPedId(), currentHealth)
 
             exports.tpz_core:getCoreAPI().NotifyObjective(Locales["CHARACTER_RELOADED"], 3000)
 
@@ -54,3 +51,4 @@ if Config.ReloadCharacter.Enabled then
     end)
 
 end
+
