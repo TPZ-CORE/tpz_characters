@@ -899,12 +899,9 @@ function LoadEntityComponents(ped, model, skinComp, reload, clean)
 
     end
 
-
-    Wait(200)
-
     RemoveTagFromMetaPed(ped, Config.ComponentCategories.ammopistol)
 	SetPedScale(ped, skinComp.scale)
-    Wait(1000)
+    Wait(150) -- mandatory wait
 
     if clean then
         CleanPlayerPed()
@@ -913,3 +910,4 @@ function LoadEntityComponents(ped, model, skinComp, reload, clean)
     SetEntityVisible(ped, true)
     SetEntityFadeIn(ped)
 end
+
