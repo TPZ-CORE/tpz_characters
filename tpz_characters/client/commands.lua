@@ -32,8 +32,6 @@ if Config.ReloadCharacter.Enabled then
 
             local gender = data.gender == 0 and "mp_male" or "mp_female"
             LoadEntityComponents(PlayerPedId(), gender, data.skinComp, true, true)
-            
-            Wait(1000)
 
             exports.tpz_core:getCoreAPI().NotifyObjective(Locales["CHARACTER_RELOADED"], 3000)
 
@@ -51,4 +49,5 @@ if Config.ReloadCharacter.Enabled then
     end)
 
 end
+
 
