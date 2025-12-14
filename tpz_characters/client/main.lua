@@ -318,7 +318,7 @@ AddEventHandler('tpz_characters:refreshCharacterSelection', function(chars, data
     
             data[index].entity = entity 
     
-            local sex            = GetGenderByInteger(tonumber(data[index].gender))
+            local sex            = data[index].gender == 0 and "male" or "female"
             local scenarios      = randomPosition.CharacterPositions[index].Scenarios[sex]
             local randomScenario = randomPosition.CharacterPositions[index].Scenarios[sex][ math.random( #randomPosition.CharacterPositions[1].Scenarios[sex]) ]
     
