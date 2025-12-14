@@ -1,6 +1,21 @@
 local TPZ = exports.tpz_core:getCoreAPI()
 
 -----------------------------------------------------------
+--[[ Local Functions ]]--
+-----------------------------------------------------------
+
+local GetSteamID = function(source)
+    local sid = GetPlayerIdentifiers(source)[1] or false
+
+    if (sid == false or sid:sub(1, 5) ~= "steam") then
+
+        return false
+    end
+
+    return sid
+end
+
+-----------------------------------------------------------
 --[[ Events ]]--
 -----------------------------------------------------------
 
