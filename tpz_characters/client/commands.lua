@@ -45,7 +45,7 @@ local PerformDressingStateActionByName = function(clothingType, clothingHashType
         return 
     end
 
-    if not equip then 
+    if not equip and not undress then 
 
         modules.IsPedReadyToRender()    
         RemoveTagFromMetaPed(PlayerPedId(), joaat(clothingHashType))
@@ -544,3 +544,4 @@ RegisterCommand('eyewear', function()
     Wait(1000)
     PerformDressingStateActionByName('eyewear', 'EYEWEAR', poncho)
 end)
+
