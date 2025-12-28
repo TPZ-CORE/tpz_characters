@@ -168,7 +168,8 @@ RegisterCommand('dress', function()
     end
 
     undress = false
-
+    hat, vest, boots, pants, shirt, gunbelt, maskcoat, closedcoat, cloak, poncho, eyewear = true, true, true, true, true, true, true, true, true, true, true
+    
     local data = exports.tpz_core:getCoreAPI().GetPlayerClientData()
     local gender = data.gender == 0 and "mp_male" or "mp_female"
 
@@ -186,6 +187,8 @@ RegisterCommand('undress', function()
     end
 
     undress = true
+
+    hat, vest, boots, pants, shirt, gunbelt, maskcoat, closedcoat, cloak, poncho, eyewear = false, false, false, false, false, false, false, false, false, false, false
 
     local data = exports.tpz_core:getCoreAPI().GetPlayerClientData()
 
@@ -544,5 +547,3 @@ RegisterCommand('eyewear', function()
     Wait(1000)
     PerformDressingStateActionByName('eyewear', 'EYEWEAR', poncho)
 end)
-
-
