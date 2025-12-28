@@ -622,8 +622,11 @@ function LoadAll(gender, ped, skinComp, set)
 	modules.UpdatePedVariation(ped)
 end
 
-function LoadEntityComponents(ped, model, skinComp, reload, clean)
-    SetEntityVisible(ped, false)
+function LoadEntityComponents(ped, model, skinComp, reload, clean, preventVisibilityAdjustment)
+	
+    if not preventVisibilityAdjustment then
+        SetEntityVisible(ped, false)
+    end
 
     local skinComp = json.decode(skinComp)
 	local gender      = model == "mp_male" and "Male" or "Female"
@@ -907,7 +910,10 @@ function LoadEntityComponents(ped, model, skinComp, reload, clean)
         CleanPlayerPed()
     end
 
-    SetEntityVisible(ped, true)
-    SetEntityFadeIn(ped)
+    if not preventVisibilityAdjustment then
+        SetEntityVisible(ped, true)
+        SetEntityFadeIn(ped)
+    end
 end
+
 
