@@ -88,7 +88,7 @@ AddEventHandler("tpz_characters:requestCharacterSkin", function(targetSource)
             local charData = result[1]
             TriggerClientEvent('tpz_characters:receiveSkinData', _source, {
                 skin = charData.skin,
-                skinComp = charData.skinComp,
+                skinComp = skinComp,
                 gender = charData.gender
             })
         else
@@ -127,6 +127,7 @@ exports.tpz_core:getCoreAPI().addNewCallBack("tpz_characters:getPlayerSkinInform
         end
     end)
 end)
+
 
 
 
