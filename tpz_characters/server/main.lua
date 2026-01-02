@@ -98,6 +98,15 @@ AddEventHandler("tpz_characters:requestCharacterSkin", function(targetSource)
 
 end)
 
+RegisterNetEvent('tpz_core:onPlayerFirstSpawn')
+AddEventHandler("tpz_core:onPlayerFirstSpawn", function(coords, status, isdead, newChar, charIdentifier)
+	
+    local PlayerData = GetCharacterData()
+		
+    PlayerData.OnCharacterSelector    = false
+    PlayerData.SelectedCharIdentifier = charIdentifier
+end)
+
 -----------------------------------------------------------
 --[[ Callbacks ]]--
 -----------------------------------------------------------
@@ -118,5 +127,6 @@ exports.tpz_core:getCoreAPI().addNewCallBack("tpz_characters:getPlayerSkinInform
         end
     end)
 end)
+
 
 
