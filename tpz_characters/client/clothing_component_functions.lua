@@ -613,8 +613,6 @@ function LoadAll(gender, ped, skinComp, set)
 	modules.ApplyShopItemToPed(skinComp.legstype, ped)
 
 	modules.ApplyShopItemToPed(skinComp.eyes, ped)
-	modules.ApplyShopItemToPed(skinComp.legs, ped)
-	modules.ApplyShopItemToPed(skinComp.torso, ped)
 
     EquipMetaPedOutfit(ped, skinComp.waist)
 	EquipMetaPedOutfit(ped, skinComp.body)
@@ -806,7 +804,7 @@ function LoadEntityComponents(ped, model, skinComp, reload, clean, preventVisibi
         'eyebrows',
     }
 
-    for _, element in pairs (groom_elements) do 
+  for _, element in pairs (groom_elements) do 
 
         if skinComp[element] ~= nil then
 
@@ -837,7 +835,32 @@ function LoadEntityComponents(ped, model, skinComp, reload, clean, preventVisibi
                 data.opacity, skinComp.albedo, ped)
             end
 
+        else
+
+            if element == 'hair' then
+
+                modules.IsPedReadyToRender(ped)
+
+                local hash = groom['hair'][1][1].hex
+        
+                modules.ApplyShopItemToPed(hash, ped)
+        
+                modules.UpdatePedVariation(ped)
+
+            else
+
+                if element == 'overlay' or element == 'hair_overlay' then 
+                    element = 'hair'
+                end
+
+                ApplyOverlay(element, 1,
+                1, 1, 0, 0, 1.0, 0, 1, 
+                1, 0, 0, 1,
+                1.0, skinComp['albedo'], ped)
+            end
+
         end
+
 
     end
 
@@ -915,5 +938,6 @@ function LoadEntityComponents(ped, model, skinComp, reload, clean, preventVisibi
         SetEntityFadeIn(ped)
     end
 end
+
 
 
