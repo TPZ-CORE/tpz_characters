@@ -804,7 +804,7 @@ function LoadEntityComponents(ped, model, skinComp, reload, clean, preventVisibi
         'eyebrows',
     }
 
-  for _, element in pairs (groom_elements) do 
+    for _, element in pairs (groom_elements) do 
 
         if skinComp[element] ~= nil then
 
@@ -837,6 +837,7 @@ function LoadEntityComponents(ped, model, skinComp, reload, clean, preventVisibi
 
         else
 
+            print(element)
             if element == 'hair' then
 
                 modules.IsPedReadyToRender(ped)
@@ -847,7 +848,7 @@ function LoadEntityComponents(ped, model, skinComp, reload, clean, preventVisibi
         
                 modules.UpdatePedVariation(ped)
 
-            else
+            elseif element == 'eyebrows' or element == 'hair_overlay' then
 
                 if element == 'overlay' or element == 'hair_overlay' then 
                     element = 'hair'
@@ -857,6 +858,11 @@ function LoadEntityComponents(ped, model, skinComp, reload, clean, preventVisibi
                 1, 1, 0, 0, 1.0, 0, 1, 
                 1, 0, 0, 1,
                 1.0, skinComp['albedo'], ped)
+            end
+
+            if element == 'beardstabble' and model == "mp_female" then 
+                ApplyOverlay('beardstabble', 0, 1, 1, 0, 0, 1.0, 0, 1, 0, 0, 0, 1, 0.0, skinComp['albedo'])
+	
             end
 
         end
@@ -938,6 +944,7 @@ function LoadEntityComponents(ped, model, skinComp, reload, clean, preventVisibi
         SetEntityFadeIn(ped)
     end
 end
+
 
 
 
