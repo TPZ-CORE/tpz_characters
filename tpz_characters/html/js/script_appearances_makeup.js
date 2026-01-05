@@ -93,7 +93,7 @@ $(function () {
 
 			CURRENT_MAKEUP_COLOR_PRIMARY_ITEM--;
 
-			text = CURRENT_MAKEUP_COLOR_PRIMARY_ITEM + " / " + 10;
+			text = CURRENT_MAKEUP_COLOR_PRIMARY_ITEM + " / " + 63;
 
 
 		} else if ($type == 'color2') {
@@ -104,7 +104,7 @@ $(function () {
 
 			CURRENT_MAKEUP_COLOR_SECONDARY_ITEM--;
 
-			text = CURRENT_MAKEUP_COLOR_SECONDARY_ITEM + " / " + 10;
+			text = CURRENT_MAKEUP_COLOR_SECONDARY_ITEM + " / " + 63;
 
 		} else if ($type == 'variant') {
 
@@ -162,23 +162,23 @@ $(function () {
 
 		} else if ($type == 'color') {
 
-			if (CURRENT_MAKEUP_COLOR_PRIMARY_ITEM == 10) {
+			if (CURRENT_MAKEUP_COLOR_PRIMARY_ITEM == 63) {
 				return;
 			}
 
 			CURRENT_MAKEUP_COLOR_PRIMARY_ITEM++;
 
-			text = CURRENT_MAKEUP_COLOR_PRIMARY_ITEM + " / " + 10;
+			text = CURRENT_MAKEUP_COLOR_PRIMARY_ITEM + " / " + 63;
 
 		} else if ($type == 'color2') {
 
-			if (CURRENT_MAKEUP_COLOR_SECONDARY_ITEM == 10) {
+			if (CURRENT_MAKEUP_COLOR_SECONDARY_ITEM == 63) {
 				return;
 			}
 
 			CURRENT_MAKEUP_COLOR_SECONDARY_ITEM++;
 
-			text = CURRENT_MAKEUP_COLOR_SECONDARY_ITEM + " / " + 10;
+			text = CURRENT_MAKEUP_COLOR_SECONDARY_ITEM + " / " + 63;
 
 		} else if ($type == 'variant') {
 
