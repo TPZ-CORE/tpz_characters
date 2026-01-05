@@ -860,7 +860,7 @@ function LoadEntityComponents(ped, model, skinComp, reload, clean, preventVisibi
                 1.0, skinComp['albedo'], ped)
             end
 
-            if element == 'beardstabble' and model == "mp_female" then 
+            if element == 'beardstabble' then 
                 ApplyOverlay('beardstabble', 0, 1, 1, 0, 0, 1.0, 0, 1, 0, 0, 0, 1, 0.0, skinComp['albedo'])
 	
             end
@@ -944,6 +944,7 @@ function LoadEntityComponents(ped, model, skinComp, reload, clean, preventVisibi
         SetEntityFadeIn(ped)
     end
 end
+
 
 
 
