@@ -837,7 +837,6 @@ function LoadEntityComponents(ped, model, skinComp, reload, clean, preventVisibi
 
         else
 
-            print(element)
             if element == 'hair' then
 
                 modules.IsPedReadyToRender(ped)
@@ -944,6 +943,7 @@ function LoadEntityComponents(ped, model, skinComp, reload, clean, preventVisibi
         SetEntityFadeIn(ped)
     end
 end
+
 
 
 
