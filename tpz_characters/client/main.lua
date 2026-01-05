@@ -409,8 +409,15 @@ Citizen.CreateThread(function()
             for i, prompt in pairs (promptList) do
                 PromptSetVisible(prompt.prompt, 0)
 
-                if CharacterData.Characters < CharacterData.MaxCharacters and prompt.type == 'CREATE_CHARACTER' then
-                    PromptSetVisible(prompt.prompt, 1)
+                if prompt.type == 'CREATE_CHARACTER' then
+
+                    PromptSetEnabled(prompt.prompt, 0)
+
+                    if CharacterData.Characters < CharacterData.MaxCharacters then
+                        PromptSetVisible(prompt.prompt, 1)
+                        PromptSetEnabled(prompt.prompt, 1)
+                    end
+
                 end
 
                 if CharacterData.Characters > 0 and prompt.type ~= 'CREATE_CHARACTER' then
@@ -575,3 +582,4 @@ end)
 -----------------------------------------------------------
 --[[ Commands ]]--
 -----------------------------------------------------------
+
