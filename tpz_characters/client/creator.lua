@@ -832,7 +832,7 @@ LoadSelectedCategoryMakeupData = function(category, title)
 			category = SELECTED_CATEGORY_TYPE,
 			type     = 'color',
 			current  = current_color,
-			max      = 10,
+			max      = 63,
 		},
 	})
 
@@ -846,7 +846,7 @@ LoadSelectedCategoryMakeupData = function(category, title)
 				category = SELECTED_CATEGORY_TYPE,
 				type     = 'color2',
 				current  = current_color2,
-				max      = 10,
+				max      = 63,
 			},
 		})
 
@@ -1163,4 +1163,5 @@ function SetCharacterDressingState()
 	end
 
 end
+
 
