@@ -87,9 +87,9 @@ Config.OnCharacterSelector = {
         ['NEXT_CHARACTER']      = {label = "Next Character", key = 0xDEB34313, hold = 1 },
         
         ['SELECT_CHARACTER']    = {label = "Select", key = 0xD9D0E1C0, hold = 1500 },
-        ['CREATE_CHARACTER']    = {label = "Create New Character", key = 0xC7B5340A, hold = 1500 },
+        ['CREATE_CHARACTER']    = {label = "Create New Character", key = 0x156F7119, hold = 1500 },
 
-        ['DELETE_CHARACTER']    = {label = "Delete Permanently", key = 0x156F7119, hold = 2500 },
+        ['DELETE_CHARACTER']    = {label = "Delete Permanently", key = 0xC7B5340A, hold = 2500 },
     },
 
     -- Randomly selecting a location when player has joined to the server for selecting or creating new characters.
@@ -202,3 +202,4 @@ Config.Webhooks = {
     },
 
 }
+
