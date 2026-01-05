@@ -185,7 +185,7 @@ function SelectCharacterModelOnCreation(isMale)
 		while GetCharacterData().HasNUIActive do
 			Wait(0)
 			FreezeEntityPosition(PlayerPedId(), false)
-			DrawLightWithRange(-560.1646, -3782.066, 238.5975, 250, 250, 250, 7.0, 30.0)
+			DrawLightWithRange(vector3(-560.1646, -3782.066, 238.5975), 250, 250, 250, 7.0, 50.0)
 		end
 	end)
 
@@ -640,7 +640,7 @@ LoadSelectedCategoryGroomData = function(category, title)
 		local current_opacity   = PlayerSkin[_category] and PlayerSkin[_category].opacity or 10
 
 		local max_texture_id    = #Config.overlays_info[category]
-		local max_colors        = #Config.color_palettes[category]
+		local max_colors        = (category == 'eyebrows' or _category == 'hair_overlay') and 63 or #Config.color_palettes[category]
 
 		-- texture_id
 		SendNUIMessage({
@@ -777,7 +777,7 @@ UpdateCharacterGroomTextures = function(data)
 
 			SendNUIMessage({
 				action = 'updateGroomSpecificData',
-				max_colors = #Config.color_palettes[category],
+				max_colors = (category == 'eyebrows' or _category == 'hair_overlay' ) and 63 or #Config.color_palettes[category],
 				category   = SELECTED_CATEGORY_TYPE,
 			})
 
@@ -1163,5 +1163,3 @@ function SetCharacterDressingState()
 	end
 
 end
-
-
