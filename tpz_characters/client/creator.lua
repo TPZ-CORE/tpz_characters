@@ -239,6 +239,7 @@ function DefaultPedSetup(ped, male)
 	PlayerSkin.eyebrows = { id = 1, opacity = 1.0, visibility = 1, color = 1 }
 
 	ApplyOverlay("eyebrows", 1, 1, 1, 0, 0, 1.0, 0, 1, 0x3F6E70FF, 0, 0, 1, 1.0, PlayerSkin.albedo)
+	ApplyOverlay('beardstabble', 0, 1, 1, 0, 0, 1.0, 0, 1, 0, 0, 0, 1, 0.0, PlayerSkin.albedo)
 
 	modules.IsPedReadyToRender()
 	modules.EquipMetaPedOutfitPreset(ped, 3)
@@ -1162,3 +1163,4 @@ function SetCharacterDressingState()
 	end
 
 end
+
