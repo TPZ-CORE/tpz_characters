@@ -590,7 +590,7 @@ $(function () {
 	$("#tpz_characters").on("click", "#sex-dialog-select-button", function () {
 		PlayButtonClickSound();
 
-		let sex = $("#sex-dialog-gender-input").val();
+		var sex = $('input[name="gender"]:checked').val();
 
 		if (sex == null || sex == false || sex == "" || !sex || sex == undefined) {
 			RequestNotification("INVALID_SEX_INPUT", "error", 4000);
