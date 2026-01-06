@@ -96,8 +96,9 @@ local function SetTextureOutfitTints(ped, category, data)
     Citizen.InvokeNative(0x4EFC1F8FF1AD94DE, ped, joaat(category), palette, data.tint0, data.tint1, data.tint2)
 end
 
-local function GetGender()
-    local Gender = IsPedMale(PlayerPedId()) and "Male" or "Female"
+local function GetGender(ped)
+    local ped = ped or PlayerPedId()
+    local Gender = IsPedMale(ped) and "Male" or "Female"
     return Gender
 end
 
@@ -121,7 +122,9 @@ local function SetDefaultSkin(gender, skin)
     gender = gender == 'mp_male' and 'M' or 'F'
 
 	for _, value in pairs(Config.DefaultChar) do
+
 		local albedo = joaat(value.Albedo[1]:format(gender))
+        
 		if albedo == skin.albedo then
 			-- work arround to fix Torso
 			for _, v in pairs(value.Body) do
@@ -376,7 +379,7 @@ function ApplyOverlay(name, visibility, tx_id, tx_normal, tx_material, tx_color_
         end
     end
 
-    local gender = GetGender()
+    local gender = GetGender(ped)
     local current_texture_settings = Config.texture_types[gender]
 
     if textureId ~= -1 then
@@ -621,7 +624,7 @@ function LoadAll(gender, ped, skinComp, set)
 end
 
 function LoadEntityComponents(ped, model, skinComp, reload, clean, preventVisibilityAdjustment)
-	
+
     if not preventVisibilityAdjustment then
         SetEntityVisible(ped, false)
     end
@@ -794,6 +797,74 @@ function LoadEntityComponents(ped, model, skinComp, reload, clean, preventVisibi
     -- Load Groom
     local groom = LoadGroomData(gender)
 
+
+    -- Load Makeup
+    local makeup_elements = {
+        'foundation',
+        'lipsticks',
+        'shadows',
+        'eyeliners',
+        'blush',
+    }
+
+    for _, element in pairs (makeup_elements) do 
+
+        if skinComp[element] then
+            local data = skinComp[element]
+
+            ApplyOverlay(element, data.visibility,
+            data.id, 1, 0, 0,
+            1.0, 0, 1, data.primary_color, data.secondary_color or 0,
+            data.tertiary_color or 0, data.variant or 1,
+            data.opacity, skinComp.albedo, ped)
+        else
+            ApplyOverlay(element, 0,
+            0, 1, 0, 0,
+            1.0, 0, 1,  0, 0,
+            0, 0,
+            0.0, 0, ped)
+
+        end
+        
+    end
+
+    local clothing = LoadClothingData(gender)
+
+    for _, cloth in pairs (Config.ClothingCategories) do
+
+        if skinComp[cloth.category] then
+
+            local data = skinComp[cloth.category]
+
+            if data.id ~= 0 then
+
+                local outfitHash = clothing[cloth.category][data.id][data.palette].hex
+    
+                modules.IsPedReadyToRender(ped)
+                modules.ApplyShopItemToPed(outfitHash, ped)
+
+                if data.drawable ~= 0 then
+                    local palette = Config.clothesPalettes[data.palette]
+                    
+                    SetMetaPedTag(ped, data.drawable, data.albedo, data.normal, data.material, palette, data.tint0, data.tint1, data.tint2)
+                end
+    
+                modules.UpdatePedVariation(ped)
+                
+                FixClothingProperlyOnCategorySelect(cloth.category, skinComp, ped)
+
+            else
+                modules.IsPedReadyToRender(ped)
+                RemoveTagFromMetaPed(ped, Config.ComponentCategories[cloth.category])
+                modules.UpdatePedVariation(ped)
+
+            end
+    
+
+        end
+
+    end
+
     local groom_elements = {
         'hair',
         'overlay',
@@ -847,86 +918,21 @@ function LoadEntityComponents(ped, model, skinComp, reload, clean, preventVisibi
         
                 modules.UpdatePedVariation(ped)
 
-            elseif element == 'eyebrows' or element == 'hair_overlay' then
+            elseif element == 'hair_overlay' then
 
                 if element == 'overlay' or element == 'hair_overlay' then 
                     element = 'hair'
                 end
 
-                ApplyOverlay(element, 1,
-                1, 1, 0, 0, 1.0, 0, 1, 
-                1, 0, 0, 1,
-                1.0, skinComp['albedo'], ped)
+                ApplyOverlay(element, 0, 1, 1, 0, 0, 1.0, 0, 1, 0, 0, 0, 1, 0.0, skinComp['albedo'], ped)
             end
 
             if element == 'beardstabble' then 
-                ApplyOverlay('beardstabble', 0, 1, 1, 0, 0, 1.0, 0, 1, 0, 0, 0, 1, 0.0, skinComp['albedo'])
-	
+                ApplyOverlay('beardstabble', 0, 1, 1, 0, 0, 1.0, 0, 1, 0, 0, 0, 1, 0.0, skinComp['albedo'], ped)
             end
 
         end
 
-
-    end
-
-    -- Load Makeup
-    local makeup_elements = {
-        'foundation',
-        'lipsticks',
-        'shadows',
-        'eyeliners',
-        'blush',
-    }
-
-    for _, element in pairs (makeup_elements) do 
-
-        if skinComp[element] then
-            local data = skinComp[element]
-
-            ApplyOverlay(element, data.visibility,
-            data.id, 1, 0, 0,
-            1.0, 0, 1, data.primary_color, data.secondary_color or 0,
-            data.tertiary_color or 0, data.variant or 1,
-            data.opacity, skinComp.albedo, ped)
-
-        end
-        
-    end
-
-    local clothing = LoadClothingData(gender)
-
-    for _, cloth in pairs (Config.ClothingCategories) do
-
-        if skinComp[cloth.category] then
-
-            local data = skinComp[cloth.category]
-
-            if data.id ~= 0 then
-
-                local outfitHash = clothing[cloth.category][data.id][data.palette].hex
-    
-                modules.IsPedReadyToRender(ped)
-                modules.ApplyShopItemToPed(outfitHash, ped)
-
-                if data.drawable ~= 0 then
-                    local palette = Config.clothesPalettes[data.palette]
-                    
-                    SetMetaPedTag(ped, data.drawable, data.albedo, data.normal, data.material, palette, data.tint0, data.tint1, data.tint2)
-                end
-    
-                modules.UpdatePedVariation(ped)
-                
-                FixClothingProperlyOnCategorySelect(cloth.category, skinComp, ped)
-
-            else
-                modules.IsPedReadyToRender(ped)
-                RemoveTagFromMetaPed(ped, Config.ComponentCategories[cloth.category])
-                modules.UpdatePedVariation(ped)
-
-            end
-    
-
-        end
 
     end
 
@@ -942,10 +948,5 @@ function LoadEntityComponents(ped, model, skinComp, reload, clean, preventVisibi
         SetEntityVisible(ped, true)
         SetEntityFadeIn(ped)
     end
+    
 end
-
-
-
-
-
-
