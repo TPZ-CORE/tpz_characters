@@ -623,6 +623,10 @@ function LoadAll(gender, ped, skinComp, set)
 	modules.UpdatePedVariation(ped)
 end
 
+exports('LoadEntityComponents', function(ped, model, skinComp, reload, clean, preventVisibilityAdjustment)
+    LoadEntityComponents(ped, model, skinComp, reload, clean, preventVisibilityAdjustment)
+end)
+
 function LoadEntityComponents(ped, model, skinComp, reload, clean, preventVisibilityAdjustment)
 
     if not preventVisibilityAdjustment then
@@ -950,3 +954,4 @@ function LoadEntityComponents(ped, model, skinComp, reload, clean, preventVisibi
     end
     
 end
+
