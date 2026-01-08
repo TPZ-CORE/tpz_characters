@@ -732,8 +732,8 @@ UpdateCharacterGroomTextures = function(data)
 
 			modules.ApplyShopItemToPed(hash)
 		else
-			local capitalizedCategoryName = exports.tpz_core:getCoreAPI().Capitalize(SELECTED_CATEGORY_TYPE)
-			RemoveTagFromMetaPed(PlayerPedId(), Config.ComponentCategories[capitalizedCategoryName])
+--local capitalizedCategoryName = exports.tpz_core:getCoreAPI().Capitalize(SELECTED_CATEGORY_TYPE)
+			RemoveTagFromMetaPed(PlayerPedId(), Config.ComponentCategories[string.lower(SELECTED_CATEGORY_TYPE)])
 		end
 
 		if actionType == 'texture_id' then 
@@ -1163,3 +1163,4 @@ function SetCharacterDressingState()
 	end
 
 end
+
