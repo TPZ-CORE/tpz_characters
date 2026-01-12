@@ -428,6 +428,10 @@ Citizen.CreateThread(function()
                         PromptSetEnabled(prompt.prompt, enabled)
                     end
 
+                    if prompt.type == "SELECT_CHARACTER" then
+                        PromptSetEnabled(prompt.prompt, 1)
+                    end
+
                     PromptSetVisible(prompt.prompt, 1)
 
                 end
