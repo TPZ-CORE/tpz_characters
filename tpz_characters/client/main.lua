@@ -408,6 +408,7 @@ Citizen.CreateThread(function()
 
             for i, prompt in pairs (promptList) do
                 PromptSetVisible(prompt.prompt, 0)
+                PromptSetEnabled(prompt.prompt, 0)
 
                 if prompt.type == 'CREATE_CHARACTER' then
 
@@ -428,6 +429,7 @@ Citizen.CreateThread(function()
                     end
 
                     PromptSetVisible(prompt.prompt, 1)
+
                 end
 
                 if PromptHasHoldModeCompleted(prompt.prompt) then
