@@ -188,18 +188,3 @@ Config.OnCharacterSelector = {
     },
 
 }
-
----------------------------------------------------------------
---[[ Webhooks ]]--
----------------------------------------------------------------
-
-Config.Webhooks = {
-
-    ["DEVTOOLS_INJECTION_CHEAT"] = {
-        Enabled = false,
-        Url = "",
-        Color = 10038562,
-    },
-
-}
-
