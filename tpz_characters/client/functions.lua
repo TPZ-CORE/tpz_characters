@@ -136,7 +136,7 @@ end
 
 function RemoveImaps()
     if IsImapActive(183712523) then
-        RequestImap(183712523)
+        RemoveImap(183712523)
     end
 
     if IsImapActive(-1699673416) then
