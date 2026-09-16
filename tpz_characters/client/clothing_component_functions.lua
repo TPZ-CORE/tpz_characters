@@ -792,7 +792,7 @@ function LoadEntityComponents(ped, model, skinComp, reload, clean, preventVisibi
 
             local hash = GetBodyFeaturesHashByCompName(element)
             modules.IsPedReadyToRender(ped)
-            SetCharExpression(ped, hash, value)
+            SetCharExpression(ped, hash, data.id)
             modules.UpdatePedVariation(ped)
         end
 
