@@ -545,5 +545,5 @@ RegisterCommand('eyewear', function()
 
     exports.tpz_core:getCoreAPI().PlayAnimation(PlayerPedId(), anim_data)
     Wait(1000)
-    PerformDressingStateActionByName('eyewear', 'EYEWEAR', poncho)
+    PerformDressingStateActionByName('eyewear', 'EYEWEAR', eyewear)
 end)
