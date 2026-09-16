@@ -482,7 +482,8 @@ RegisterNUICallback('create', function()
     ClearSelectorPrompt()
         
     NetworkEndTutorialSession()
-        
+    RemoveImaps()
+		
     local sex = IdentityData.isMale and 0 or 1
 
     TriggerServerEvent('tpz_core:createNewCharacter', IdentityData.firstname, IdentityData.lastname, sex, IdentityData.dob, GetPlayerSkinData())
