@@ -221,7 +221,7 @@ AddEventHandler('tpz_characters:loadCharacterSelection', function(chars, data)
     
             local sex            = data[index].gender == 0 and "male" or "female"
             local scenarios      = randomPosition.CharacterPositions[index].Scenarios[sex]
-            local randomScenario = randomPosition.CharacterPositions[index].Scenarios[sex][ math.random( #randomPosition.CharacterPositions[1].Scenarios[sex]) ]
+            local randomScenario = randomPosition.CharacterPositions[index].Scenarios[sex][ math.random( #randomPosition.CharacterPositions[index].Scenarios[sex]) ]
     
             TaskStartScenarioInPlace(entity, joaat(randomScenario), -1)
             SetPedCanBeTargetted(entity, false)
@@ -320,7 +320,7 @@ AddEventHandler('tpz_characters:refreshCharacterSelection', function(chars, data
     
             local sex            = data[index].gender == 0 and "male" or "female"
             local scenarios      = randomPosition.CharacterPositions[index].Scenarios[sex]
-            local randomScenario = randomPosition.CharacterPositions[index].Scenarios[sex][ math.random( #randomPosition.CharacterPositions[1].Scenarios[sex]) ]
+            local randomScenario = randomPosition.CharacterPositions[index].Scenarios[sex][ math.random( #randomPosition.CharacterPositions[index].Scenarios[sex]) ]
     
             TaskStartScenarioInPlace(entity, joaat(randomScenario), -1)
             SetPedCanBeTargetted(entity, false)
