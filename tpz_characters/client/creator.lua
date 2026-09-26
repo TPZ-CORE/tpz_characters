@@ -48,6 +48,8 @@ function CreateCharacterLobbyHandlers()
 
     Citizen.InvokeNative(0x706D57B0F50DA710, "MC_MUSIC_STOP")
             
+	
+    ClearPedTasksImmediately(PlayerPedId(), true)
     FreezeEntityPosition(PlayerPedId(), false)
     SetEntityVisible(PlayerPedId(), true)
 
@@ -72,6 +74,13 @@ function CreateCharacterLobbyHandlers()
 
     local createCharCoords = CreatorData.Modifications.SpawnPlayerPosition
     exports.tpz_core.getCoreAPI().TeleportToCoords(createCharCoords.x, createCharCoords.y, createCharCoords.z, createCharCoords.h)
+
+	-- Request Coords Teleportation Collision
+	if not HasCollisionLoadedAroundEntity(PlayerPedId()) then
+		RequestCollisionAtCoord(createCharCoords.x, createCharCoords.y, createCharCoords.z)
+	end
+
+	print('yes')
 
     -- [[ Creating camera handlers on character create (random selected coords) ]]
     local cameraCoords = CreatorData.Modifications.MainCamera
@@ -732,7 +741,7 @@ UpdateCharacterGroomTextures = function(data)
 
 			modules.ApplyShopItemToPed(hash)
 		else
---local capitalizedCategoryName = exports.tpz_core:getCoreAPI().Capitalize(SELECTED_CATEGORY_TYPE)
+			--local capitalizedCategoryName = exports.tpz_core:getCoreAPI().Capitalize(SELECTED_CATEGORY_TYPE)
 			RemoveTagFromMetaPed(PlayerPedId(), Config.ComponentCategories[string.lower(SELECTED_CATEGORY_TYPE)])
 		end
 
@@ -1010,7 +1019,7 @@ LoadSelectedOutfitById = function(data, firstLoad)
 
         else
 			PlayerSkin[SELECTED_CATEGORY_TYPE] = { id = 0, palette = 1, tint0 = 0, tint1 = 0, tint2 = 0, drawable = 0, albedo = 0, normal = 0, material = 0}
-            RemoveTagFromMetaPed(PlayerPedId(), Config.ComponentCategories[SELECTED_CATEGORY_TYPE])
+            RemoveTagFromMetaPed(PlayerPedId(), Config.ComponentCategories[string.lower(SELECTED_CATEGORY_TYPE)])
         end
 
     elseif actionType == 'TINT' and texture_id ~= 0 then
@@ -1163,4 +1172,3 @@ function SetCharacterDressingState()
 	end
 
 end
-
