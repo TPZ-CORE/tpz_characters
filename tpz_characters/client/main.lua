@@ -279,6 +279,8 @@ AddEventHandler('tpz_characters:loadCharacterSelection', function(chars, data)
         SetEntityVisible(PlayerPedId(), true)
         SetEntityInvincible(PlayerPedId(), true)
 
+        Wait(1000)
+
         local playerCoords = GetEntityCoords(PlayerPedId())
 
         if randomPosition.CharacterPositions[CharacterData.SelectedCharIndex].PerformChairSeatScenario then
@@ -375,6 +377,8 @@ function onSelectedCharacterLoad()
     SetEntityVisible(PlayerPedId(), true)
     SetEntityInvincible(PlayerPedId(), true)
 
+    Wait(1000)
+    
     local playerCoords = GetEntityCoords(PlayerPedId())
 
     if randomPosition.CharacterPositions[CharacterData.SelectedCharIndex].PerformChairSeatScenario then
@@ -643,6 +647,8 @@ Citizen.CreateThread(function()
 
                         local charData = CharacterData.Data[CharacterData.SelectedCharIndex]
                         local charId   = tonumber(charData.charidentifier)
+
+                        CharacterData.SelectedCharIdentifier = charId 
 
                         ClearPedTasksImmediately(PlayerPedId(), true)
                 
