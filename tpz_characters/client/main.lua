@@ -161,6 +161,10 @@ end
 RegisterNetEvent('tpz_characters:loadCharacterSelection')
 AddEventHandler('tpz_characters:loadCharacterSelection', function(chars, data)
 
+    while not DoesEntityExist(PlayerPedId()) do 
+        Wait(500)
+    end
+
     CharacterData.IsBusy     = true 
     CharacterData.Characters = chars
     CharacterData.Data       = data
@@ -281,24 +285,36 @@ AddEventHandler('tpz_characters:loadCharacterSelection', function(chars, data)
 
         Wait(1000)
 
-        local playerCoords = GetEntityCoords(PlayerPedId())
+        local scenarioStarted = false
+        local playerCoords    = GetEntityCoords(PlayerPedId())
 
         if randomPosition.CharacterPositions[CharacterData.SelectedCharIndex].PerformChairSeatScenario then
 
-            for _, object in ipairs(GetNearbyObjects(playerCoords)) do
-            
-                local objectCoords = GetEntityCoords(object)
-    
-                if #(playerCoords - objectCoords) <= 2.0 then
-    
-                    local chairpos = GetOffsetFromEntityInWorldCoords(object,0.0,-0.05,0.5)
-                    local chairheading = GetEntityHeading(object)
+            local startTime = GetGameTimer()
 
-                    TaskStartScenarioAtPosition(PlayerPedId(), joaat("GENERIC_SEAT_CHAIR_TABLE_SCENARIO"), chairpos.x, chairpos.y, chairpos.z, chairheading+180.0, -1, true, false)
-    
-                    break
-                end
+            while not scenarioStarted and (GetGameTimer() - startTime) < 5000 do
+                
+                for _, object in ipairs(GetNearbyObjects(playerCoords)) do
+            
+                    local objectCoords = GetEntityCoords(object)
         
+                    if #(playerCoords - objectCoords) <= 2.0 then
+        
+                        local chairpos = GetOffsetFromEntityInWorldCoords(object,0.0,-0.05,0.5)
+                        local chairheading = GetEntityHeading(object)
+    
+                        TaskStartScenarioAtPosition(PlayerPedId(), joaat("GENERIC_SEAT_CHAIR_TABLE_SCENARIO"), chairpos.x, chairpos.y, chairpos.z, chairheading+180.0, -1, true, false)
+        
+                        Wait(250)
+    
+                        if IsPedUsingAnyScenario(PlayerPedId()) then
+                            scenarioStarted = true
+                            break
+                        end
+                    end
+            
+                end
+
             end
 
         else
@@ -378,7 +394,7 @@ function onSelectedCharacterLoad()
     SetEntityInvincible(PlayerPedId(), true)
 
     Wait(1000)
-    
+
     local playerCoords = GetEntityCoords(PlayerPedId())
 
     if randomPosition.CharacterPositions[CharacterData.SelectedCharIndex].PerformChairSeatScenario then
