@@ -91,7 +91,7 @@ Config.OnCharacterSelector = {
 
         ['DELETE_CHARACTER']    = {label = "Delete Permanently", key = 0xC7B5340A, hold = 2500 },
     },
-
+    
     -- Randomly selecting a location when player has joined to the server for selecting or creating new characters.
     Locations = {
 
@@ -100,24 +100,22 @@ Config.OnCharacterSelector = {
 
             Modifications = {
 
-                -- The player position (do not add close to the characters selection)
-                SpawnPlayerPosition = { x = 3291.271, y = -720.341, z = 42.460 },
-
                 Weather      = { Type = "sunny", Transition = 19, Snow = false },  
                 Timecycle    = { ModifierName = "teaser_trainShot", Strenght = 1.0 },
-                ClockTime    = { Hour = 19, Transition = 10 },
+                ClockTime    = { Hour = 20, Transition = 10 },
                 Music        = 'REHR_START',
-
-                -- Camera location when no characters are selected.
-                MainCamera = { x = 3299.27, y = -705.08, z = 44.55, rotx = 0.0, roty = 0.0, rotz = 130.0, fov = 60.0  },
             },
+
 
             CharacterPositions = {
                 [1] = {
-                    SpawnPosition = { x = 3294.5927734375, y = -709.4757690429688, z = 43.47323608398437, h = -46.73543930053711 },
-                    Camera        = { x = 3297.212, y = -708.690, z = 43.871, rotx = 0.0, roty = 0.0, rotz = 90.0, fov = 60.0 },
-                 
-                    Scenarios = {
+                    SpawnPosition = { x = 1779.639, y = -810.236, z = 187.45, h = 130.942245483},
+                    Camera        = { x = 1777.250, y = -810.463, z = 189.459, rotx = -9.368, roty = 0.000, rotz = 258.341, fov = 50.0 },
+
+                    -- There's must be a chair next to the player spawn coords for performing a chair scenario.
+                    PerformChairSeatScenario = true, -- 2.0.8
+
+                    Scenarios = { -- THIS IS FUNCTIONAL ONLY IF @PerformChairSeatScenario = false
 
                         ['female'] = {
                             "WORLD_HUMAN_SMOKE_CARRYING",
@@ -132,50 +130,53 @@ Config.OnCharacterSelector = {
                         },
 
                     },
-
+                
                 },
 
                 [2] = {
-                    SpawnPosition = { x = 3294.02294921875, y = -713.1904296875, z = 43.20399551391601, h = -32.87755966186523 },
-                    Camera        = { x = 3296.312, y = -709.560, z = 43.552, rotx = 0.0, roty = 0.0, rotz = 145.0, fov = 40.0 },
-                  
-                    Scenarios = {
+                    SpawnPosition = { x = 1780.008, y = -806.291, z = 187.95, h = 233.2605438 },
+                    Camera        = { x = 1783.223, y = -807.291, z = 189.559, rotx = -14.569, roty = 0.000, rotz = 95.330, fov = 50.0 } ,
+            
+                    -- There's must be a chair next to the player spawn coords for performing a chair scenario.
+                    PerformChairSeatScenario = true, -- 2.0.8
+
+                    Scenarios = { -- THIS IS FUNCTIONAL ONLY IF @PerformChairSeatScenario = false
 
                         ['female'] = {
-                            "MP_LOBBY_SCENARIO_02",
-                            "MP_LOBBY_SCENARIO_04",
-                            "MP_LOBBY_SCENARIO_07",
+                            "WORLD_HUMAN_SMOKE_CARRYING",
+                            "MP_LOBBY_SCENARIO_08",
                             "WORLD_HUMAN_SMOKE_CARRYING"
                         },
 
                         ['male'] = {
-                            "MP_LOBBY_SCENARIO_02",
-                            "MP_LOBBY_SCENARIO_04",
-                            "MP_LOBBY_SCENARIO_07",
+                            "WORLD_HUMAN_SMOKE_CARRYING",
+                            "MP_LOBBY_SCENARIO_08",
                             "WORLD_HUMAN_SMOKE_CARRYING"
                         },
 
                     },
+
                 },
 
                 [3] = {
-                    SpawnPosition = { x = 3286.9814453125, y = -707.7363891601562, z = 43.29147720336914, h = -86.77998352050781 },
-                    Camera        = { x = 3290.69, y = -709.61, z = 43.52, rotx = 0.0, roty = 0.0, rotz = 60.0, fov = 60.0 },
+                    SpawnPosition = { x = 1789.315, y = -804.189, z = 187.95, h = 89.5257644653 },
+                    Camera        = { x = 1786.116, y = -802.832, z = 189.359, rotx = -6.749, roty = 0.000, rotz = 226.478, fov = 50.0 },
                  
-                    Scenarios = {
+                    -- There's must be a chair next to the player spawn coords for performing a chair scenario.
+                    PerformChairSeatScenario = true, -- 2.0.8
+
+                    Scenarios = { -- THIS IS FUNCTIONAL ONLY IF @PerformChairSeatScenario = false
 
                         ['female'] = {
-                            "WORLD_HUMAN_SIT_GROUND_COFFEE_DRINK",
-                            "MP_LOBBY_CROUCHING_B",
-                            "WORLD_HUMAN_SIT_DRINK",
-                            "WORLD_HUMAN_SIT_GROUND_READ_NEWSPAPER"
+                            "WORLD_HUMAN_SMOKE_CARRYING",
+                            "MP_LOBBY_SCENARIO_08",
+                            "WORLD_HUMAN_SMOKE_CARRYING"
                         },
 
                         ['male'] = {
-                            "WORLD_HUMAN_SIT_GROUND_COFFEE_DRINK",
-                            "MP_LOBBY_CROUCHING_B",
-                            "WORLD_HUMAN_SIT_DRINK",
-                            "WORLD_HUMAN_SIT_GROUND_READ_NEWSPAPER"
+                            "WORLD_HUMAN_SMOKE_CARRYING",
+                            "MP_LOBBY_SCENARIO_08",
+                            "WORLD_HUMAN_SMOKE_CARRYING"
                         },
 
                     },
