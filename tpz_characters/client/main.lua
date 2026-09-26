@@ -90,6 +90,7 @@ AddEventHandler("tpz_core:playerJoining", function(userData)
     end
 
     TriggerServerEvent('tpz_core:onPlayerJoined')
+
 end)
 
 -- Added by @Dobiban
@@ -135,11 +136,32 @@ AddEventHandler('tpz_characters:receiveSkinData', function(data)
 
 end)
 
+
+
+function GetNearbyObjects(coords)
+	local itemset = CreateItemset(true)
+	local size = Citizen.InvokeNative(0x59B57C4B06531E1E, coords, 1.5, itemset, 3, Citizen.ResultAsInteger())
+
+	local objects = {}
+
+	if size > 0 then
+		for i = 0, size - 1 do
+			table.insert(objects, GetIndexedItemInItemset(i, itemset))
+		end
+	end
+
+	if IsItemsetValid(itemset) then
+		DestroyItemset(itemset)
+	end
+
+	return objects
+end
+
 -- Load character selection
 RegisterNetEvent('tpz_characters:loadCharacterSelection')
 AddEventHandler('tpz_characters:loadCharacterSelection', function(chars, data)
-    Wait(1000)
-    
+
+    CharacterData.IsBusy     = true 
     CharacterData.Characters = chars
     CharacterData.Data       = data
 
@@ -155,6 +177,16 @@ AddEventHandler('tpz_characters:loadCharacterSelection', function(chars, data)
 
     CharacterData.PositionIndex = randomPosition.Index
 
+    local spawnCoords = randomPosition.CharacterPositions[1].SpawnPosition
+    exports.tpz_core:getCoreAPI().TeleportToCoords(spawnCoords.x, spawnCoords.y, spawnCoords.z, spawnCoords.h)
+
+    -- Request Coords Teleportation Collision
+    if not HasCollisionLoadedAroundEntity(PlayerPedId()) then
+        RequestCollisionAtCoord(spawnCoords.x, spawnCoords.y, spawnCoords.z)
+    end
+
+    repeat Wait(0) until HasCollisionLoadedAroundEntity(PlayerPedId())
+
     ExecuteCommand('hud:hideall')
 
     exports.weathersync:setSyncEnabled(false)
@@ -164,109 +196,220 @@ AddEventHandler('tpz_characters:loadCharacterSelection', function(chars, data)
     SetTimecycleModifier(randomPosition.Modifications.Timecycle.ModifierName)
 	Citizen.InvokeNative(0xFDB74C9CC54C3F37, randomPosition.Modifications.Timecycle.Strength)
 
-    local spawnCoords = randomPosition.Modifications.SpawnPlayerPosition
-    exports.tpz_core:getCoreAPI().TeleportToCoords(spawnCoords.x, spawnCoords.y, spawnCoords.z, 0)
-
     -- Request Music
     PrepareMusicEvent(randomPosition.Modifications.Music)
 	Wait(100)
 	TriggerMusicEvent(randomPosition.Modifications.Music)
 	Wait(1000)
 
-    -- Request Coords Teleportation Collision
-	if not HasCollisionLoadedAroundEntity(PlayerPedId()) then
-		RequestCollisionAtCoord(spawnCoords.x, spawnCoords.y, spawnCoords.z)
-	end
+    CreateThread(function()
 
-	repeat Wait(0) until HasCollisionLoadedAroundEntity(PlayerPedId())
+        local pool = GetGamePool("CPed") -- clearing peds that are inside the interior / exterior.
+        for _,npc in pairs (pool) do
+
+            if DoesEntityExist(npc) and not IsPedAPlayer(npc) then
+                DeleteEntity(npc)
+            end
+
+        end
+
+        while CharacterData.IsBusy do
+    
+            Wait(0)
+
+            DisplayRadar(false)
+    
+            Citizen.InvokeNative(0xAB0D553FE20A6E25, 0.0) -- SetAmbientPedDensityMultiplierThisFrame
+            Citizen.InvokeNative(0x7A556143A1C03898, 0.0) -- SetScenarioPedDensityMultiplierThisFrame
+            Citizen.InvokeNative(0xBA0980B5C0A11924, 0.0) -- SetAmbientHumanDensityMultiplierThisFrame
+            Citizen.InvokeNative(0x28CB6391ACEDD9DB, 0.0) -- SetScenarioHumanDensityMultiplierThisFrame
+   
+        end
+    
+    end)
 
     -- Modify Player Attributes
-	FreezeEntityPosition(PlayerPedId(), true)
-	SetEntityVisible(PlayerPedId(), false)
-	SetEntityInvincible(PlayerPedId(), true)
+	--FreezeEntityPosition(PlayerPedId(), true)
 
-    local cameraCoords   = randomPosition.Modifications.MainCamera
-    local _cameraHandler = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", cameraCoords.x, cameraCoords.y, cameraCoords.z, cameraCoords.rotx, cameraCoords.roty, cameraCoords.rotz, cameraCoords.fov, false, 2)
+    CharacterData.SelectedCharIdentifier = nil
+    CharacterData.SelectedCharIndex = 1
 
-	SetCamActive(_cameraHandler, true)
-	RenderScriptCams(true, false, 0, true, true, 0)
-
-    CameraHandler.coords = cameraCoords
-
-    CameraHandler.z    = cameraCoords.z
-    CameraHandler.zoom = cameraCoords.fov
+    FreezeEntityPosition(PlayerPedId(), false)
 
     if chars > 0 then
 
-        for index = 1, chars do
+        local charData = CharacterData.Data[1]
+        local charId   = tonumber(charData.charidentifier)
 
-            local gender = data[index].gender == 0 and "mp_male" or "mp_female"
+        CharacterData.SelectedCharIdentifier = charId 
 
-            LoadHashModel(joaat(gender))
-    
-            local charSpawnCoords = randomPosition.CharacterPositions[index].SpawnPosition
-            local entity          = CreatePed(joaat(gender), charSpawnCoords.x, charSpawnCoords.y, charSpawnCoords.z, charSpawnCoords.h, false, false, false, false)
+        local gender = charData.gender == 0 and "mp_male" or "mp_female"
+
+        if (charData and charData.skinComp == nil) then 
+            print('it was null - throwing error')
+
+            local cbdata = exports.tpz_core:ClientRpcCall().Callback.TriggerAwait("tpz_characters:getPlayerSkinInformation", { charId = charId } )
+       
+            if type(cbdata.skinComp) ~= "table" then
+                cbdata.skinComp = json.encode(cbdata.skinComp)
+            end
             
-            repeat Wait(0) until DoesEntityExist(entity)
-
-            Wait(1000)
-
-            LoadEntityComponents(entity, gender, data[index].skinComp, false, false)
-            SetAttributeCoreValue(entity, 1, 100)
-            SetAttributeCoreValue(entity, 0, 100)
-
-            SetEntityInvincible(entity, true)
-
-            data[index].entity = entity 
-    
-            local sex            = data[index].gender == 0 and "male" or "female"
-            local scenarios      = randomPosition.CharacterPositions[index].Scenarios[sex]
-            local randomScenario = randomPosition.CharacterPositions[index].Scenarios[sex][ math.random( #randomPosition.CharacterPositions[index].Scenarios[sex]) ]
-    
-            TaskStartScenarioInPlace(entity, joaat(randomScenario), -1)
-            SetPedCanBeTargetted(entity, false)
-
-            Wait(1000)
-
+            charData.skinComp = cbdata.skinComp
         end
 
-    end
+        LoadHashModel(joaat(gender))
 
-    DoScreenFadeIn(1000)
+        SetPlayerModel(gender)
+        SetModelAsNoLongerNeeded(gender)
 
-    if chars > 0 then
+        LoadEntityComponents(PlayerPedId(), gender, charData.skinComp, true, false)
+
+        local spawnCoords = randomPosition.CharacterPositions[CharacterData.SelectedCharIndex].SpawnPosition
+        exports.tpz_core:getCoreAPI().TeleportToCoords(spawnCoords.x, spawnCoords.y, spawnCoords.z, spawnCoords.h)
+
+        -- Request Coords Teleportation Collision
+        if not HasCollisionLoadedAroundEntity(PlayerPedId()) then
+            RequestCollisionAtCoord(spawnCoords.x, spawnCoords.y, spawnCoords.z)
+        end
+    
+        repeat Wait(0) until HasCollisionLoadedAroundEntity(PlayerPedId())
+
+        ClearPedTasksImmediately(PlayerPedId(), true)
+        FreezeEntityPosition(PlayerPedId(), false)
+        SetEntityVisible(PlayerPedId(), true)
+        SetEntityInvincible(PlayerPedId(), true)
+
+        local playerCoords = GetEntityCoords(PlayerPedId())
+
+        if randomPosition.CharacterPositions[CharacterData.SelectedCharIndex].PerformChairSeatScenario then
+
+            for _, object in ipairs(GetNearbyObjects(playerCoords)) do
+            
+                local objectCoords = GetEntityCoords(object)
+    
+                if #(playerCoords - objectCoords) <= 2.0 then
+    
+                    local chairpos = GetOffsetFromEntityInWorldCoords(object,0.0,-0.05,0.5)
+                    local chairheading = GetEntityHeading(object)
+
+                    TaskStartScenarioAtPosition(PlayerPedId(), joaat("GENERIC_SEAT_CHAIR_TABLE_SCENARIO"), chairpos.x, chairpos.y, chairpos.z, chairheading+180.0, -1, true, false)
+    
+                    break
+                end
         
-        Wait(5000)
+            end
 
-        while not IsScreenFadedOut() do
-            Wait(50)
-            DoScreenFadeOut(2000)
+        else
+
+            local sex            = charData.gender == 0 and "male" or "female"
+            local scenarios      = randomPosition.CharacterPositions[CharacterData.SelectedCharIndex].Scenarios[sex]
+            local randomScenario = randomPosition.CharacterPositions[CharacterData.SelectedCharIndex].Scenarios[sex][ math.random( #randomPosition.CharacterPositions[CharacterData.SelectedCharIndex].Scenarios[sex]) ]
+    
+            TaskStartScenarioInPlace(PlayerPedId(), joaat(randomScenario), -1)
         end
-    
-        DestroyAllCams(true)
 
-        local newCameraCoords = randomPosition.CharacterPositions[1].Camera
-        local _cameraHandler  = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", newCameraCoords.x, newCameraCoords.y, newCameraCoords.z, newCameraCoords.rotx, newCameraCoords.roty, newCameraCoords.rotz, newCameraCoords.fov, false, 2)
-    
-        SetCamActive(_cameraHandler, true)
-        RenderScriptCams(true, false, 0, true, true, 0)
-    
-        CameraHandler.coords = newCameraCoords
-    
-        CameraHandler.z    = newCameraCoords.z
-        CameraHandler.zoom = newCameraCoords.fov
-
-        DoScreenFadeIn(3000)
-
-        CharacterData.SelectedCharIndex = 1
     end
+
+    local newCameraCoords = randomPosition.CharacterPositions[1].Camera
+    local _cameraHandler  = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", newCameraCoords.x, newCameraCoords.y, newCameraCoords.z, newCameraCoords.rotx, newCameraCoords.roty, newCameraCoords.rotz, newCameraCoords.fov, false, 2)
+
+    SetCamActive(_cameraHandler, true)
+    RenderScriptCams(true, false, 0, true, true, 0)
+
+    CameraHandler.coords = newCameraCoords
+
+    CameraHandler.z    = newCameraCoords.z
+    CameraHandler.zoom = newCameraCoords.fov
+
 
     CharacterData.OnCharacterSelector = true
+
+    Wait(4000)
+    DoScreenFadeIn(3000)
+
 
 end)
 
 
+function onSelectedCharacterLoad()
+    ClearPedTasksImmediately(PlayerPedId(), true)
+    
+    local randomPosition = Config.OnCharacterSelector.Locations[CharacterData.PositionIndex]
+    local charData = CharacterData.Data[CharacterData.SelectedCharIndex]
+    local charId   = tonumber(charData.charidentifier)
+    CharacterData.SelectedCharIdentifier = charId 
 
+    local gender = charData.gender == 0 and "mp_male" or "mp_female"
+
+    if (charData and charData.skinComp == nil) then 
+        print('it was null - throwing error')
+
+        local cbdata = exports.tpz_core:ClientRpcCall().Callback.TriggerAwait("tpz_characters:getPlayerSkinInformation", { charId = charId } )
+   
+        if type(cbdata.skinComp) ~= "table" then
+            cbdata.skinComp = json.encode(cbdata.skinComp)
+        end
+        
+        charData.skinComp = cbdata.skinComp
+    end
+
+    LoadHashModel(joaat(gender))
+
+    SetPlayerModel(gender)
+    SetModelAsNoLongerNeeded(gender)
+
+    LoadEntityComponents(PlayerPedId(), gender, charData.skinComp, true, false)
+
+    local spawnCoords = randomPosition.CharacterPositions[CharacterData.SelectedCharIndex].SpawnPosition
+    exports.tpz_core:getCoreAPI().TeleportToCoords(spawnCoords.x, spawnCoords.y, spawnCoords.z, spawnCoords.h)
+
+    -- Request Coords Teleportation Collision
+    if not HasCollisionLoadedAroundEntity(PlayerPedId()) then
+        RequestCollisionAtCoord(spawnCoords.x, spawnCoords.y, spawnCoords.z)
+    end
+
+    repeat Wait(0) until HasCollisionLoadedAroundEntity(PlayerPedId())
+
+    ClearPedTasksImmediately(PlayerPedId(), true)
+    FreezeEntityPosition(PlayerPedId(), false)
+    SetEntityVisible(PlayerPedId(), true)
+    SetEntityInvincible(PlayerPedId(), true)
+
+    local playerCoords = GetEntityCoords(PlayerPedId())
+
+    if randomPosition.CharacterPositions[CharacterData.SelectedCharIndex].PerformChairSeatScenario then
+
+        for _, object in ipairs(GetNearbyObjects(playerCoords)) do
+        
+            local objectCoords = GetEntityCoords(object)
+
+            if #(playerCoords - objectCoords) <= 2.0 then
+
+                local chairpos = GetOffsetFromEntityInWorldCoords(object,0.0,-0.05,0.5)
+                local chairheading = GetEntityHeading(object)
+
+                TaskStartScenarioAtPosition(PlayerPedId(), joaat("GENERIC_SEAT_CHAIR_TABLE_SCENARIO"), chairpos.x, chairpos.y, chairpos.z, chairheading+180.0, -1, true, false)
+
+                break
+            end
+    
+        end
+
+    else
+
+        local sex            = charData.gender == 0 and "male" or "female"
+        local scenarios      = randomPosition.CharacterPositions[CharacterData.SelectedCharIndex].Scenarios[sex]
+        local randomScenario = randomPosition.CharacterPositions[CharacterData.SelectedCharIndex].Scenarios[sex][ math.random( #randomPosition.CharacterPositions[CharacterData.SelectedCharIndex].Scenarios[sex]) ]
+
+        TaskStartScenarioInPlace(PlayerPedId(), joaat(randomScenario), -1)
+    end
+
+    Wait(4000)
+    DoScreenFadeIn(3000)
+
+end
+
+/*
 RegisterNetEvent('tpz_characters:refreshCharacterSelection')
 AddEventHandler('tpz_characters:refreshCharacterSelection', function(chars, data)
 
@@ -317,7 +460,7 @@ AddEventHandler('tpz_characters:refreshCharacterSelection', function(chars, data
             SetAttributeCoreValue(entity, 0, 100)
     
             data[index].entity = entity 
-    
+
             local sex            = data[index].gender == 0 and "male" or "female"
             local scenarios      = randomPosition.CharacterPositions[index].Scenarios[sex]
             local randomScenario = randomPosition.CharacterPositions[index].Scenarios[sex][ math.random( #randomPosition.CharacterPositions[index].Scenarios[sex]) ]
@@ -361,28 +504,20 @@ AddEventHandler('tpz_characters:refreshCharacterSelection', function(chars, data
     end
 
     CharacterData.OnCharacterSelector = true
+end)*/
+
+RegisterNetEvent('tpz_core:onPlayerFirstSpawn')
+AddEventHandler("tpz_core:onPlayerFirstSpawn", function(coords, status, isdead, newChar, charIdentifier)
+	
+    local PlayerData = GetCharacterData()
+		
+    PlayerData.OnCharacterSelector    = false
+    PlayerData.SelectedCharIdentifier = charIdentifier
 end)
 
 -----------------------------------------------------------
 --[[ Threads ]]--
 -----------------------------------------------------------
-
-Citizen.CreateThread(function()
-
-    while true do
-
-        Wait(0)
-        
-        if CharacterData.IsBusy then
-            DisplayRadar(false)
-            
-        else
-            Wait(1000)
-        end
-
-    end
-
-end)
 
 -- Reload Skin Cooldown timer for removing.
 Citizen.CreateThread(function()
@@ -409,7 +544,7 @@ Citizen.CreateThread(function()
             for i, prompt in pairs (promptList) do
                 PromptSetVisible(prompt.prompt, 0)
                 PromptSetEnabled(prompt.prompt, 0)
-
+                
                 if prompt.type == 'CREATE_CHARACTER' then
 
                     PromptSetEnabled(prompt.prompt, 0)
@@ -463,10 +598,8 @@ Citizen.CreateThread(function()
                     
                         CameraHandler.z    = newCameraCoords.z
                         CameraHandler.zoom = newCameraCoords.fov
-                    
-                        DoScreenFadeIn(3000)
 
-                        Wait(1000)
+                        onSelectedCharacterLoad()
 
                     elseif prompt.type == 'PREVIOUS_CHARACTER' then
 
@@ -493,10 +626,9 @@ Citizen.CreateThread(function()
                     
                         CameraHandler.z    = newCameraCoords.z
                         CameraHandler.zoom = newCameraCoords.fov
-                    
-                        DoScreenFadeIn(3000)
 
-                        Wait(1000)
+                        onSelectedCharacterLoad()
+                    
 
                     elseif prompt.type == 'SELECT_CHARACTER' then
 
@@ -512,23 +644,8 @@ Citizen.CreateThread(function()
                         local charData = CharacterData.Data[CharacterData.SelectedCharIndex]
                         local charId   = tonumber(charData.charidentifier)
 
-                        CharacterData.SelectedCharIdentifier = charId
-
                         ClearPedTasksImmediately(PlayerPedId(), true)
                 
-                        local gender = charData.gender == 0 and "mp_male" or "mp_female"
-
-                        LoadHashModel(joaat(gender))
-
-                        Wait(1000)
-
-                        SetPlayerModel(gender)
-                        SetModelAsNoLongerNeeded(gender)
-
-                        Wait(1000)
-
-                        LoadEntityComponents(PlayerPedId(), gender, charData.skinComp, true, false)
-
                         NetworkClearClockTimeOverride()
                         exports.weathersync:setSyncEnabled(true)
 
@@ -554,10 +671,14 @@ Citizen.CreateThread(function()
                     elseif prompt.type == 'CREATE_CHARACTER' then
 
                         CharacterData.OnCharacterSelector = false
+
                         ToggleUI(true)
+
+            
 
                     elseif prompt.type == 'DELETE_CHARACTER' then
 
+                        
                         CharacterData.OnCharacterSelector = false
 
                         local charData = CharacterData.Data[CharacterData.SelectedCharIndex]
@@ -567,7 +688,7 @@ Citizen.CreateThread(function()
 
                         Wait(1000)
                         TriggerServerEvent("tpz_core:requestCharacters", true)
-
+                        
                     end
 
 
@@ -588,4 +709,3 @@ end)
 -----------------------------------------------------------
 --[[ Commands ]]--
 -----------------------------------------------------------
-
