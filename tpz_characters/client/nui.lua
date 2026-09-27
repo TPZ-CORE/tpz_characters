@@ -14,7 +14,12 @@ end
 --[[ Functions  ]]--
 -----------------------------------------------------------
 
-ToggleUI = function(display, data)
+ToggleSelectionUI = function(display)
+    SetNuiFocus(false, false)
+    SendNUIMessage({ type = "enable", enable = display, window = 'selector' })
+end
+
+ToggleUI = function(display)
 
     
     if display then 
@@ -25,7 +30,7 @@ ToggleUI = function(display, data)
         --LoadAllClothingData() -- for loading player skin and all clothing properly.
 
         SetNuiFocus(display, display)
-        SendNUIMessage({ type = "enable", enable = display })
+        SendNUIMessage({ type = "enable", enable = display, window = 'creator' })
 
         --PlayerData.HasNUIActive = false
         SendNUIMessage({ 
@@ -44,7 +49,7 @@ ToggleUI = function(display, data)
         GetCharacterData().HasNUIActive = false
 
         SetNuiFocus(display, display)
-        SendNUIMessage({ type = "enable", enable = display })
+        SendNUIMessage({ type = "enable", enable = display, window = 'creator' })
     end
 end
 
@@ -483,7 +488,7 @@ RegisterNUICallback('create', function()
         
     NetworkEndTutorialSession()
     RemoveImaps()
-		
+        
     local sex = IdentityData.isMale and 0 or 1
 
     TriggerServerEvent('tpz_core:createNewCharacter', IdentityData.firstname, IdentityData.lastname, sex, IdentityData.dob, GetPlayerSkinData())
