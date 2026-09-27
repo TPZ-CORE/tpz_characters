@@ -500,12 +500,26 @@ function GetComponentsWithWearableState(category, isMultiplayer)
     return `base`, nil
 end
 
+exports('GetMetaPedData', function()
+    local await = true 
+    local result = GetMetaPedData(category, ped)
+
+    while result == nil  do 
+        Wait(10)
+    end
+
+    return result
+end)
+
 function GetMetaPedData(category, ped)
     local playerPed = ped or PlayerPedId()
+
     local componentIndex = GetComponentIndexByCategory(playerPed, category)
+
     if not componentIndex then
         return nil
     end
+
     local drawable, albedo, normal, material = GetMetaPedAssetGuids(playerPed, componentIndex)
     local palette, tint0, tint1, tint2 = GetMetaPedAssetTint(playerPed, componentIndex)
 
@@ -591,7 +605,7 @@ function FixClothingProperlyOnCategorySelect(category, skinData, ped)
 
     if category == "pant" then 
 
-        UpdateShopItemWearableState(Config.ComponentCategories[category], `base`) -- -2081918609
+        --UpdateShopItemWearableState(Config.ComponentCategories[category], `base`) -- -2081918609
         modules.UpdatePedVariation(entityPed)
 
         local item = PlayerSkin.Shirt -- some pants breaking the shirt colors
@@ -955,3 +969,88 @@ function LoadEntityComponents(ped, model, skinComp, reload, clean, preventVisibi
     
 end
 
+exports('ReloadGroom', function()
+
+    local ped    = PlayerPedId()
+    local gender = IsPedMale(PlayerPedId()) == 1 and 'Male' or 'Female'
+    
+    local ClientData = exports.tpz_core:getCoreAPI().GetPlayerClientData()
+    local skinComp = ClientData.skinComp
+
+    skinComp = json.decode(skinComp)
+
+    local groom  = LoadGroomData(gender)
+
+    local groom_elements = {
+        'hair',
+        'overlay',
+        'hair_overlay',
+        'beard',
+        'beardstabble',
+        'bow',
+        'eyebrows',
+    }
+
+    for _, element in pairs (groom_elements) do 
+
+        if skinComp[element] ~= nil then
+
+            local data = skinComp[element]
+
+            if element == 'hair' or element == 'bow' or element == 'beard' then
+
+                modules.IsPedReadyToRender(ped)
+
+                if data.id > 0 then 
+
+                    local hash = groom[element][data.id][data.color].hex
+        
+                    modules.ApplyShopItemToPed(hash, ped)
+                end
+        
+                modules.UpdatePedVariation(ped)
+
+            else
+
+                if element == 'overlay' or element == 'hair_overlay' then 
+                    element = 'hair'
+                end
+
+                ApplyOverlay(element, data.visibility,
+                data.id, 1, 0, 0, 1.0, 0, 1, 
+                data.color, 0, 0, 1,
+                data.opacity, skinComp.albedo, ped)
+            end
+
+        else
+
+            if element == 'hair' then
+
+                modules.IsPedReadyToRender(ped)
+
+                local hash = groom['hair'][1][1].hex
+        
+                modules.ApplyShopItemToPed(hash, ped)
+        
+                modules.UpdatePedVariation(ped)
+
+            elseif element == 'hair_overlay' then
+
+                if element == 'overlay' or element == 'hair_overlay' then 
+                    element = 'hair'
+                end
+
+                ApplyOverlay(element, 0, 1, 1, 0, 0, 1.0, 0, 1, 0, 0, 0, 1, 0.0, skinComp['albedo'], ped)
+            end
+
+            if element == 'beardstabble' then 
+                ApplyOverlay('beardstabble', 0, 1, 1, 0, 0, 1.0, 0, 1, 0, 0, 0, 1, 0.0, skinComp['albedo'], ped)
+            end
+
+        end
+
+
+    end
+
+
+end)
