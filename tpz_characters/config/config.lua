@@ -81,16 +81,6 @@ Config.OnCharacterCreate = {
 ---------------------------------------------------------------
 
 Config.OnCharacterSelector = {
-
-    Prompts = {
-        ['PREVIOUS_CHARACTER']  = {label = "Previous Character", key = 0xA65EBAB4, hold = 1},
-        ['NEXT_CHARACTER']      = {label = "Next Character", key = 0xDEB34313, hold = 1 },
-        
-        ['SELECT_CHARACTER']    = {label = "Select", key = 0xD9D0E1C0, hold = 1500 },
-        ['CREATE_CHARACTER']    = {label = "Create New Character", key = 0x156F7119, hold = 1500 },
-
-        ['DELETE_CHARACTER']    = {label = "Delete Permanently", key = 0xC7B5340A, hold = 2500 },
-    },
     
     -- Randomly selecting a location when player has joined to the server for selecting or creating new characters.
     Locations = {
