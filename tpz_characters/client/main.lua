@@ -11,6 +11,7 @@ local CharacterData = {
 
     SelectedCharIndex   = 0,
     SelectedCharIdentifier = nil, -- selected char on select prompt
+    
     Data                = {},
 
     HasNUIActive        = false,
@@ -20,26 +21,12 @@ CameraHandler = {coords = nil, zoom = 0, z = 0 }
 IdentityData  = { isMale = true, firstname = nil, lastname = nil, dob = nil }
 
 local LOADED_FIRST_CHAR = false 
+local CHARACTER_CHANGE_AWAIT = false
+local REQUESTED_JOIN_DATA = false
 
 -----------------------------------------------------------
 --[[ Functions  ]]--
 -----------------------------------------------------------
-
-function DeleteCharacterEntities()
-
-    for index, char in pairs (CharacterData.Data) do
-
-        if char.entity then
-
-            DeleteEntity(char.entity)
-            DeletePed(char.entity)
-            SetEntityAsNoLongerNeeded( char.entity )
-
-        end
-
-    end
-
-end
 
 -- Function to clean the character properly
 function CleanPlayerPed()
@@ -57,6 +44,39 @@ function CleanPlayerPed()
     end
 end
 
+function CheckControls(func, pad, controls)
+	if type(controls) == 'number' then
+		return func(pad, controls)
+	end
+
+	for _, control in ipairs(controls) do
+		if func(pad, control) then
+			return true
+		end
+	end
+
+	return false
+end
+
+
+function UpdateCharacterSelectorControls()
+
+    local hasCharacters = CharacterData.Characters > 0
+    local canChangeCharacter = CharacterData.Characters > 1
+    local canCreateCharacter = CharacterData.Characters < CharacterData.MaxCharacters
+
+    SendNUIMessage({
+        action = "updateSelectorControls",
+
+        previous = canChangeCharacter,
+        next = canChangeCharacter,
+        select = hasCharacters,
+        delete = hasCharacters,
+        create = canCreateCharacter
+    })
+
+end
+
 function GetCharacterData()
     return CharacterData
 end
@@ -64,14 +84,6 @@ end
 -----------------------------------------------------------
 --[[ Base Events  ]]--
 -----------------------------------------------------------
-
-AddEventHandler('onResourceStop', function(resourceName)
-    if (GetCurrentResourceName() ~= resourceName) then
-        return
-    end
-
-    DeleteCharacterEntities()
-end)
 
 -----------------------------------------------------------
 --[[ General Events  ]]--
@@ -90,6 +102,8 @@ AddEventHandler("tpz_core:playerJoining", function(userData)
     if Config.Debug then
         print(string.format("Maximum Characters Limit: %s", CharacterData.MaxCharacters))
     end
+
+    REQUESTED_JOIN_DATA = true 
 
     TriggerServerEvent('tpz_core:onPlayerJoined')
 
@@ -309,7 +323,7 @@ AddEventHandler('tpz_characters:loadCharacterSelection', function(chars, data)
         
                         local chairpos = GetOffsetFromEntityInWorldCoords(object,0.0,-0.05,0.5)
                         local chairheading = GetEntityHeading(object)
-    
+        
                         TaskStartScenarioAtPosition(PlayerPedId(), joaat("GENERIC_SEAT_CHAIR_TABLE_SCENARIO"), chairpos.x, chairpos.y, chairpos.z, chairheading+180.0, -1, true, false)
         
                         Wait(250)
@@ -335,6 +349,9 @@ AddEventHandler('tpz_characters:loadCharacterSelection', function(chars, data)
             TaskStartScenarioInPlace(PlayerPedId(), joaat(randomScenario), -1)
         end
 
+        local account = json.decode(charData.accounts)
+        SendNUIMessage({ action = 'set_selected_character_info', result = charData, cash = account['cash'], gold = account['gold']})
+
     end
 
     local newCameraCoords = randomPosition.CharacterPositions[1].Camera
@@ -351,10 +368,24 @@ AddEventHandler('tpz_characters:loadCharacterSelection', function(chars, data)
 
     CharacterData.OnCharacterSelector = true
 
+    if not REQUESTED_JOIN_DATA then 
+        TriggerServerEvent('tpz_core:requestplayerJoiningData')
+    end
+
     Wait(7000)
     LOADED_FIRST_CHAR = true 
+    UpdateCharacterSelectorControls()
 
     Wait(3000)
+
+	ToggleSelectionUI(true)
+
+    if chars > 0 then 
+        SendNUIMessage({ action = 'display_character_info'})
+    end
+
+    TriggerEvent("tpz_core:onCharacterSelection")
+
     DoScreenFadeIn(3000)
 
 
@@ -405,6 +436,9 @@ function onSelectedCharacterLoad()
     SetEntityVisible(PlayerPedId(), true)
     SetEntityInvincible(PlayerPedId(), true)
 
+    local account = json.decode(charData.accounts)
+    SendNUIMessage({ action = 'set_selected_character_info', result = charData, cash = account['cash'], gold = account['gold']})
+    
     Wait(1000)
 
     local playerCoords = GetEntityCoords(PlayerPedId())
@@ -436,305 +470,354 @@ function onSelectedCharacterLoad()
         TaskStartScenarioInPlace(PlayerPedId(), joaat(randomScenario), -1)
     end
 
-    Wait(4000)
+    Wait(5000)
+    
     DoScreenFadeIn(3000)
 
+    CHARACTER_CHANGE_AWAIT = false
+    ToggleSelectionUI(true)
+    SendNUIMessage({ action = 'display_character_info'})
+
 end
-
-/*
-RegisterNetEvent('tpz_characters:refreshCharacterSelection')
-AddEventHandler('tpz_characters:refreshCharacterSelection', function(chars, data)
-
-    while not IsScreenFadedOut() do
-        Wait(50)
-        DoScreenFadeOut(2000)
-    end
-
-    DestroyAllCams(true)
-    DeleteCharacterEntities()
-
-    CharacterData.SelectedCharIndex = 0
-
-    CharacterData.Characters = chars
-    CharacterData.Data       = data
-
-    local randomPosition     = Config.OnCharacterSelector.Locations[CharacterData.PositionIndex]
-
-    local cameraCoords       = randomPosition.Modifications.MainCamera
-    local _cameraHandler     = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", cameraCoords.x, cameraCoords.y, cameraCoords.z, cameraCoords.rotx, cameraCoords.roty, cameraCoords.rotz, cameraCoords.fov, false, 2)
-
-	SetCamActive(_cameraHandler, true)
-	RenderScriptCams(true, false, 0, true, true, 0)
-
-    CameraHandler.coords = cameraCoords
-
-    CameraHandler.z    = cameraCoords.z
-    CameraHandler.zoom = cameraCoords.fov
-
-    if chars > 0 then
-
-        for index = 1, chars do
-
-            local gender = data[index].gender == 0 and "mp_male" or "mp_female"
-
-            LoadHashModel(joaat(gender))
-    
-            local charSpawnCoords = randomPosition.CharacterPositions[index].SpawnPosition
-            local entity          = CreatePed(joaat(gender), charSpawnCoords.x, charSpawnCoords.y, charSpawnCoords.z, charSpawnCoords.h, false, false, false, false)
-            
-            repeat Wait(0) until DoesEntityExist(entity)
-
-            Wait(1000)
-
-            LoadEntityComponents(entity, gender, data[index].skinComp, false, false)
-
-            SetAttributeCoreValue(entity, 1, 100) --_SET_ATTRIBUTE_CORE_VALUE
-            SetAttributeCoreValue(entity, 0, 100)
-    
-            data[index].entity = entity 
-
-            local sex            = data[index].gender == 0 and "male" or "female"
-            local scenarios      = randomPosition.CharacterPositions[index].Scenarios[sex]
-            local randomScenario = randomPosition.CharacterPositions[index].Scenarios[sex][ math.random( #randomPosition.CharacterPositions[index].Scenarios[sex]) ]
-    
-            TaskStartScenarioInPlace(entity, joaat(randomScenario), -1)
-            SetPedCanBeTargetted(entity, false)
-
-            Wait(1000)
-
-        end
-
-    end
-
-    DoScreenFadeIn(1000)
-
-    if chars > 0 then
-        
-        Wait(5000)
-
-        while not IsScreenFadedOut() do
-            Wait(50)
-            DoScreenFadeOut(2000)
-        end
-    
-        DestroyAllCams(true)
-
-        local newCameraCoords = randomPosition.CharacterPositions[1].Camera
-        local _cameraHandler  = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", newCameraCoords.x, newCameraCoords.y, newCameraCoords.z, newCameraCoords.rotx, newCameraCoords.roty, newCameraCoords.rotz, newCameraCoords.fov, false, 2)
-    
-        SetCamActive(_cameraHandler, true)
-        RenderScriptCams(true, false, 0, true, true, 0)
-    
-        CameraHandler.coords = newCameraCoords
-    
-        CameraHandler.z    = newCameraCoords.z
-        CameraHandler.zoom = newCameraCoords.fov
-
-        DoScreenFadeIn(3000)
-
-        CharacterData.SelectedCharIndex = 1
-    end
-
-    CharacterData.OnCharacterSelector = true
-end)*/
 
 RegisterNetEvent('tpz_core:onPlayerFirstSpawn')
 AddEventHandler("tpz_core:onPlayerFirstSpawn", function(coords, status, isdead, newChar, charIdentifier)
 	
     local PlayerData = GetCharacterData()
 		
-    PlayerData.OnCharacterSelector    = false
-    PlayerData.SelectedCharIdentifier = charIdentifier
+    CharacterData.OnCharacterSelector    = false
+    CharacterData.SelectedCharIdentifier = charIdentifier
 end)
 
------------------------------------------------------------
---[[ Threads ]]--
------------------------------------------------------------
+AddEventHandler("tpz_core:onCharacterSelection", function()
 
--- Reload Skin Cooldown timer for removing.
-Citizen.CreateThread(function()
+    Citizen.CreateThread(function()
 
-    RegisterCharacterSelectorPrompts()
+        while CharacterData.OnCharacterSelector do
 
-    while true do
+            Wait(0)
+    
+            if not CHARACTER_CHANGE_AWAIT then
+    
+                -- =========================================================
+                -- PREVIOUS CHARACTER
+                -- LEFT ARROW
+                -- =========================================================
+    
+                if CheckControls(IsDisabledControlJustPressed, 0, 0xA65EBAB4) and CharacterData.Characters > 1 then
+    
+                    ToggleSelectionUI(false)
 
-        Wait(0)
-
-        if CharacterData.OnCharacterSelector then
-
-            local promptGroup, promptList = GetSelectorPromptData()
-
-            local characterUsername = ""
-
-            if CharacterData.SelectedCharIndex ~= 0 then
-                characterUsername = CharacterData.Data[CharacterData.SelectedCharIndex].firstname .. ' ' .. CharacterData.Data[CharacterData.SelectedCharIndex].lastname
-            end
-
-            local label = CreateVarString(10, 'LITERAL_STRING', characterUsername)
-            PromptSetActiveGroupThisFrame(promptGroup, label)
-
-            for i, prompt in pairs (promptList) do
-                PromptSetVisible(prompt.prompt, 0)
-                PromptSetEnabled(prompt.prompt, 0)
-                
-                if prompt.type == 'CREATE_CHARACTER' then
-
-                    PromptSetEnabled(prompt.prompt, 0)
-
-                    if CharacterData.Characters < CharacterData.MaxCharacters then
-                        PromptSetVisible(prompt.prompt, 1)
-                        PromptSetEnabled(prompt.prompt, 1)
+                    while not IsScreenFadedOut() do
+                        Wait(50)
+                        DoScreenFadeOut(2000)
                     end
 
+                    CHARACTER_CHANGE_AWAIT = true 
+    
+                    DestroyAllCams(true)
+    
+                    CharacterData.SelectedCharIndex = CharacterData.SelectedCharIndex - 1
+    
+                    if CharacterData.SelectedCharIndex < 1 then
+                        CharacterData.SelectedCharIndex = CharacterData.Characters
+                    end
+    
+                    local newCameraCoords =
+                        Config.OnCharacterSelector.Locations[
+                            CharacterData.PositionIndex
+                        ].CharacterPositions[
+                            CharacterData.SelectedCharIndex
+                        ].Camera
+    
+                    local _cameraHandler = CreateCamWithParams(
+                        "DEFAULT_SCRIPTED_CAMERA",
+                        newCameraCoords.x,
+                        newCameraCoords.y,
+                        newCameraCoords.z,
+                        newCameraCoords.rotx,
+                        newCameraCoords.roty,
+                        newCameraCoords.rotz,
+                        newCameraCoords.fov,
+                        false,
+                        2
+                    )
+    
+                    SetCamActive(_cameraHandler, true)
+    
+                    RenderScriptCams(
+                        true,
+                        false,
+                        0,
+                        true,
+                        true,
+                        0
+                    )
+    
+                    CameraHandler.coords = newCameraCoords
+                    CameraHandler.z = newCameraCoords.z
+                    CameraHandler.zoom = newCameraCoords.fov
+    
+                    onSelectedCharacterLoad()
+    
                 end
+    
+    
+                -- =========================================================
+                -- NEXT CHARACTER
+                -- RIGHT ARROW
+                -- =========================================================
+    
+                if CheckControls(IsDisabledControlJustPressed, 0, 0xDEB34313) and CharacterData.Characters > 1 then
+    
+                    ToggleSelectionUI(false)
 
-                if CharacterData.Characters > 0 and prompt.type ~= 'CREATE_CHARACTER' then
-
-                    if prompt.type == 'NEXT_CHARACTER' or prompt.type == 'PREVIOUS_CHARACTER' then
-                        local enabled = CharacterData.Characters == 1 and 0 or 1
-                        PromptSetEnabled(prompt.prompt, enabled)
+                    while not IsScreenFadedOut() do
+                        Wait(50)
+                        DoScreenFadeOut(2000)
                     end
 
-                    if prompt.type == "SELECT_CHARACTER" then
-                        PromptSetEnabled(prompt.prompt, 1)
+                    CHARACTER_CHANGE_AWAIT = true 
+    
+                    DestroyAllCams(true)
+    
+                    CharacterData.SelectedCharIndex = CharacterData.SelectedCharIndex + 1
+    
+                    if CharacterData.SelectedCharIndex > CharacterData.Characters then
+                        CharacterData.SelectedCharIndex = 1
                     end
-
-                    PromptSetVisible(prompt.prompt, 1)
-
+    
+                    local newCameraCoords =
+                        Config.OnCharacterSelector.Locations[
+                            CharacterData.PositionIndex
+                        ].CharacterPositions[
+                            CharacterData.SelectedCharIndex
+                        ].Camera
+    
+                    local _cameraHandler = CreateCamWithParams(
+                        "DEFAULT_SCRIPTED_CAMERA",
+                        newCameraCoords.x,
+                        newCameraCoords.y,
+                        newCameraCoords.z,
+                        newCameraCoords.rotx,
+                        newCameraCoords.roty,
+                        newCameraCoords.rotz,
+                        newCameraCoords.fov,
+                        false,
+                        2
+                    )
+    
+                    SetCamActive(_cameraHandler, true)
+    
+                    RenderScriptCams(
+                        true,
+                        false,
+                        0,
+                        true,
+                        true,
+                        0
+                    )
+    
+                    CameraHandler.coords = newCameraCoords
+                    CameraHandler.z = newCameraCoords.z
+                    CameraHandler.zoom = newCameraCoords.fov
+    
+                    onSelectedCharacterLoad()
+    
                 end
+    
+                -- =========================================================
+                -- DELETE CHARACTER
+                -- DELETE
+                -- =========================================================
 
-                if PromptHasHoldModeCompleted(prompt.prompt) then
+                if CheckControls(IsDisabledControlJustPressed, 0, 0x4AF4D473) then
+   
+                    CHARACTER_CHANGE_AWAIT = true 
 
-                    if prompt.type == 'NEXT_CHARACTER' then
-
-                        while not IsScreenFadedOut() do
-                            Wait(50)
-                            DoScreenFadeOut(2000)
-                        end
-
-                        DestroyAllCams(true)
-
-                        CharacterData.SelectedCharIndex = CharacterData.SelectedCharIndex + 1
-
-                        if CharacterData.SelectedCharIndex > CharacterData.Characters then
-                            CharacterData.SelectedCharIndex = 1
-                        end
                     
-                        local newCameraCoords = Config.OnCharacterSelector.Locations[CharacterData.PositionIndex].CharacterPositions[CharacterData.SelectedCharIndex].Camera
-                        local _cameraHandler  = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", newCameraCoords.x, newCameraCoords.y, newCameraCoords.z, newCameraCoords.rotx, newCameraCoords.roty, newCameraCoords.rotz, newCameraCoords.fov, false, 2)
+                    ToggleSelectionUI(false)
+
+                    while not IsScreenFadedOut() do
+                        Wait(50)
+                        DoScreenFadeOut(2000)
+                    end
+
+                    TriggerServerEvent("tpz_characters:deleteSelectedCharacter", CharacterData.SelectedCharIdentifier )
+
+                    UpdateCharacterSelectorControls()
+
                     
-                        SetCamActive(_cameraHandler, true)
-                        RenderScriptCams(true, false, 0, true, true, 0)
+                    CharacterData.Data[CharacterData.SelectedCharIndex] = nil
+
+                    CharacterData.Characters = CharacterData.Characters - 1
+
+                    if CharacterData.Characters < 0 then 
+                        CharacterData.Characters = 0
+                    end
+
+                    CharacterData.SelectedCharIdentifier = nil
+                    CharacterData.SelectedCharIndex = 1
                     
-                        CameraHandler.coords = newCameraCoords
-                    
-                        CameraHandler.z    = newCameraCoords.z
-                        CameraHandler.zoom = newCameraCoords.fov
+                    DestroyAllCams(true)
+    
+                    local newCameraCoords =
+                        Config.OnCharacterSelector.Locations[
+                            CharacterData.PositionIndex
+                        ].CharacterPositions[
+                            CharacterData.SelectedCharIndex
+                        ].Camera
+    
+                    local _cameraHandler = CreateCamWithParams(
+                        "DEFAULT_SCRIPTED_CAMERA",
+                        newCameraCoords.x,
+                        newCameraCoords.y,
+                        newCameraCoords.z,
+                        newCameraCoords.rotx,
+                        newCameraCoords.roty,
+                        newCameraCoords.rotz,
+                        newCameraCoords.fov,
+                        false,
+                        2
+                    )
+    
+                    SetCamActive(_cameraHandler, true)
+    
+                    RenderScriptCams(
+                        true,
+                        false,
+                        0,
+                        true,
+                        true,
+                        0
+                    )
+    
+                    CameraHandler.coords = newCameraCoords
+                    CameraHandler.z = newCameraCoords.z
+                    CameraHandler.zoom = newCameraCoords.fov
+
+                    if CharacterData.Characters > 0 then 
 
                         onSelectedCharacterLoad()
 
-                    elseif prompt.type == 'PREVIOUS_CHARACTER' then
-
-                        while not IsScreenFadedOut() do
-                            Wait(50)
-                            DoScreenFadeOut(2000)
-                        end
-
-                        DestroyAllCams(true)
-                    
-                        CharacterData.SelectedCharIndex = CharacterData.SelectedCharIndex - 1
-
-                        if CharacterData.SelectedCharIndex < 1 then
-                            CharacterData.SelectedCharIndex = CharacterData.Characters
-                        end
-
-                        local newCameraCoords = Config.OnCharacterSelector.Locations[CharacterData.PositionIndex].CharacterPositions[CharacterData.SelectedCharIndex].Camera
-                        local _cameraHandler  = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", newCameraCoords.x, newCameraCoords.y, newCameraCoords.z, newCameraCoords.rotx, newCameraCoords.roty, newCameraCoords.rotz, newCameraCoords.fov, false, 2)
-                    
-                        SetCamActive(_cameraHandler, true)
-                        RenderScriptCams(true, false, 0, true, true, 0)
-                    
-                        CameraHandler.coords = newCameraCoords
-                    
-                        CameraHandler.z    = newCameraCoords.z
-                        CameraHandler.zoom = newCameraCoords.fov
-
-                        onSelectedCharacterLoad()
-                    
-
-                    elseif prompt.type == 'SELECT_CHARACTER' then
-
+                    else
                         CharacterData.OnCharacterSelector = false
     
-                        while not IsScreenFadedOut() do
-                            Wait(50)
-                            DoScreenFadeOut(2000)
-                        end
-
-                        DestroyAllCams(true)
-
-                        local charData = CharacterData.Data[CharacterData.SelectedCharIndex]
-                        local charId   = tonumber(charData.charidentifier)
-
-                        CharacterData.SelectedCharIdentifier = charId 
-
-                        ClearPedTasksImmediately(PlayerPedId(), true)
-                
-                        NetworkClearClockTimeOverride()
-                        exports.weathersync:setSyncEnabled(true)
-
-                        TriggerServerEvent('tpz_core:instanceplayers', 0) -- Removing all the instanced players after selecting a character.
-                        TriggerServerEvent('tpz_core:onSelectedCharacter', nil, charId, false)
-                        DisplayRadar(true)
-                        ExecuteCommand("hud:hideall")
-
-                        Citizen.InvokeNative(0x706D57B0F50DA710, "MC_MUSIC_STOP")
-            
-                        FreezeEntityPosition(PlayerPedId(), false)
-                        SetEntityVisible(PlayerPedId(), true)
-                        SetEntityInvincible(PlayerPedId(), false)
-                        SetEntityCanBeDamaged(PlayerPedId(), true)
-
-                        DeleteCharacterEntities()
-                        ClearSelectorPrompt()
-
-                        CharacterData.IsBusy = false
-                        
-                        break
-
-                    elseif prompt.type == 'CREATE_CHARACTER' then
-
-                        CharacterData.OnCharacterSelector = false
-
+                        Wait(250)
                         ToggleUI(true)
 
-            
+                        break
+                    end
+                end
 
-                    elseif prompt.type == 'DELETE_CHARACTER' then
+                -- =========================================================
+                -- SELECT CHARACTER
+                -- ENTER
+                -- =========================================================
+    
+                if CheckControls(IsDisabledControlJustPressed, 0, 0xC7B5340A) and CharacterData.Characters > 0 then
+    
+                    CharacterData.OnCharacterSelector = false
+                    
+                    ToggleSelectionUI(false)
 
-                        
-                        CharacterData.OnCharacterSelector = false
-
-                        local charData = CharacterData.Data[CharacterData.SelectedCharIndex]
-                        local charId   = tonumber(charData.charidentifier)
-
-                        TriggerServerEvent("tpz_characters:deleteSelectedCharacter", charId )
-
-                        Wait(1000)
-                        TriggerServerEvent("tpz_core:requestCharacters", true)
-                        
+                    while not IsScreenFadedOut() do
+                        Wait(50)
+                        DoScreenFadeOut(2000)
                     end
 
-
-                    Wait(10)
+                    DestroyAllCams(true)
+    
+                    local charData =
+                        CharacterData.Data[
+                            CharacterData.SelectedCharIndex
+                        ]
+    
+                    local charId =
+                        tonumber(charData.charidentifier)
+    
+                    CharacterData.SelectedCharIdentifier = charId
+    
+                    ClearPedTasksImmediately(
+                        PlayerPedId(),
+                        true
+                    )
+    
+                    NetworkClearClockTimeOverride()
+    
+                    exports.weathersync:setSyncEnabled(true)
+    
+                    TriggerServerEvent(
+                        'tpz_core:instanceplayers',
+                        0
+                    )
+    
+                    TriggerServerEvent(
+                        'tpz_core:onSelectedCharacter',
+                        nil,
+                        charId,
+                        false
+                    )
+    
+                    DisplayRadar(true)
+    
+                    ExecuteCommand("hud:hideall")
+    
+                    Citizen.InvokeNative(
+                        0x706D57B0F50DA710,
+                        "MC_MUSIC_STOP"
+                    )
+    
+                    FreezeEntityPosition(
+                        PlayerPedId(),
+                        false
+                    )
+    
+                    SetEntityVisible(
+                        PlayerPedId(),
+                        true
+                    )
+    
+                    SetEntityInvincible(
+                        PlayerPedId(),
+                        false
+                    )
+    
+                    SetEntityCanBeDamaged(
+                        PlayerPedId(),
+                        true
+                    )
+    
+                    CharacterData.IsBusy = false
+    
+                    break
+    
+                end
+    
+    
+                -- =========================================================
+                -- CREATE CHARACTER
+                -- SPACE
+                -- =========================================================
+    
+                if CheckControls(IsDisabledControlJustPressed, 0, 0xD9D0E1C0) then
+    
+                    if CharacterData.Characters < CharacterData.MaxCharacters then
+                        ToggleSelectionUI(false)
+                        CharacterData.OnCharacterSelector = false
+    
+                        Wait(250)
+                        ToggleUI(true)
+    
+                        break
+                    end
+    
                 end
 
             end
-
-        else
-            Wait(1000)
+    
         end
 
-    end
+    end)
 
 end)
