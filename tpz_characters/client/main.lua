@@ -160,19 +160,21 @@ end
 -- Load character selection
 RegisterNetEvent('tpz_characters:loadCharacterSelection')
 AddEventHandler('tpz_characters:loadCharacterSelection', function(chars, data)
+    Wait(2000)
     
-    while not IsScreenFadedOut() do
-        Wait(50)
-        DoScreenFadeOut(1000)
-    end
-    
+    CharacterData.Characters = chars
+    CharacterData.Data       = data
+
     while not DoesEntityExist(PlayerPedId()) do 
         Wait(500)
     end
 
-    CharacterData.IsBusy     = true 
-    CharacterData.Characters = chars
-    CharacterData.Data       = data
+    while not IsScreenFadedOut() do
+        Wait(50)
+        DoScreenFadeOut(1000)
+    end
+
+    CharacterData.IsBusy = true 
 
    -- local instanced = GetPlayerServerId(PlayerId()) + 456565
 	--TriggerServerEvent('tpz_core:instanceplayers', math.floor(instanced)) 
@@ -344,7 +346,7 @@ AddEventHandler('tpz_characters:loadCharacterSelection', function(chars, data)
 
     CharacterData.OnCharacterSelector = true
 
-    Wait(4000)
+    Wait(10000)
     DoScreenFadeIn(3000)
 
 
