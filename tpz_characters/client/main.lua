@@ -19,6 +19,8 @@ local CharacterData = {
 CameraHandler = {coords = nil, zoom = 0, z = 0 }
 IdentityData  = { isMale = true, firstname = nil, lastname = nil, dob = nil }
 
+local LOADED_FIRST_CHAR = false 
+
 -----------------------------------------------------------
 --[[ Functions  ]]--
 -----------------------------------------------------------
@@ -160,8 +162,7 @@ end
 -- Load character selection
 RegisterNetEvent('tpz_characters:loadCharacterSelection')
 AddEventHandler('tpz_characters:loadCharacterSelection', function(chars, data)
-    Wait(2000)
-    
+
     CharacterData.Characters = chars
     CharacterData.Data       = data
 
@@ -176,8 +177,8 @@ AddEventHandler('tpz_characters:loadCharacterSelection', function(chars, data)
 
     CharacterData.IsBusy = true 
 
-   -- local instanced = GetPlayerServerId(PlayerId()) + 456565
-	--TriggerServerEvent('tpz_core:instanceplayers', math.floor(instanced)) 
+    local instanced = GetPlayerServerId(PlayerId()) + 456565
+	TriggerServerEvent('tpz_core:instanceplayers', math.floor(instanced)) 
 
     local randomPosition = Config.OnCharacterSelector.Locations[ math.random( #Config.OnCharacterSelector.Locations ) ]
 
@@ -193,7 +194,7 @@ AddEventHandler('tpz_characters:loadCharacterSelection', function(chars, data)
 
     repeat Wait(0) until HasCollisionLoadedAroundEntity(PlayerPedId())
 
-    ExecuteCommand('hud:hideall')
+    ExecuteCommand('hud:hideall') -- tpz_hud
 
     exports.weathersync:setSyncEnabled(false)
 	exports.weathersync:setMyWeather(randomPosition.Modifications.Weather.Type, randomPosition.Modifications.Weather.Transition,  randomPosition.Modifications.Weather.Snow)
@@ -229,6 +230,10 @@ AddEventHandler('tpz_characters:loadCharacterSelection', function(chars, data)
             Citizen.InvokeNative(0x7A556143A1C03898, 0.0) -- SetScenarioPedDensityMultiplierThisFrame
             Citizen.InvokeNative(0xBA0980B5C0A11924, 0.0) -- SetAmbientHumanDensityMultiplierThisFrame
             Citizen.InvokeNative(0x28CB6391ACEDD9DB, 0.0) -- SetScenarioHumanDensityMultiplierThisFrame
+
+            if not LOADED_FIRST_CHAR then 
+                DoScreenFadeOut(0)
+            end
    
         end
     
@@ -346,7 +351,10 @@ AddEventHandler('tpz_characters:loadCharacterSelection', function(chars, data)
 
     CharacterData.OnCharacterSelector = true
 
-    Wait(10000)
+    Wait(7000)
+    LOADED_FIRST_CHAR = true 
+
+    Wait(3000)
     DoScreenFadeIn(3000)
 
 
@@ -675,7 +683,7 @@ Citizen.CreateThread(function()
                         NetworkClearClockTimeOverride()
                         exports.weathersync:setSyncEnabled(true)
 
-                       -- TriggerServerEvent('tpz_core:instanceplayers', 0) -- Removing all the instanced players after selecting a character.
+                        TriggerServerEvent('tpz_core:instanceplayers', 0) -- Removing all the instanced players after selecting a character.
                         TriggerServerEvent('tpz_core:onSelectedCharacter', nil, charId, false)
                         DisplayRadar(true)
                         ExecuteCommand("hud:hideall")
@@ -730,8 +738,3 @@ Citizen.CreateThread(function()
     end
 
 end)
-
-
------------------------------------------------------------
---[[ Commands ]]--
------------------------------------------------------------
