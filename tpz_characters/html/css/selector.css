@@ -1,0 +1,564 @@
+/* ========================================================= */
+/* TPZ CHARACTER SELECTOR                                    */
+/* ========================================================= */
+
+#tpz_characters_select {
+	position: relative;
+
+	width: 100%;
+	height: 100%;
+
+	overflow: hidden;
+
+	box-sizing: border-box;
+}
+
+
+/* ========================================================= */
+/* CHARACTER INFORMATION PLAQUE                              */
+/* ========================================================= */
+
+.character-info-alt {
+	position: absolute;
+
+	top: 3.5vh;
+	right: 2vw;
+
+	width: 24vw;
+	min-height: 22vh;
+
+	padding: 1.6vh 1.7vw;
+
+	box-sizing: border-box;
+
+	background: rgba(0, 0, 0, 0.52);
+
+	border-top: 1px solid rgba(255, 255, 255, 0.6);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.28);
+
+	border-left: 1px solid rgba(255, 255, 255, 0.12);
+	border-right: 1px solid rgba(255, 255, 255, 0.12);
+
+	box-shadow:
+		inset 0 0 25px rgba(255, 255, 255, 0.015),
+		0 0 0 1px rgba(0, 0, 0, 0.7);
+
+	font-family: "Times New Roman", serif;
+
+	color: rgba(255, 255, 255, 0.9);
+
+	overflow: hidden;
+}
+
+
+/* ========================================================= */
+/* DECORATIVE CORNERS                                        */
+/* ========================================================= */
+
+.character-info-alt::before,
+.character-info-alt::after {
+	content: "";
+
+	position: absolute;
+
+	width: 0.9vw;
+	height: 0.9vw;
+
+	pointer-events: none;
+}
+
+
+/* TOP LEFT */
+
+.character-info-alt::before {
+	top: 0.65vh;
+	left: 0.65vw;
+
+	border-top: 1px solid rgba(255, 255, 255, 0.5);
+	border-left: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+
+/* BOTTOM RIGHT */
+
+.character-info-alt::after {
+	right: 0.65vw;
+	bottom: 0.65vh;
+
+	border-right: 1px solid rgba(255, 255, 255, 0.3);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+
+/* ========================================================= */
+/* TOP CAPTION                                               */
+/* ========================================================= */
+
+.character-info-alt-top {
+	width: 100%;
+
+	display: flex;
+
+	align-items: center;
+	justify-content: center;
+
+	margin-bottom: 1.1vh;
+}
+
+
+.character-info-alt-caption {
+	font-family: "Times New Roman", serif;
+
+	font-size: 0.52vw;
+
+	font-weight: 600;
+
+	letter-spacing: 0.28vw;
+
+	color: rgba(255, 255, 255, 0.42);
+
+	white-space: nowrap;
+}
+
+
+/* ========================================================= */
+/* CHARACTER NAME                                            */
+/* ========================================================= */
+
+.character-info-alt-name {
+	width: 100%;
+
+	min-height: 4vh;
+
+	display: flex;
+
+	align-items: center;
+	justify-content: center;
+
+	padding: 0 0.5vw;
+
+	box-sizing: border-box;
+
+	font-family: "Times New Roman", serif;
+
+	font-size: 1vw;
+
+	font-weight: 600;
+
+	letter-spacing: 0.14vw;
+
+	line-height: 1.35;
+
+	text-align: center;
+
+	color: rgba(255, 255, 255, 0.94);
+
+	white-space: normal;
+
+	overflow-wrap: anywhere;
+}
+
+
+/* ========================================================= */
+/* NAME ORNAMENT                                             */
+/* ========================================================= */
+
+.character-info-alt-ornament {
+	width: 100%;
+
+	display: flex;
+
+	align-items: center;
+	justify-content: center;
+
+	gap: 0.5vw;
+
+	margin: 1vh 0 1.5vh 0;
+}
+
+
+.character-info-alt-ornament span {
+	width: 5vw;
+
+	height: 1px;
+
+	background: rgba(255, 255, 255, 0.2);
+}
+
+
+.character-info-alt-ornament b {
+	font-family: "Times New Roman", serif;
+
+	font-size: 0.4vw;
+
+	font-weight: normal;
+
+	color: rgba(255, 255, 255, 0.55);
+
+	transform: rotate(45deg);
+}
+
+
+/* ========================================================= */
+/* INFORMATION ROWS                                          */
+/* ========================================================= */
+
+.character-info-alt-details {
+	width: 100%;
+
+	display: grid;
+
+	grid-template-columns: 1fr 1px 1fr;
+
+	align-items: center;
+
+	min-height: 4.5vh;
+}
+
+
+.info-column {
+	display: flex;
+
+	flex-direction: column;
+
+	gap: 0.45vh;
+
+	min-width: 0;
+}
+
+
+.info-column:first-child {
+	padding-right: 1vw;
+}
+
+
+.info-column:last-child {
+	padding-left: 1vw;
+}
+
+
+/* ========================================================= */
+/* INFORMATION LABEL                                        */
+/* ========================================================= */
+
+.info-label {
+	font-family: "Times New Roman", serif;
+
+	font-size: 0.52vw;
+
+	font-weight: 600;
+
+	letter-spacing: 0.15vw;
+
+	color: rgba(255, 255, 255, 0.42);
+
+	white-space: nowrap;
+}
+
+
+/* ========================================================= */
+/* INFORMATION VALUE                                        */
+/* ========================================================= */
+
+.info-value {
+	font-family: "Times New Roman", serif;
+
+	font-size: 0.7vw;
+
+	font-weight: 600;
+
+	letter-spacing: 0.06vw;
+
+	line-height: 1.35;
+
+	color: rgba(255, 255, 255, 0.88);
+
+	white-space: normal;
+
+	overflow-wrap: anywhere;
+}
+
+
+/* ========================================================= */
+/* MONEY                                                     */
+/* ========================================================= */
+
+.info-value.money {
+	color: rgba(255, 255, 255, 0.94);
+}
+
+
+/* ========================================================= */
+/* GOLD                                                      */
+/* ========================================================= */
+
+.info-value.gold {
+	color: rgba(218, 190, 115, 0.95);
+}
+
+
+/* ========================================================= */
+/* VERTICAL DIVIDER                                          */
+/* ========================================================= */
+
+.info-divider {
+	width: 1px;
+
+	height: 2.8vh;
+
+	background: rgba(255, 255, 255, 0.18);
+}
+
+
+/* ========================================================= */
+/* HORIZONTAL DIVIDER                                        */
+/* ========================================================= */
+
+.character-info-alt-separator {
+	width: 100%;
+
+	height: 1px;
+
+	margin: 1.1vh 0;
+
+	background: rgba(255, 255, 255, 0.13);
+}
+
+
+/* ========================================================= */
+/* BOTTOM ORNAMENT                                           */
+/* ========================================================= */
+
+.character-info-alt-bottom {
+	width: 100%;
+
+	display: flex;
+
+	align-items: center;
+	justify-content: center;
+
+	margin-top: 1.2vh;
+}
+
+
+.character-info-alt-bottom span {
+	font-family: "Times New Roman", serif;
+
+	font-size: 0.55vw;
+
+	color: rgba(255, 255, 255, 0.42);
+
+	transform: rotate(45deg);
+}
+
+
+/* ========================================================= */
+/* CHARACTER FOOTER                                          */
+/* ========================================================= */
+
+.character-footer {
+	position: absolute;
+
+	left: 2vw;
+	right: 2vw;
+	bottom: 2.2vh;
+
+	height: 7vh;
+
+	display: flex;
+
+	align-items: center;
+	justify-content: space-between;
+
+	box-sizing: border-box;
+
+	border-top: 1px solid rgba(255, 255, 255, 0.55);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+
+	font-family: "Times New Roman", serif;
+
+	color: rgba(255, 255, 255, 0.85);
+
+	pointer-events: none;
+}
+
+
+/* ========================================================= */
+/* FOOTER LEFT                                               */
+/* ========================================================= */
+
+.footer-left {
+	height: 100%;
+
+	display: flex;
+
+	align-items: center;
+
+	padding-left: 2.5vw;
+
+	gap: 0.8vw;
+}
+
+
+.footer-decoration {
+	display: inline-flex;
+
+	align-items: center;
+	justify-content: center;
+
+	font-size: 0.85vw;
+
+	color: rgba(255, 255, 255, 0.75);
+
+	transform: rotate(45deg);
+}
+
+
+.footer-title {
+	font-family: "Times New Roman", serif;
+
+	font-size: 0.82vw;
+
+	font-weight: 500;
+
+	letter-spacing: 0.35vw;
+
+	color: rgba(255, 255, 255, 0.72);
+
+	white-space: nowrap;
+}
+
+
+/* ========================================================= */
+/* FOOTER CONTROLS                                           */
+/* ========================================================= */
+
+.footer-controls {
+	height: 100%;
+
+	display: flex;
+
+	align-items: center;
+
+	padding-right: 1.8vw;
+
+	gap: 0.8vw;
+
+	white-space: nowrap;
+}
+
+
+.control {
+	display: flex;
+
+	align-items: center;
+
+	gap: 0.55vw;
+
+	white-space: nowrap;
+}
+
+
+.control-text {
+	font-family: "Times New Roman", serif;
+
+	font-size: 0.72vw;
+
+	font-weight: 600;
+
+	letter-spacing: 0.08vw;
+
+	color: rgba(255, 255, 255, 0.82);
+
+	white-space: nowrap;
+}
+
+
+/* ========================================================= */
+/* KEY BOX                                                   */
+/* ========================================================= */
+
+.key {
+	min-width: 2.6vw;
+
+	height: 1.65vw;
+
+	padding: 0 0.35vw;
+
+	display: flex;
+
+	align-items: center;
+	justify-content: center;
+
+	box-sizing: border-box;
+
+	border: 1px solid rgba(255, 255, 255, 0.8);
+
+	background: rgba(0, 0, 0, 0.45);
+
+	box-shadow:
+		inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+		0 0 0 1px rgba(0, 0, 0, 0.6);
+
+	color: rgba(255, 255, 255, 0.92);
+
+	font-family: "Times New Roman", serif;
+
+	font-size: 0.62vw;
+
+	font-weight: 700;
+
+	letter-spacing: 0.04vw;
+
+	white-space: nowrap;
+}
+
+
+/* ========================================================= */
+/* ARROW KEY                                                 */
+/* ========================================================= */
+
+.control .key {
+	min-width: 1.7vw;
+
+	padding: 0 0.25vw;
+
+	font-size: 0.75vw;
+
+	line-height: 1;
+}
+
+
+/* ========================================================= */
+/* CONTROL SEPARATORS                                        */
+/* ========================================================= */
+
+.control-separator {
+	width: 1px;
+
+	height: 2.1vw;
+
+	margin: 0 0.35vw;
+
+	background: rgba(255, 255, 255, 0.55);
+
+	flex-shrink: 0;
+}
+
+
+/* ========================================================= */
+/* SPACE KEY                                                 */
+/* ========================================================= */
+
+.control:last-child .key {
+	min-width: 3.4vw;
+}
+
+
+/* ========================================================= */
+/* CREATE CHARACTER TEXT                                     */
+/* ========================================================= */
+
+.control:last-child .control-text {
+	letter-spacing: 0.07vw;
+}
