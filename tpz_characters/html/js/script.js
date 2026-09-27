@@ -24,17 +24,78 @@ $(function () {
 		if (item.type == "enable") {
 			document.body.style.display = item.enable ? "block" : "none";
 
-			$(".main-section").show();
-			
 			if (item.enable) {
 
-				$("#main-background").hide();
-				$("#title").hide();
-				$(".main-section").hide();
+				if (item.window == 'creator') {
+					$(".main-section").show();
 
-				$("#tpz_characters").fadeIn(1000);
-				$(".sex-dialog").fadeIn(1000);
+					if (item.enable) {
+
+						$("#main-background").hide();
+						$("#title").hide();
+						$(".main-section").hide();
+						$("#tpz_characters_select").hide();
+
+						$("#tpz_characters").fadeIn(1000);
+						$(".sex-dialog").fadeIn(1000);
+					}
+
+				} else if (item.window == 'selector') {
+
+					$("#main-background").hide();
+					$("#title").hide();
+					$(".main-section").hide();
+					$('.character-info-alt').hide();
+
+					$("#tpz_characters_select").fadeIn(1000);
+				}
+
 			}
+
+
+		} else if (item.action === 'updateSelectorControls') {
+
+			$('[data-control="previous"]')
+				.toggle(item.previous);
+
+			$('[data-control="next"]')
+				.toggle(item.next);
+
+			$('[data-control="select"]')
+				.toggle(item.select);
+
+			$('[data-control="delete"]')
+				.toggle(item.delete);
+
+			$('[data-control="create"]')
+				.toggle(item.create);
+
+			$('[data-separator="previous"]')
+				.toggle(item.previous);
+
+			$('[data-separator="next"]')
+				.toggle(item.next);
+
+			$('[data-separator="create"]')
+				.toggle(item.create);
+
+
+		} else if (item.action == "display_character_info") {
+
+			showCharacterInformation();
+
+		} else if (item.action == "set_selected_character_info") {
+
+			let prod = item.result;
+
+			updateCharacterInformation({
+				name: prod.firstname + " " + prod.lastname,
+				gender: Number(prod.gender) == 0 ? 'MALE' : 'FEMALE',
+				dateOfBirth: prod.dob,
+				money: '$' + Number(item.cash).toFixed(2),
+				gold: item.gold
+			});
+
 
 		} else if (item.action == "set_management_section") {
 
@@ -44,7 +105,7 @@ $(function () {
 
 			$("#categories-list").html('');
 
-		} else if (item.action == 'reset_appearance_categories'){
+		} else if (item.action == 'reset_appearance_categories') {
 
 			$("#appearance-categories-list").html('');
 
@@ -58,7 +119,7 @@ $(function () {
 
 			$("#bodyfeatures-categories-list").html('');
 
-		} else if (item.action == 'reset_bodyfeatures_components_list'){
+		} else if (item.action == 'reset_bodyfeatures_components_list') {
 
 			$("#bodyfeatures-selected-comps-list").html('');
 
@@ -135,13 +196,13 @@ $(function () {
 
 			$("#appearance-info-text").text(item.locales['NUI_APPEARANCE_INFO']);
 			$("#appearance-back-button").text(item.locales['NUI_BACK']);
-			
+
 			$("#body-info-text").text(item.locales['NUI_BODY_INFO']);
 			$("#body-type-title").text(item.locales['NUI_BODY_TYPES']);
 			$("#body-waist-title").text(item.locales['NUI_WAIST_TYPES']);
 			$("#body-torso-title").text(item.locales['NUI_TORSO_TYPES']);
 			$("#body-legs-title").text(item.locales['NUI_LEGS_TYPES']);
-			
+
 			$("#ageing-info-text").text(item.locales['NUI_AGEING_INFO']);
 			$("#ageing-texture-id-title").text(item.locales['NUI_AGEING_TEXTURE_ID']);
 			$("#ageing-opacity-title").text(item.locales['NUI_AGEING_OPACITY']);
@@ -162,7 +223,7 @@ $(function () {
 			$("#eyes-info-text").text(item.locales['NUI_EYES_INFO']);
 			$("#eyes-texture-id-title").text(item.locales['NUI_EYES_TEXTURE_ID_TITLE']);
 
-		} else if (item.action == 'set_welcome_text'){
+		} else if (item.action == 'set_welcome_text') {
 
 			$("#info-welcome-text").text(item.text);
 
@@ -198,7 +259,7 @@ $(function () {
 			$("#ageing-texture-id-currentNumber").text('0 / ' + MAX_OVERLAYS_INFO_AGEING_TEXTURE_ID);
 			$("#ageing-opacity-currentNumber").text('1.0 / 1.0');
 
-		} else if (item.action == 'setHeritageMaxColorTypes'){
+		} else if (item.action == 'setHeritageMaxColorTypes') {
 
 			MAX_HERITAGE_COLOR_TYPES = item.max;
 			$("#heritage-color-currentNumber").text('1 / ' + MAX_HERITAGE_COLOR_TYPES);
@@ -277,7 +338,7 @@ $(function () {
 					<button id="bodyfeatures-selected-comps-list-next" class = "bodyfeatures-${res.category}" category ="${res.category}">⟩</button>
 				  </div>
 				</div>`
-			  );
+			);
 
 		} else if (item.action == 'selectedBodyFeaturesCategory') {
 
@@ -292,7 +353,7 @@ $(function () {
 			$("#bodyfeatures-selected-comps-list").css('left', margin + "vw");
 
 
-		} else if (item.action == 'insertBodyFeaturesCategory'){
+		} else if (item.action == 'insertBodyFeaturesCategory') {
 			let res = item.result;
 			$("#bodyfeatures-categories-list").append(
 				`<div id="bodyfeatures-categories-list-name" title = "` + res.label + `" category = "` + res.category + `" >` + res.label + `</div>` +
@@ -319,13 +380,13 @@ $(function () {
 
 			} else {
 
-				if (res.type == 'opacity'){
+				if (res.type == 'opacity') {
 
-					if (current == 10 || current == 1.0 ){
+					if (current == 10 || current == 1.0) {
 						current = "1.0";
 					}
 
-					if (current == 0.0){
+					if (current == 0.0) {
 						current = "0.0";
 					}
 
@@ -358,11 +419,11 @@ $(function () {
 
 			$("#groom-selected-comps-list").css('left', margin + "vw");
 
-			CURRENT_GROOM_CATEGORY_ITEM  = res.current_texture_id;
+			CURRENT_GROOM_CATEGORY_ITEM = res.current_texture_id;
 			MAXIMUM_GROOM_CATEGORY_ITEMS = res.max_texture_id;
 
-			CURRENT_GROOM_COLOR_ITEM     = res.current_color;
-			MAXIMUM_GROOM_COLOR_ITEMS    = res.max_colors;
+			CURRENT_GROOM_COLOR_ITEM = res.current_color;
+			MAXIMUM_GROOM_COLOR_ITEMS = res.max_colors;
 
 			let opacity = res.current_opacity != 10 ? convertToInt(res.current_opacity) : 10;
 			CURRENT_GROOM_OPACITY_ITEM = opacity;
@@ -372,7 +433,7 @@ $(function () {
 			$("#eyes-texture-id-currentNumber").text(item.current + " / " + item.max);
 
 			MAX_OVERLAYS_INFO_EYES_TEXTURE_ID = item.max;
-			
+
 		} else if (item.action == 'updateGroomSpecificData') {
 
 			MAXIMUM_GROOM_COLOR_ITEMS = item.max_colors;
@@ -444,7 +505,7 @@ $(function () {
 			CURRENT_MAKEUP_COLOR_PRIMARY_ITEM = res.primary_color;
 			CURRENT_MAKEUP_COLOR_SECONDARY_ITEM = res.secondary_color;
 
-			CURRENT_MAKEUP_VARIANT_ITEM  = res.current_variant;
+			CURRENT_MAKEUP_VARIANT_ITEM = res.current_variant;
 			MAXIMUM_MAKEUP_VARIANT_ITEMS = res.max_variants;
 
 			let opacity = res.current_opacity != 9 ? convertToInt(res.current_opacity) : 9;
@@ -455,7 +516,7 @@ $(function () {
 
 			$("#palette-currentNumber").text(item.current + ' / ' + item.max);
 
-			SELECTED_ITEM_PALETTE_ID       = item.current;
+			SELECTED_ITEM_PALETTE_ID = item.current;
 			SELECTED_ITEM_MAXIMUM_PALETTES = item.max;
 
 			$('.r-num, .r-range').val(item.tint0);
@@ -507,11 +568,11 @@ $(function () {
 		if (!$(".info").is(":visible") || $(".sex-dialog").is(":visible") || $(".dialog").is(":visible")) {
 			return;
 		}
-		
+
 		switch (e.key) {
 			case "PageUp":
 
-				$.post('http://tpz_characters/key_action', JSON.stringify({ action: "ZOOM_IN"}));
+				$.post('http://tpz_characters/key_action', JSON.stringify({ action: "ZOOM_IN" }));
 				break;
 			case "PageDown":
 				$.post('http://tpz_characters/key_action', JSON.stringify({ action: "ZOOM_OUT" }));
@@ -542,14 +603,14 @@ $(function () {
 				break;
 		}
 	});
-	
+
 	$("#tpz_characters").on("click", "#main-identity-section-button", function () {
 		PlayButtonClickSound();
 
 		$(".dialog").fadeIn();
 	});
 
-	$("#tpz_characters").on("click", "#dialog-save-button", function() {
+	$("#tpz_characters").on("click", "#dialog-save-button", function () {
 		PlayButtonClickSound();
 
 		// Verify date
@@ -560,7 +621,7 @@ $(function () {
 			return;
 		}
 
-		if (isInvalidDate(date)){
+		if (isInvalidDate(date)) {
 			RequestNotification("INVALID_DATE_OF_BIRTH", "error", 4000);
 			return;
 		}
@@ -585,7 +646,7 @@ $(function () {
 		$(".dialog").fadeOut();
 
 	});
-	
+
 
 	$("#tpz_characters").on("click", "#sex-dialog-select-button", function () {
 		PlayButtonClickSound();
@@ -639,6 +700,41 @@ $(function () {
 
 		$.post('http://tpz_characters/create', JSON.stringify({}));
 	});
+
+	/* ========================================================= */
+	/* CHARACTER INFORMATION                                      */
+	/* ========================================================= */
+
+	function updateCharacterInformation(character) {
+
+		$('.character-info-alt-name').text(
+			character.name || 'UNKNOWN'
+		);
+
+		$('.info-column').eq(0).find('.info-value').text(
+			character.gender || 'UNKNOWN'
+		);
+
+		$('.info-column').eq(1).find('.info-value').text(
+			character.dateOfBirth || 'UNKNOWN'
+		);
+
+		$('.info-value.money').text(
+			character.money || '$0.00'
+		);
+
+		$('.info-value.gold').text(
+			character.gold || '0.00'
+		);
+	}
+
+	function hideCharacterInformation() {
+		$('.character-info-alt').stop(true, true).fadeOut(200);
+	}
+
+	function showCharacterInformation() {
+		$('.character-info-alt').stop(true, true).fadeIn(200);
+	}
 
 });
 
