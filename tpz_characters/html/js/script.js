@@ -88,12 +88,16 @@ $(function () {
 
 			let prod = item.result;
 
+			function formatLastPlayed(timestamp) { if (!timestamp || timestamp == 0) { return 'UNKNOWN'; } const date = new Date(timestamp * 1000); const day = String(date.getDate()).padStart(2, '0'); const month = String(date.getMonth() + 1).padStart(2, '0'); const year = date.getFullYear(); const hours = String(date.getHours()).padStart(2, '0'); const minutes = String(date.getMinutes()).padStart(2, '0'); return `${day}/${month}/${year} ${hours}:${minutes}`; }
+
 			updateCharacterInformation({
 				name: prod.firstname + " " + prod.lastname,
 				gender: Number(prod.gender) == 0 ? 'MALE' : 'FEMALE',
 				dateOfBirth: prod.dob,
 				money: '$' + Number(item.cash).toFixed(2),
-				gold: item.gold
+				gold: item.gold,
+				lastPlayed: formatLastPlayed(Number(prod.last_play)),
+				playedTime: prod.played_time,
 			});
 
 
@@ -725,6 +729,14 @@ $(function () {
 
 		$('.info-value.gold').text(
 			character.gold || '0.00'
+		);
+
+		$('.info-value.last-played').text(
+			character.lastPlayed || 'UNKNOWN'
+		);
+
+		$('.info-value.played-time').text(
+			character.playedTime || '0 HOURS'
 		);
 	}
 
