@@ -292,6 +292,18 @@ local locales = { -- <- DO NOT TOUCH, MOVE TO LAST SECTION FOR LOCALE CHECK.
     ['DEVTOOLS_INJECTION_DETECTED']                    = "DevTools vagy injekciós csalás használata miatt ki lettél dobva.",
 
     ['RELOAD_CHARACTER_COMMAND_COOLDOWN']              = "~e~Nem használhatod újra még %s másodpercig.",
+
+    ['MONTH']                                          = "month",
+    ['MONTHS']                                         = "months",
+    ['DAY']                                            = "day",
+    ['DAYS']                                           = "days",
+    ['HOUR']                                           = "hour",
+    ['HOURS']                                          = "hours",
+    ['MINUTE']                                         = "minute",
+    ['MINUTES']                                        = "minutes",
+    ['SECOND']                                         = "second",
+    ['SECONDS']                                        = "seconds",
+    ['AND']                                            = "and",
 }
 
 ---------------------------------------------------------------
