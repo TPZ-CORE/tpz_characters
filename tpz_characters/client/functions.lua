@@ -96,3 +96,39 @@ function StartCam(x, y, z, rotx, roty, rotz, fov)
 	RenderScriptCams(true, true, 500, true, true)
 
 end
+
+function convertSecondsToText(seconds)
+    local secondsInMinute = 60
+    local secondsInHour   = 60 * secondsInMinute
+    local secondsInDay    = 24 * secondsInHour
+    local secondsInMonth  = 30 * secondsInDay  -- Assuming 30-day months
+
+    local months          = math.floor(seconds / secondsInMonth)
+    local days            = math.floor((seconds % secondsInMonth) / secondsInDay)
+    local hours           = math.floor((seconds % secondsInDay) / secondsInHour)
+    local mins            = math.floor((seconds % secondsInHour) / secondsInMinute)
+
+    local parts = {}
+
+    if months > 0 then
+        table.insert(parts, months .. " " .. (months ~= 1 and Locales['MONTHS'] or Locales['MONTH']))
+    end
+
+    if days > 0 then
+        table.insert(parts, days .. " " .. (days ~= 1 and Locales['DAYS'] or Locales['DAY']))
+    end
+
+    if hours > 0 then
+        table.insert(parts, hours .. " " .. (hours ~= 1 and Locales['HOURS'] or Locales['HOUR']))
+    end
+
+    if mins > 0 then
+        table.insert(parts, mins .. " " .. (mins ~= 1 and Locales['MINUTES'] or Locales['MINUTE']))
+    end
+
+	if seconds < 60 then
+		table.insert(parts, seconds .. " " .. (seconds ~= 1 and Locales['SECONDS'] or Locales['SECOND']))
+	end
+
+    return table.concat(parts, " " .. Locales['AND'] .. " ")
+end
