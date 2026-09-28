@@ -350,6 +350,11 @@ AddEventHandler('tpz_characters:loadCharacterSelection', function(chars, data)
         end
 
         local account = json.decode(charData.accounts)
+
+        if charData.played_time > 0 then 
+            charData.played_time = convertSecondsToText(charData.played_time * 60)
+        end
+
         SendNUIMessage({ action = 'set_selected_character_info', result = charData, cash = account['cash'], gold = account['gold']})
 
     end
@@ -437,6 +442,11 @@ function onSelectedCharacterLoad()
     SetEntityInvincible(PlayerPedId(), true)
 
     local account = json.decode(charData.accounts)
+    
+    if charData.played_time > 0 then 
+        charData.played_time = convertSecondsToText(charData.played_time * 60)
+    end
+
     SendNUIMessage({ action = 'set_selected_character_info', result = charData, cash = account['cash'], gold = account['gold']})
     
     Wait(1000)
