@@ -314,6 +314,17 @@ local locales = { -- <- DO NOT TOUCH, MOVE TO LAST SECTION FOR LOCALE CHECK.
     
     ['RELOAD_CHARACTER_COMMAND_COOLDOWN']              = "~e~You can't do that for the next %s seconds.", -- not translatable for many languages.
     
+    ['MONTH']                                          = "month",
+    ['MONTHS']                                         = "months",
+    ['DAY']                                            = "day",
+    ['DAYS']                                           = "days",
+    ['HOUR']                                           = "hour",
+    ['HOURS']                                          = "hours",
+    ['MINUTE']                                         = "minute",
+    ['MINUTES']                                        = "minutes",
+    ['SECOND']                                         = "second",
+    ['SECONDS']                                        = "seconds",
+    ['AND']                                            = "and",
 }
 
 ---------------------------------------------------------------
