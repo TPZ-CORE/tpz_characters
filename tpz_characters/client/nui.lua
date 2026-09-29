@@ -14,6 +14,11 @@ end
 --[[ Functions  ]]--
 -----------------------------------------------------------
 
+ToggleSelectionDeleteDialogUI = function(display)
+    SetNuiFocus(display, display)
+    SendNUIMessage({ type = "enable", enable = display, window = 'delete_dialog' })
+end
+
 ToggleSelectionUI = function(display)
     SetNuiFocus(false, false)
     SendNUIMessage({ type = "enable", enable = display, window = 'selector' })
@@ -73,6 +78,25 @@ end
 RegisterNUICallback('requestNotification', function(data)
     SendNUINotification(Locales[data.message], data.messageType, data.duration)
 end)
+
+
+RegisterNUICallback('delete_cancel', function(data)
+    WAIT_FOR_DELETE_DIALOG_RESPONSE_RESPOND = false -- prioritize
+    WAIT_FOR_DELETE_DIALOG_RESPONSE = false
+
+    Wait(500)
+    SetNuiFocus(false, false)
+end)
+
+
+RegisterNUICallback('delete_accept', function(data)
+    WAIT_FOR_DELETE_DIALOG_RESPONSE_RESPOND = true -- prioritize
+    WAIT_FOR_DELETE_DIALOG_RESPONSE = false
+
+    Wait(500)
+    SetNuiFocus(false, false)
+end)
+
 
 -- triggered only once, for selecting the gender (male / female).
 -- @param data.sex : returns the selected sex in uppercase (MALE / FEMALE)
