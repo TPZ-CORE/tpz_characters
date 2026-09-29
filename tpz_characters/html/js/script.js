@@ -2,6 +2,8 @@
 function CloseNUI() {
 
 	$("#tpz_characters").fadeOut();
+	$("#tpz_characters_delete_dialog").fadeOut();
+	$("#tpz_characters_select").fadeOut();
 	$("#categories-list").html('');
 	$("#appearance-categories-list").html('');
 	$("#lifestyle-categories-list").html('');
@@ -35,7 +37,7 @@ $(function () {
 						$("#title").hide();
 						$(".main-section").hide();
 						$("#tpz_characters_select").hide();
-
+						$("#tpz_characters_delete_dialog").hide();
 						$("#tpz_characters").fadeIn(1000);
 						$(".sex-dialog").fadeIn(1000);
 					}
@@ -46,12 +48,16 @@ $(function () {
 					$("#title").hide();
 					$(".main-section").hide();
 					$('.character-info-alt').hide();
-
+					$("#tpz_characters_delete_dialog").hide();
 					$("#tpz_characters_select").fadeIn(1000);
+
+				} else if (item.window == 'delete_dialog') {
+
+					$("#tpz_characters_delete_dialog").fadeIn(1000);
+
 				}
 
 			}
-
 
 		} else if (item.action === 'updateSelectorControls') {
 
@@ -747,6 +753,39 @@ $(function () {
 	function showCharacterInformation() {
 		$('.character-info-alt').stop(true, true).fadeIn(200);
 	}
+
+	// DELETE DIALOG
+
+	const deleteCharacterCancel = document.getElementById(
+		"delete-dialog-cancel"
+	);
+
+	const deleteCharacterAccept = document.getElementById(
+		"delete-dialog-accept"
+	);
+
+
+	/* =========================================================
+	   CANCEL
+	   ========================================================= */
+
+	deleteCharacterCancel.addEventListener("click", function () {
+		PlayButtonClickSound();
+		$.post('http://tpz_characters/delete_cancel', JSON.stringify({}));
+		$("#tpz_characters_delete_dialog").fadeOut(1000);
+	});
+
+
+	/* =========================================================
+	   ACCEPT
+	   ========================================================= */
+
+	deleteCharacterAccept.addEventListener("click", function () {
+		PlayButtonClickSound();
+		$.post('http://tpz_characters/delete_accept', JSON.stringify({}));
+		$("#tpz_characters_delete_dialog").fadeOut(1000);
+	});
+
 
 });
 
