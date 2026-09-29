@@ -23,6 +23,8 @@ IdentityData  = { isMale = true, firstname = nil, lastname = nil, dob = nil }
 local LOADED_FIRST_CHAR = false 
 local CHARACTER_CHANGE_AWAIT = false
 local REQUESTED_JOIN_DATA = false
+WAIT_FOR_DELETE_DIALOG_RESPONSE = false
+WAIT_FOR_DELETE_DIALOG_RESPONSE_RESPOND = false
 
 -----------------------------------------------------------
 --[[ Functions  ]]--
@@ -644,79 +646,93 @@ AddEventHandler("tpz_core:onCharacterSelection", function()
                 if CheckControls(IsDisabledControlJustPressed, 0, 0x4AF4D473) then
    
                     CHARACTER_CHANGE_AWAIT = true 
+                    WAIT_FOR_DELETE_DIALOG_RESPONSE = true 
+                    WAIT_FOR_DELETE_DIALOG_RESPONSE_RESPOND = false 
 
-                    
-                    ToggleSelectionUI(false)
+                    ToggleSelectionDeleteDialogUI(true)
 
-                    while not IsScreenFadedOut() do
-                        Wait(50)
-                        DoScreenFadeOut(2000)
+                    while WAIT_FOR_DELETE_DIALOG_RESPONSE do 
+                        Wait(500)
                     end
 
-                    TriggerServerEvent("tpz_characters:deleteSelectedCharacter", CharacterData.SelectedCharIdentifier )
-
-                    UpdateCharacterSelectorControls()
-
-                    
-                    CharacterData.Data[CharacterData.SelectedCharIndex] = nil
-
-                    CharacterData.Characters = CharacterData.Characters - 1
-
-                    if CharacterData.Characters < 0 then 
-                        CharacterData.Characters = 0
+                    if WAIT_FOR_DELETE_DIALOG_RESPONSE_RESPOND == false  then 
+                        CHARACTER_CHANGE_AWAIT = false
                     end
 
-                    CharacterData.SelectedCharIdentifier = nil
-                    CharacterData.SelectedCharIndex = 1
-                    
-                    DestroyAllCams(true)
-    
-                    local newCameraCoords =
-                        Config.OnCharacterSelector.Locations[
-                            CharacterData.PositionIndex
-                        ].CharacterPositions[
-                            CharacterData.SelectedCharIndex
-                        ].Camera
-    
-                    local _cameraHandler = CreateCamWithParams(
-                        "DEFAULT_SCRIPTED_CAMERA",
-                        newCameraCoords.x,
-                        newCameraCoords.y,
-                        newCameraCoords.z,
-                        newCameraCoords.rotx,
-                        newCameraCoords.roty,
-                        newCameraCoords.rotz,
-                        newCameraCoords.fov,
-                        false,
-                        2
-                    )
-    
-                    SetCamActive(_cameraHandler, true)
-    
-                    RenderScriptCams(
-                        true,
-                        false,
-                        0,
-                        true,
-                        true,
-                        0
-                    )
-    
-                    CameraHandler.coords = newCameraCoords
-                    CameraHandler.z = newCameraCoords.z
-                    CameraHandler.zoom = newCameraCoords.fov
+                    if WAIT_FOR_DELETE_DIALOG_RESPONSE_RESPOND then
+                        ToggleSelectionUI(false)
 
-                    if CharacterData.Characters > 0 then 
-
-                        onSelectedCharacterLoad()
-
-                    else
-                        CharacterData.OnCharacterSelector = false
+                        while not IsScreenFadedOut() do
+                            Wait(50)
+                            DoScreenFadeOut(2000)
+                        end
     
-                        Wait(250)
-                        ToggleUI(true)
+                        TriggerServerEvent("tpz_characters:deleteSelectedCharacter", CharacterData.SelectedCharIdentifier )
+    
+                        UpdateCharacterSelectorControls()
+    
+                        
+                        CharacterData.Data[CharacterData.SelectedCharIndex] = nil
+    
+                        CharacterData.Characters = CharacterData.Characters - 1
+    
+                        if CharacterData.Characters < 0 then 
+                            CharacterData.Characters = 0
+                        end
+    
+                        CharacterData.SelectedCharIdentifier = nil
+                        CharacterData.SelectedCharIndex = 1
+                        
+                        DestroyAllCams(true)
+        
+                        local newCameraCoords =
+                            Config.OnCharacterSelector.Locations[
+                                CharacterData.PositionIndex
+                            ].CharacterPositions[
+                                CharacterData.SelectedCharIndex
+                            ].Camera
+        
+                        local _cameraHandler = CreateCamWithParams(
+                            "DEFAULT_SCRIPTED_CAMERA",
+                            newCameraCoords.x,
+                            newCameraCoords.y,
+                            newCameraCoords.z,
+                            newCameraCoords.rotx,
+                            newCameraCoords.roty,
+                            newCameraCoords.rotz,
+                            newCameraCoords.fov,
+                            false,
+                            2
+                        )
+        
+                        SetCamActive(_cameraHandler, true)
+        
+                        RenderScriptCams(
+                            true,
+                            false,
+                            0,
+                            true,
+                            true,
+                            0
+                        )
+        
+                        CameraHandler.coords = newCameraCoords
+                        CameraHandler.z = newCameraCoords.z
+                        CameraHandler.zoom = newCameraCoords.fov
+    
+                        if CharacterData.Characters > 0 then 
+    
+                            onSelectedCharacterLoad()
+    
+                        else
+                            CharacterData.OnCharacterSelector = false
+        
+                            Wait(250)
+                            ToggleUI(true)
+    
+                            break
+                        end
 
-                        break
                     end
                 end
 
