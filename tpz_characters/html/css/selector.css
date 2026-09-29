@@ -562,3 +562,220 @@
 .control:last-child .control-text {
 	letter-spacing: 0.07vw;
 }
+
+#tpz_characters_delete_dialog {
+	position: fixed;
+
+	top: 0;
+	left: 0;
+
+	width: 100vw;
+	height: 100vh;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	background: rgba(0, 0, 0, 0.55);
+
+	z-index: 9999;
+
+	font-family: Georgia, "Times New Roman", serif;
+}
+
+
+/* =========================================================
+   DIALOG
+   ========================================================= */
+
+#tpz_characters_delete_dialog .delete-dialog {
+
+	width: 30vw;
+	min-height: 20vh;
+
+	padding: 2.5vh 2vw;
+
+	background: #111111;
+
+	border: 0.08vw solid #666666;
+
+	box-shadow:
+		0 1vh 3vh rgba(0, 0, 0, 0.8),
+		inset 0 0 0 0.05vw rgba(255, 255, 255, 0.08);
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	color: #eeeeee;
+}
+
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+#tpz_characters_delete_dialog .delete-dialog-title {
+
+	width: 100%;
+
+	text-align: center;
+
+	font-size: 1.5vw;
+
+	text-transform: uppercase;
+
+	letter-spacing: 0.08vw;
+
+	color: #eeeeee;
+
+	margin-bottom: 1.5vh;
+}
+
+
+/* =========================================================
+   DIVIDER
+   ========================================================= */
+
+#tpz_characters_delete_dialog .delete-dialog-divider {
+
+	width: 90%;
+
+	height: 0.08vh;
+
+	background: #555555;
+
+	margin-bottom: 2vh;
+}
+
+
+/* =========================================================
+   DESCRIPTION
+   ========================================================= */
+
+#tpz_characters_delete_dialog .delete-dialog-description {
+
+	width: 90%;
+
+	text-align: center;
+
+	font-size: 0.85vw;
+
+	line-height: 1.6;
+
+	color: #bdbdbd;
+
+	margin-bottom: 2.5vh;
+}
+
+
+/* =========================================================
+   BUTTON CONTAINER
+   ========================================================= */
+
+#tpz_characters_delete_dialog .delete-dialog-buttons {
+
+	width: 100%;
+
+	display: flex;
+
+	justify-content: center;
+
+	align-items: center;
+
+	gap: 1vw;
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+#tpz_characters_delete_dialog .delete-dialog-button {
+
+	width: 8vw;
+	height: 4.5vh;
+
+	border: 0.08vw solid #666666;
+
+	background: #1a1a1a;
+
+	color: #dddddd;
+
+	font-family: Georgia, "Times New Roman", serif;
+
+	font-size: 0.72vw;
+
+	text-transform: uppercase;
+
+	letter-spacing: 0.04vw;
+
+	cursor: pointer;
+
+	transition:
+		background 0.15s ease,
+		border-color 0.15s ease,
+		color 0.15s ease;
+}
+
+
+/* =========================================================
+   CANCEL
+   ========================================================= */
+
+#tpz_characters_delete_dialog .delete-dialog-cancel:hover {
+
+	background: #292929;
+
+	border-color: #888888;
+
+	color: #ffffff;
+}
+
+
+/* =========================================================
+   ACCEPT
+   ========================================================= */
+
+#tpz_characters_delete_dialog .delete-dialog-accept {
+
+	background: #242424;
+
+	border-color: #777777;
+
+	color: #eeeeee;
+}
+
+
+#tpz_characters_delete_dialog .delete-dialog-accept:hover {
+
+	background: #383838;
+
+	border-color: #aaaaaa;
+
+	color: #ffffff;
+}
+
+
+/* =========================================================
+   SMALLER / NARROWER SCREENS
+   ========================================================= */
+
+@media (max-aspect-ratio: 4/3) {
+
+	#tpz_characters_delete_dialog .delete-dialog {
+		width: 40vw;
+	}
+
+	#tpz_characters_delete_dialog .delete-dialog-title {
+		font-size: 1.9vw;
+	}
+
+	#tpz_characters_delete_dialog .delete-dialog-description {
+		font-size: 1.1vw;
+	}
+
+	#tpz_characters_delete_dialog .delete-dialog-button {
+		font-size: 0.95vw;
+	}
+}
